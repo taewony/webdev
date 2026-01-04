@@ -367,3 +367,21 @@ Frameworks that make building complex UIs easier.
 
 This cheat sheet is based on the book structure "First Encounter with Web Development". Happy Coding\! 💻
 
+## GitHub 계정 생성 및 새 저장소(Repository) 만들기
+
+### 1. 현재 폴더를 Git 저장소로 초기화
+git init
+
+### 2. 현재 폴더의 모든 파일을 추적 대상으로 추가 (준비 영역에 올림)
+git add .
+
+### 3. 변경 사항을 로컬에 기록 (커밋)
+git commit -m "프로젝트 첫 커밋"
+
+### 4. GitHub 원격 저장소 주소를 'origin'이라는 이름으로 연결 
+### 아래 URL은 본인의 저장소 주소로 변경 필수!
+git remote add origin https://github.com/your_ID/repo_name.git
+
+### 5. 로컬 커밋을 GitHub(origin)의 'main' 브랜치로 업로드 (푸시)
+git branch -M main        # 브랜치 이름을 master에서 main으로 변경
+git push -u origin main
