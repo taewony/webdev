@@ -1,85 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Header Example</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WCB Bakery</title>
+    <meta name="description" content="매일 아침 갓 구운 신선한 빵을 만날 수 있는 곳">
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 
-    <style>
-        /* 전체 기본 스타일 */
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        /* 레이아웃 컨테이너 */
-        .container {
-            width: 80%;
-            margin: 0 auto;
-        }
-
-        /* header 영역 */
-        header {
-            background-color: #1a1a1a;
-            color: white;
-            padding: 20px 0;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        header p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            color: #cccccc;
-        }
-
-        /* 메인 콘텐츠 */
-        main {
-            padding: 40px 0;
-            min-height: 200px; /* 푸터가 너무 올라오지 않게 최소 높이 설정 */
-        }
-
-        /* footer 영역 */
-        footer {
-            background-color: #1a1a1a;
-            color: #888;
-            padding: 20px 0;
-            text-align: center;
-            font-size: 13px;
-            border-top: 1px solid #333;
-        }
-    </style>
+    <!-- Google Fonts (제목용) -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- 헤더 영역 -->
+    <!-- 1. 헤더 (Hero Section): 브랜드 이미지와 슬로건 -->
     <header>
         <div class="container">
-            <h1>My Portfolio</h1>
-            <p>Learning HTML & CSS step by step</p>
+            <h1 class="fancy-font">WCB Bakery</h1>
+            <p>엄선된 재료로 매일 아침 구워내는<br>행복한 빵을 만나보세요.</p>
         </div>
     </header>
 
-    <!-- 메인 콘텐츠 -->
+    <!-- 2. 메인 콘텐츠: 메뉴 리스트 -->
     <main>
-        <div class="container">
-            <h2>Welcome</h2>
-            <p>
-                This is a simple example of an index.html file
-                with a header section and basic CSS styling.
-            </p>
-        </div>
+        <section class="menu-section">
+            <div class="container">
+                <h2 class="section-title fancy-font">Our Menu</h2>
+                
+                <table class="menu-table">
+                    <tr>
+                        <th>🍞 메론빵</th>
+                        <td>2,200원</td>
+                    </tr>
+                    <tr>
+                        <th>🥐 사과 데니쉬</th>
+                        <td>2,400원</td>
+                    </tr>
+                    <tr>
+                        <th>🥐 초콜릿 크로와상</th>
+                        <td>2,800원</td>
+                    </tr>
+                    <tr>
+                        <th>🥖 바게트</th>
+                        <td>3,000원</td>
+                    </tr>
+                    <tr>
+                        <th>🍓 딸기 페스트리</th>
+                        <td>3,000원</td>
+                    </tr>
+                    <tr>
+                        <th>🥯 녹두앙금빵</th>
+                        <td>3,200원</td>
+                    </tr>
+                    <tr>
+                        <th>🫐 블루베리 쨈</th>
+                        <td>4,000원</td>
+                    </tr>
+                    <tr>
+                        <th>🥜 호두건포도빵</th>
+                        <td>7,000원</td>
+                    </tr>
+                    <tr>
+                        <th>🥪 런치 세트</th>
+                        <td>12,000원</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
     </main>
 
-    <!-- 푸터 영역 -->
+    <!-- 3. 푸터: 연락처 및 정보 -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 My Portfolio. All rights reserved.</p>
+            <h2 class="section-title fancy-font" style="color:white; margin-bottom: 20px;">Contact Us</h2>
+            <p>📍 서울시 서초구 서운로 00-00</p>
+            <p>⏰ 영업시간: 08:00 ~ 20:00</p>
+            
+            <a href="#" class="btn-contact">문의하기</a>
+
+            <p class="copyright">&copy; 2026 WCB Bakery. All rights reserved.</p>
         </div>
     </footer>
 
