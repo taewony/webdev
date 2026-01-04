@@ -385,3 +385,38 @@ git remote add origin https://github.com/your_ID/repo_name.git
 ### 5. 로컬 커밋을 GitHub(origin)의 'main' 브랜치로 업로드 (푸시)
 git branch -M main        # 브랜치 이름을 master에서 main으로 변경
 git push -u origin main
+
+---
+
+## 🚀 How to Host Your Project on GitHub Pages
+
+Follow these steps to publish your `index.html` (at the root directory) to the web:
+
+1. **Push your code to GitHub:** Ensure your latest changes are pushed to your repository.
+   ```bash
+   git add .
+   git commit -m "Prepare for deployment"
+   git push origin main
+   ```
+2. **Navigate to Settings:** Open your repository on GitHub.com and click on the **Settings** tab at the top.
+3. **Go to Pages:** Click on **Pages** in the left sidebar menu (under the "Code and automation" section).
+4. **Configure Build and Deployment:**
+   - Under **Branch**, select **main** from the dropdown menu.
+   - Ensure the folder is set to **/(root)**.
+   - Click the **Save** button.
+5. **Check Your Live Site:** Wait a minute or two. A message will appear at the top of the Pages section saying "Your site is live at...". Click the link to view your project!
+
+### 🔄 How to Update Changes
+
+Whenever you modify `index.html` or any other files, GitHub Pages will automatically update. Just push your changes:
+
+1. **Save** your changes in your editor.
+2. **Commit & Push** the updates to GitHub:
+   ```bash
+   git add .
+   git commit -m "Update site content"
+   git push origin main
+   ```
+3. **Wait & Refresh:** GitHub Pages will detect the new commit and redeploy automatically (usually takes 1-2 minutes). Refresh your browser to see the changes.
+
+**Live Demo:** [https://taewony.github.io/webdev/](https://taewony.github.io/webdev/)
