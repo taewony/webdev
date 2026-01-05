@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Someone's Portfolio</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/destyle.css@1.0.5/destyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background-color: #fafafa;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Amatic SC', cursive;
+            font-size: 3.5rem;
+        }
+        nav {
+            background-color: #444;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.75rem 0;
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+        nav ul li {
+            margin: 0 1.5rem;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #eda1a1;
+        }
+        main {
+            min-height: 500px;
+            padding: 3rem 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 3rem 1.5rem;
+        }
+        .footer-content h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .footer-info p {
+            margin: 0.5rem 0;
+            opacity: 0.8;
+        }
+        .footer-sns {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 2rem 0;
+        }
+        .footer-sns li {
+            margin: 0 1rem;
+        }
+        .footer-sns a {
+            color: #fff;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        .footer-sns a:hover {
+            opacity: 0.7;
+        }
+        .copyright {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Someone's Portfolio</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#mycats">MyCats</a></li>
+            <li><a href="#catblog">CatBlog</a></li>
+            <li><a href="#bakery">Bakery</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Main content will be added here -->
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="footer-info">
+                <p>📍 Seoul, South Korea</p>
+                <p>⏰ Office Hours: 08:00 ~ 20:00</p>
+            </div>
+            
+            <ul class="footer-sns">
+                <li><a href="#">Twitter</a></li>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">YouTube</a></li>
+                <li><a href="#">Instagram</a></li>
+            </ul>
+
+            <p class="copyright">&copy; 2026 Taewony's Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

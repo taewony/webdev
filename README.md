@@ -66,6 +66,52 @@ A standard HTML5 boilerplate:
 \</body\>  
 \</html\>
 
+### **3.3 HTML5 Page Structure with semantic tags**
+
+HTML5 semantic tags provide meaning to the structure of a web page.
+
+\<\!DOCTYPE html\>  
+\<html lang="en"\>  
+\<head\>  
+    \<meta charset="UTF-8"\>  
+    \<title\>Semantic Structure\</title\>  
+\</head\>  
+\<body\>  
+    \<header\>  
+        \<h1\>My Website Title\</h1\>  
+        \<nav\>  
+            \<ul\>  
+                \<li\>\<a href="#"\>Home\</a\>\</li\>  
+                \<li\>\<a href="#"\>About\</a\>\</li\>  
+            \</ul\>  
+        \</nav\>  
+    \</header\>
+
+    \<main\>  
+        \<section\>  
+            \<h2\>Introduction\</h2\>  
+            \<p\>Welcome to our semantic website.\</p\>  
+        \</section\>
+
+        \<article\>  
+            \<h2\>Latest Post\</h2\>  
+            \<p\>This is an independent piece of content.\</p\>  
+        \</article\>
+
+        \<aside\>  
+            \<h3\>Related Links\</h3\>  
+            \<ul\>  
+                \<li\>Link 1\</li\>  
+            \</ul\>  
+        \</aside\>  
+    \</main\>
+
+    \<footer\>  
+        \<p\>&copy; 2026 My Website\</p\>  
+    \</footer\>  
+\</body\>  
+\</html\>
+
 ## **Ch 04: Essential HTML Tags**
 
 ### **4.1 Text & Structure**
