@@ -120,6 +120,7 @@ footer {
 }
 
 /* 배경 어둡게 처리 (Overlay) */
+/* footer::before는 CSS 가상 요소(Pseudo-element)로, footer 요소의 첫 번째 자식 요소로 가상의 요소를 생성합니다. */
 footer::before {
     content: '';
     position: absolute;
