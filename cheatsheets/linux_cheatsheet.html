@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Cheat Sheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .code-snippet {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-snippet:active {
+            transform: scale(0.98);
+        }
+        .code-snippet:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden bg-white shadow-sm fixed top-0 w-full z-50 px-4 py-3 flex justify-between items-center">
+        <h1 class="font-bold text-xl text-indigo-600"><i class="fa-brands fa-linux mr-2"></i>Linux Cheat Sheet</h1>
+        <button id="mobile-menu-btn" class="text-slate-600 focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </header>
+
+    <div class="flex min-h-screen pt-16 lg:pt-0">
+        
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen overflow-y-auto no-scrollbar">
+            <div class="p-6">
+                <h1 class="hidden lg:block font-bold text-2xl text-indigo-600 mb-2"><i class="fa-brands fa-linux mr-2"></i>Linux CS</h1>
+                <p class="text-xs text-slate-500 mb-6 hidden lg:block">리눅스 명령어 요약 가이드</p>
+                
+                <nav class="space-y-1">
+                    <a href="#directory-ops" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">디렉터리 조작</a>
+                    <a href="#file-ops" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">파일 조작 & 보기</a>
+                    <a href="#permissions" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">권한 & 소유권</a>
+                    <a href="#user-group" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">사용자 & 그룹</a>
+                    <a href="#search" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">검색 (Search)</a>
+                    <a href="#process" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">프로세스 관리</a>
+                    <a href="#system-info" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">시스템 정보</a>
+                    <a href="#resource-disk" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">리소스 & 디스크</a>
+                    <a href="#archive" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">압축 & 아카이브</a>
+                    <a href="#package" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">패키지 (dnf/rpm)</a>
+                    <a href="#network-system" class="nav-item block px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">네트워크 & 부팅</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile -->
+        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 w-full max-w-5xl mx-auto p-4 lg:p-10 pb-20">
+            
+            <div class="mb-10 text-center lg:text-left">
+                <h1 class="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4">Linux Cheat Sheet</h1>
+                <p class="text-lg text-slate-600">리눅스 시스템 관리와 운영을 위한 핵심 명령어 모음입니다. 코드 블록을 클릭하여 복사하세요.</p>
+            </div>
+
+            <!-- Sections Container -->
+            <div class="space-y-12">
+
+                <!-- Chapter 3: 디렉터리 관리 -->
+                <section id="directory-ops" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">1</span>
+                        디렉터리 조작 (Directory)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">현재 경로 확인 (pwd)</span>
+                            <code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1.5 rounded text-sm font-mono border border-slate-200" onclick="copyToClipboard(this)">pwd</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">디렉터리 목록 (ls)</span>
+                            <code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1.5 rounded text-sm font-mono border border-slate-200" onclick="copyToClipboard(this)">ls -al</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">디렉터리 이동 (cd)</span>
+                            <code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1.5 rounded text-sm font-mono border border-slate-200" onclick="copyToClipboard(this)">cd /path/to/directory</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">홈 디렉터리 이동</span>
+                            <code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1.5 rounded text-sm font-mono border border-slate-200" onclick="copyToClipboard(this)">cd ~</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">디렉터리 생성 (mkdir)</span>
+                            <code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1.5 rounded text-sm font-mono border border-slate-200" onclick="copyToClipboard(this)">mkdir -p dir1/dir2</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">디렉터리 삭제 (rmdir)</span>
+                            <code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1.5 rounded text-sm font-mono border border-slate-200" onclick="copyToClipboard(this)">rmdir directory_name</code>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chapter 4: 파일 관리 -->
+                <section id="file-ops" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">2</span>
+                        파일 조작 & 보기 (File Operations)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">파일 복사 (cp)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">cp source_file dest_file</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">디렉터리 복사</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">cp -r source_dir dest_dir</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">파일 이동/이름변경 (mv)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">mv old_name new_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">파일 삭제 (rm)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">rm file_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">강제 삭제 (주의)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">rm -rf dir_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">빈 파일 생성/시간 변경</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">touch file_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">전체 내용 보기 (cat)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">cat file_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">앞부분 보기 (head)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">head -n 10 file_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">끝부분 보기 (tail)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">tail -n 10 file_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">로그 실시간 보기</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">tail -f /var/log/syslog</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">vi 에디터 실행</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">vi file_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm"><span class="text-xs text-slate-500 font-bold block mb-1">화면 단위 보기 (more/less)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">less file_name</code></div>
+                    </div>
+                </section>
+
+                <!-- Chapter 5: 파일 속성 관리 -->
+                <section id="permissions" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">3</span>
+                        권한 & 소유권 (Permissions)
+                    </h2>
+                    <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                        <table class="w-full text-left">
+                            <tbody class="divide-y divide-slate-200">
+                                <tr>
+                                    <td class="p-3 bg-slate-50 text-slate-700 font-medium text-sm w-1/3">권한 변경 (chmod)</td>
+                                    <td class="p-3"><code class="code-snippet bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">chmod 755 file_name</code></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 bg-slate-50 text-slate-700 font-medium text-sm">실행 권한 추가</td>
+                                    <td class="p-3"><code class="code-snippet bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">chmod +x script.sh</code></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 bg-slate-50 text-slate-700 font-medium text-sm">소유자 변경 (chown)</td>
+                                    <td class="p-3"><code class="code-snippet bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">chown user:group file_name</code></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 bg-slate-50 text-slate-700 font-medium text-sm">그룹 변경 (chgrp)</td>
+                                    <td class="p-3"><code class="code-snippet bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">chgrp group_name file_name</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Chapter 2: 사용자 관리 -->
+                <section id="user-group" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">4</span>
+                        사용자 & 그룹 (User & Group)
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center">
+                            <span class="md:w-48 text-sm font-bold text-slate-600 mb-1 md:mb-0">사용자 생성 (useradd)</span>
+                            <code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">useradd -m newuser</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center">
+                            <span class="md:w-48 text-sm font-bold text-slate-600 mb-1 md:mb-0">비밀번호 설정 (passwd)</span>
+                            <code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">passwd newuser</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center">
+                            <span class="md:w-48 text-sm font-bold text-slate-600 mb-1 md:mb-0">사용자 정보 변경 (usermod)</span>
+                            <code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">usermod -aG sudo newuser</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center">
+                            <span class="md:w-48 text-sm font-bold text-slate-600 mb-1 md:mb-0">사용자 삭제 (userdel)</span>
+                            <code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">userdel -r username</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center">
+                            <span class="md:w-48 text-sm font-bold text-slate-600 mb-1 md:mb-0">그룹 생성 (groupadd)</span>
+                            <code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">groupadd groupname</code>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center">
+                            <span class="md:w-48 text-sm font-bold text-slate-600 mb-1 md:mb-0">사용자 전환 (su)</span>
+                            <code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">su - username</code>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chapter 6 & 7: 검색 및 매뉴얼 -->
+                <section id="search" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">5</span>
+                        검색 (Search & Find)
+                    </h2>
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">내용 검색 (grep)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">grep "search_text" filename</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">재귀적 내용 검색</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">grep -r "text" /path/to/dir</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">파일 찾기 (find)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">find / -name "filename.txt"</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">명령어 위치 (which)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">which java</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">매뉴얼 보기 (man)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">man ls</code></div>
+                    </div>
+                </section>
+
+                <!-- Chapter 9: 프로세스 관리 -->
+                <section id="process" class="scroll-mt-24">
+                     <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">6</span>
+                        프로세스 관리 (Process)
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">프로세스 보기 (ps)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">ps -ef</code></div>
+                            <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">실시간 모니터링 (top)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">top</code></div>
+                            <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">PID로 종료 (kill)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">kill -9 PID</code></div>
+                            <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">이름으로 종료 (killall)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">killall process_name</code></div>
+                            <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">프로세스 검색 (pgrep)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">pgrep -fl process_name</code></div>
+                            <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">프로세스 트리 (pstree)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">pstree</code></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chapter 8 & 10: 시스템 정보 -->
+                <section id="system-info" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">7</span>
+                        시스템 정보 (System Info)
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">OS 정보</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">uname -a</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">CPU 정보</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">lscpu</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">로그인 사용자</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">whoami</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">접속자 목록</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">w</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">블록 장치</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">lsblk</code></div>
+                    </div>
+                </section>
+
+                <!-- Chapter 11 & 12: 리소스 및 디스크 -->
+                <section id="resource-disk" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">8</span>
+                        리소스 & 디스크 (Resource & Disk)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">메모리 사용량 (free)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">free -h</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">디스크 용량 (df)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">df -h</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">폴더 용량 확인 (du)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">du -sh directory_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">가상 메모리 통계</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">vmstat 1</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">I/O 통계</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">iostat</code></div>
+                    </div>
+                </section>
+
+                <!-- Chapter 13: 아카이브 및 압축 -->
+                <section id="archive" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">9</span>
+                        압축 & 아카이브 (Archive & Zip)
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">tar 압축</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">tar -cvzf archive.tar.gz /path/to/dir</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">tar 해제</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">tar -xvzf archive.tar.gz</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">zip 압축</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">zip -r archive.zip folder</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">unzip 해제</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">unzip archive.zip</code></div>
+                    </div>
+                </section>
+
+                <!-- Chapter 14: 패키지 관리 -->
+                <section id="package" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">10</span>
+                        패키지 관리 (dnf/rpm)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">패키지 설치 (dnf)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">dnf install package_name</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">패키지 업데이트</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">dnf update</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">패키지 검색</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">dnf search keyword</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200"><span class="block text-xs font-bold text-slate-500 uppercase mb-1">설치된 패키지 확인 (rpm)</span><code class="code-snippet block bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">rpm -qa | grep package_name</code></div>
+                    </div>
+                </section>
+
+                <!-- Chapter 16, 17, 18, 15: 기타 시스템 관리 -->
+                <section id="network-system" class="scroll-mt-24">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4 pb-2 border-b border-slate-200 flex items-center">
+                        <span class="bg-indigo-100 text-indigo-600 w-8 h-8 rounded flex items-center justify-center text-sm mr-3">11</span>
+                        네트워크, 부팅, I/O
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">시스템 종료</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">shutdown -h now</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">재부팅</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">reboot</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">날짜 확인</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">date</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">리다이렉션 (덮어쓰기)</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">command > file.txt</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">파이프 (Pipe)</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">ps -ef | grep process</code></div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center"><span class="md:w-32 text-sm font-bold text-slate-600 mb-1 md:mb-0">마운트</span><code class="code-snippet flex-1 bg-slate-100 text-pink-600 px-2 py-1 rounded text-sm font-mono" onclick="copyToClipboard(this)">mount /dev/sdb1 /mnt/disk</code></div>
+                    </div>
+                </section>
+                
+            </div>
+
+            <footer class="mt-20 pt-10 border-t border-slate-300 text-center text-slate-500">
+                <p class="mb-2">Generated for Linux System Administration</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transform translate-y-20 transition-transform duration-300 z-50">
+        Copied to clipboard!
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        function toggleMenu() {
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        btn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+        
+        // Close menu when clicking a link on mobile
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth < 1024) { // lg breakpoint
+                    toggleMenu();
+                }
+            });
+        });
+
+        // Copy to clipboard functionality
+        function copyToClipboard(element) {
+            const text = element.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast();
+                // Visual feedback
+                const originalBg = element.classList.contains('bg-slate-100') ? 'bg-slate-100' : '';
+                element.classList.remove('bg-slate-100', 'text-pink-600');
+                element.classList.add('bg-indigo-100', 'text-indigo-700');
+                
+                setTimeout(() => {
+                    element.classList.remove('bg-indigo-100', 'text-indigo-700');
+                    element.classList.add('bg-slate-100', 'text-pink-600');
+                }, 200);
+            });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

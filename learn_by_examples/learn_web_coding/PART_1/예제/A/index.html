@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+      }
+      h1 {
+        color: #ca1b1b;
+      }
+      p {
+        color: #3e17cc;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 12px;
+        border: 1px solid #ccc;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hello HTML5</h1>
+    <p>This is an example block tag.</p>
+    <p>
+      This is an example inline tag <b><em>강조</em></b> within block tag.
+    </p>
+    <hr />
+    <h2>List Example</h2>
+    <ul>
+      <li>List item 1</li>
+      <li>List item 2</li>
+      <li>List item 3</li>
+      <li>List item 4</li>
+    </ul>
+    <ol>
+      <li>Ordered item 1</li>
+      <li>Ordered item 2</li>
+      <li>Ordered item 3</li>
+      <li>Ordered item 4</li>
+    </ol>
+    <dl>
+      <dt>Definition List</dt>
+      <dd>This is a description for the definition list.</dd>
+      <dt>Definition List</dt>
+      <dd>This is a description for the definition list.</dd>
+    </dl>
+    <hr />
+    <h2>Submenu with hierarchical structure</h2>
+    <ul>
+      <li>
+        About Us
+        <ul>
+          <li>Our Team</li>
+          <li>Our Story</li>
+          <li>Careers</li>
+        </ul>
+      </li>
+      <li>Services</li>
+      <li>Products</li>
+      <li>Contact</li>
+    </ul>
+    <hr />
+    <h2>Table Example</h2>
+    <table>
+      <caption>
+        <h3>Table Title</h3>
+      </caption>
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th>이름</th>
+          <!--table header-->
+          <th>직업</th>
+          <th>나이</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <!--table row-->
+          <th>1</th>
+          <td>홍길동</td>
+          <td>개발자</td>
+          <td>30</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>이순신</td>
+          <td>디자이너</td>
+          <td>28</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>합계</th>
+          <td colspan="2">총 합계</td>
+          <td>58</td>
+        </tr>
+      </tfoot>
+    </table>
+    <hr />
+    <h2>Anchor Example</h2>
+    <!-- href: hyperlink reference -->
+    <a href="https://www.google.com">Visit google site with inline tag</a>
+    <a href="https://www.naver.com">Visit naver.com</a>
+    <p><a href="test.html">Visit test.html</a></p>
+    <hr />
+    <h2>Image Example</h2>
+    <img src="images/iconfinder_tick_red_619540.png" alt="description" />
+    <hr />
+    <h2>Form tag Example</h2>
+    <form action="">
+      <p>
+        <label for="username">Name:</label>
+        <input type="text" id="username" />
+      </p>
+      <p>
+        <label for="password">Password:</label>
+        <input type="password" id="password" />
+      </p>
+      <p>
+        <input type="submit" value="subscribe" />
+      </p>
+      <p>
+        <input type="submit" value="subscribe" />
+      </p>
+    </form>
+    <hr />
+    <p>current time <time datetime="2023-10-05T12:00:00">12:00 PM</time></p>
+    <p>test score <meter value="80" max="100"></meter></p>
+    <p>file upload(30%) <progress value="30" max="100"></progress></p>
+    <h2>Event Example</h2>
+    <p style="color: rgb(5, 196, 46)" onclick="alert('warning');">
+      taewony &copy
+    </p>
+  </body>
+</html>
