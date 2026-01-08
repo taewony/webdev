@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .menu {
+        text-align: center;
+        padding: 0;
+      }
+      .menu li {
+        width: 100px;
+        padding: 10px;
+        background: rgb(224, 219, 219);
+        line-height: 40px;
+        list-style: none;
+        text-align: center;
+        display: inline-block;
+      }
+      .menu li:hover {
+        background-color: #db6464;
+      }
+      .portfolio {
+        text-align: center;
+        display: table;
+        padding: 0;
+        width: 100%;
+      }
+      .portfolio li {
+        width: 33.3333%;
+        background: rgb(166, 193, 204);
+        line-height: 40px;
+        list-style: none;
+        display: table-cell;
+      }
+      .portfolio li:hover {
+        background-color: #db6464;
+      }
+      h2 {
+        text-align: center;
+        /* display: none; */
+      }
+      h3 {
+        text-align: center;
+        opacity: 30%;
+      }
+      .background-position-ex {
+        width: 400px;
+        height: 300px;
+        margin: 0 auto;
+        background-image: url("https://placehold.co/100x100");
+        /* background-position: right top; */
+        /* background-size: cover; */
+        background-position: 50% 50%; /* 100% 0 */
+        background-repeat: no-repeat;
+        border: 2px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Display Menu</h2>
+    <h3>Sub Menu</h3>
+    <ul class="menu">
+      <li>menu 1</li>
+      <li>menu 2</li>
+      <li>menu 3</li>
+    </ul>
+    <ul class="portfolio">
+      <li>portfolio item1</li>
+      <li>portfolio item2</li>
+      <li>portfolio item3</li>
+    </ul>
+    <hr />
+    <h2>background position</h2>
+    <div class="background-position-ex"></div>
+  </body>
+</html>
