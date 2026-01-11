@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slot Machine</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 30px;
+
+        /* 화면 중앙 정렬 */
+        display: flex; /* Flexbox(플렉스박스) 레이아웃 모델을 사용하여 요소 배치를 유연하게 제어 */
+        flex-direction: column; /* 주 축을 세로 방향으로 설정 */
+        align-items: center;
+        justify-content: center;
+
+        height: 100vh; /* 화면 전체 높이: body의 높이를 현재 보고 있는 화면(Viewport) 높이의 100%로 설정 */
+        margin: 0; /* 브라우저가 주는 기본 여백 제거 */
+      }
+
+      /* 슬롯 3개를 가로로 배치 */
+      .slot-machine {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        height: 200px;
+        font-size: 3.5em;
+        margin-bottom: 20px;
+      }
+
+      /* 슬롯 간 간격 */
+      .slot {
+        padding: 0 40px;
+      }
+
+      /* 버튼 스타일 */
+      button {
+        padding: 5px 15px;
+        font-size: 16px;
+        background-color: #99aed5;
+        color: white;
+        border: 2px solid #7a91c0;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #7a91c0;
+        border-color: #5a7198;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Welcome to the Slot Machine Game!</h2>
+    <p>
+      Try your luck and CLICK the button!
+      <button onclick="startSlotMachine()">슬롯머신 돌리기</button>
+    </p>
+
+    <!-- 슬롯머신 영역 -->
+    <div class="slot-machine">
+      <span class="slot" id="slot1">🍀</span>
+      <span class="slot" id="slot2">⭐</span>
+      <span class="slot" id="slot3">⛄</span>
+    </div>
+
+    <!-- 슬롯머신 시작 버튼 -->
+    <button onclick="startSlotMachine()">슬롯머신 돌리기</button>
+
+    <!-- 결과 출력 -->
+    <p id="result"></p>
+
+    <script>
+      // 슬롯에 사용할 심볼 목록
+      const symbols = ["🍀", "⭐", "⛄", "💘", "🐬"];
+
+      // 슬롯 DOM 요소들
+      const slots = document.querySelectorAll(".slot");
+
+      // 결과 출력 영역
+      const resultElement = document.getElementById("result");
+
+      // 슬롯이 현재 돌아가고 있는지 여부 (중복 실행 방지)
+      let isSpinning = false;
+
+      // 랜덤 심볼 하나 반환
+      function getRandomSymbol() {
+        const index = Math.floor(Math.random() * symbols.length);
+        return symbols[index];
+      }
+
+      // 슬롯머신 시작
+      function startSlotMachine() {
+        // 이미 돌아가고 있으면 무시
+        if (isSpinning) return;
+        isSpinning = true;
+
+        resultElement.textContent = ""; // 이전 결과 초기화
+
+        const intervalTime = 100; // ms
+        const maxIterations = 50;
+        let iterationCount = 0;
+
+        // ▶️ 매 실행마다 새 최종 결과 생성
+        const finalSymbols = Array.from({ length: slots.length }, () =>
+          getRandomSymbol()
+        );
+
+        // 슬롯 회전 함수
+        const intervalId = setInterval(() => {
+          iterationCount++;
+
+          // 회전 중 랜덤 심볼 표시
+          slots.forEach((slot) => {
+            slot.textContent = getRandomSymbol();
+          });
+
+          // 회전 종료 조건
+          if (iterationCount >= maxIterations) {
+            clearInterval(intervalId);
+
+            // 최종 결과 표시
+            slots.forEach((slot, index) => {
+              slot.textContent = finalSymbols[index];
+            });
+
+            // 결과 판정
+            showResult(finalSymbols);
+
+            isSpinning = false;
+          }
+        }, intervalTime);
+      }
+
+      // 결과 판정 함수
+      function showResult(finalSymbols) {
+        if (
+          finalSymbols[0] === finalSymbols[1] &&
+          finalSymbols[1] === finalSymbols[2]
+        ) {
+          resultElement.textContent = "잭팟!";
+        } else if (
+          finalSymbols[0] === finalSymbols[1] ||
+          finalSymbols[1] === finalSymbols[2] ||
+          finalSymbols[0] === finalSymbols[2]
+        ) {
+          resultElement.textContent = "2개 맞았음";
+        } else {
+          resultElement.textContent = "꽝!";
+        }
+      }
+    </script>
+  </body>
+</html>

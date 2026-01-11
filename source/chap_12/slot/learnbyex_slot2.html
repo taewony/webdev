@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slot Machine</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 30px;
+
+        /* 화면 중앙 정렬 */
+        display: flex; /* Flexbox(플렉스박스) 레이아웃 모델을 사용하여 요소 배치를 유연하게 제어 */
+        flex-direction: column; /* 주 축을 세로 방향으로 설정 */
+        align-items: center;
+        justify-content: center;
+
+        height: 100vh; /* 화면 전체 높이: body의 높이를 현재 보고 있는 화면(Viewport) 높이의 100%로 설정 */
+        margin: 0; /* 브라우저가 주는 기본 여백 제거 */
+      }
+
+      /* 슬롯 3개를 가로로 배치 */
+      .slot-machine {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        height: 200px;
+        font-size: 3.5em;
+        margin-bottom: 20px;
+      }
+
+      /* 슬롯 간 간격 */
+      .slot {
+        padding: 0 40px;
+      }
+
+      /* 버튼 스타일 */
+      button {
+        padding: 5px 15px;
+        font-size: 16px;
+        background-color: #99aed5;
+        color: white;
+        border: 2px solid #7a91c0;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #7a91c0;
+        border-color: #5a7198;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Welcome to the Slot Machine Game!</h2>
+    <p>
+      Try your luck and CLICK the button!
+      <button onclick="startSlotMachine()">슬롯머신 돌리기</button>
+    </p>
+
+    <!-- 슬롯머신 영역 -->
+    <div class="slot-machine">
+      <span class="slot" id="slot1">🍀</span>
+      <span class="slot" id="slot2">⭐</span>
+      <span class="slot" id="slot3">⛄</span>
+    </div>
+
+    <!-- 슬롯머신 시작 버튼 -->
+    <button onclick="startSlotMachine()">슬롯머신 돌리기</button>
+
+    <!-- 결과 출력 -->
+    <p id="result"></p>
+
+    <script>
+      // 슬롯에 사용할 심볼 목록
+      const symbols = ["🍀", "⭐", "⛄", "💘", "🐬"];
+
+      // 모든 슬롯(span.slot)을 NodeList로 가져옴
+      const slots = document.querySelectorAll(".slot");
+
+      // 결과 출력용 p 태그
+      const resultElement = document.getElementById("result");
+      function getRandomSymbol() {
+        // 0 ~ symbols.length-1 사이의 정수
+        const randomIndex = Math.floor(Math.random() * symbols.length);
+        return symbols[randomIndex];
+      }
+
+      function startSlotMachine() {
+        // console.log("슬롯머신 시작!");
+        slots.forEach((slot) => {
+          slot.innerHTML = getRandomSymbol();
+        });
+      }
+    </script>
+  </body>
+</html>
