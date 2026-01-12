@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Object</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>Object</h1>
     <pre>
         객체(object) = 변수(property) + 함수(method)
     </pre>
     <script>
-
+      let person = {
+        name: "John",
+        age: 30,
+        greet: function () {
+          console.log("Hello, my name is " + this.name);
+        },
+      };
+      person.greet();
+      document.write("Name: " + person.name + "<br>");
     </script>
-</body>
-
+  </body>
 </html>

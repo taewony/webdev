@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>function - javascript Basic</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>함수</h1>
     <pre>
         (입력), 할일, 출력
         입력되는 값 = 매개변수(parameter)
         전달되는 값 = 인수(argument)
     </pre>
-    <script>
-
-    </script>
-    <hr>
+    <script></script>
+    <hr />
     <h2>함수의 구조</h2>
     <script>
- 
+      function 함수명(매개변수1, 매개변수2) {
+        // 실행문
+        return 반환값;
+      }
     </script>
-    <hr>
+    <hr />
     <h3>익명함수</h3>
     <script>
-
+      let funcName = function (매개변수1, 매개변수2) {
+        // 실행문
+        return 반환값;
+      };
     </script>
     <h3>즉시 실행 함수</h3>
     <script>
-
+      (function (매개변수1, 매개변수2) {
+        반환값 = 매개변수1 + 매개변수2;
+        return 반환값;
+      })(10, 2);
+      document.write("즉시 실행 함수: " + 반환값);
     </script>
-</body>
-
+  </body>
 </html>
