@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Loop</title>
+  </head>
+
+  <body>
+    <h1>Loop</h1>
+    <script>
+      let i = 0;
+      i += 2;
+      i += 2;
+      i += 2;
+      i += 2;
+      i += 2;
+      document.write("i: " + i + "<br>");
+    </script>
+    <hr />
+    <h2>for 반복문</h2>
+    <pre>
+        for(초기문;조건문;증감){
+            반복할 코드
+        }
+    </pre>
+    <script>
+      for (let i = 0; i <= 10; i += 2) {
+        document.write("i: " + i + "<br>");
+      }
+    </script>
+
+    <h2>while 반복문</h2>
+    <pre>
+        초기문;
+        while(조건문){
+            //반복
+            증감
+        }
+    </pre>
+    <script>
+      let j = 0;
+      while (j <= 10) {
+        document.write("j: " + j + "<br>");
+        j += 2;
+      }
+    </script>
+    <h2>do while 반복문</h2>
+    <pre>
+        초기문;
+        do{
+            //반복
+            //증감
+        }while(조건);
+    </pre>
+    <script>
+      let k = 0;
+      do {
+        document.write("k: " + k + "<br>");
+        k += 2;
+      } while (k <= 10);
+    </script>
+    <h2>forEach 반복문</h2>
+    <script>
+      let arr = ["a", "b", "c", "d", "e"];
+      arr.forEach(function (item, index) {
+        document.write("item: " + item + ", index: " + index + "<br>");
+      });
+    </script>
+    <h2>for in 반복문</h2>
+    <pre>
+        객체의 값들 반복
+    </pre>
+    <script>
+      let obj = { a: 1, b: 2, c: 3 };
+      for (let key in obj) {
+        document.write("key: " + key + ", value: " + obj[key] + "<br>");
+      }
+    </script>
+    <h2>for of 반복문</h2>
+    <script>
+      let arr1 = [1, 2, 3, 4, 5];
+      for (let item of arr1) {
+        document.write("item: " + item + "<br>");
+      }
+    </script>
+  </body>
+</html>

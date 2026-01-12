@@ -21,6 +21,25 @@
       };
       person.greet();
       document.write("Name: " + person.name + "<br>");
+      const { name, age } = person;
+      document.write("Destructured Name: " + name + ", Age: " + age + "<br>");
+    </script>
+    <h1>Merged Object</h1>
+    <pre>
+        객체병합(merged object) = 객체1 + 객체2  // 스프레드 연산자(...)
+    </pre>
+    <script>
+      const obj1 = { a: 1, b: 2 };
+      const obj2 = { b: 3, c: 4 };
+      const mergedObj = { ...obj1, ...obj2 };
+      document.write(
+        "Merged Object:",
+        mergedObj.a,
+        ", ",
+        mergedObj.b,
+        ", ",
+        mergedObj.c
+      );
     </script>
   </body>
 </html>

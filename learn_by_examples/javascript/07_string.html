@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>String</title>
+  </head>
+
+  <body>
+    <h1>String</h1>
+    <h2>charAt</h2>
+    <script>
+      let str = "Hello World";
+      let char = str.charAt(4);
+      document.write("First Character: " + char + "<br>");
+    </script>
+
+    <h2>IndexOf, Search</h2>
+    <script>
+      document.write("IndexOf 'o': " + str.indexOf("o") + "<br>");
+      const currentUrl = location.href;
+      document.write(currentUrl + "<br>");
+      document.write(
+        "Search 'string': " + currentUrl.search("string") + "<br>"
+      );
+    </script>
+
+    <h2>concat</h2>
+    <script>
+      let str2 = " How are you?";
+      let result = str.concat(str2);
+      document.write("Concatenated String: " + result + "<br>");
+    </script>
+
+    <h2>replace</h2>
+    <script>
+      let replaced = str.replace("World", "Everyone");
+      document.write("Replaced String: " + replaced + "<br>");
+    </script>
+
+    <h2>slice</h2>
+    <script>
+      let sliced = str.slice(0, 5);
+      document.write("Sliced String: " + sliced + "<br>");
+    </script>
+
+    <h2>split</h2>
+    <script>
+      let langs = "JavaScript,Python,Java";
+      let words = langs.split(",");
+      document.write("Split String: " + words[1] + "<br>");
+    </script>
+
+    <h2>length</h2>
+    <script>
+      document.write("String Length: " + str.length + "<br>");
+    </script>
+  </body>
+</html>
