@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Emoji Slot Game</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #bbd2dd;
+      }
+      .container {
+        background: rgb(214, 200, 200);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        margin-top: 0;
+      }
+      .slots {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        font-size: 80px;
+        margin: 20px 0;
+        padding: 10px;
+        background-color: #eee;
+        border-radius: 10px;
+      }
+      .slot {
+        width: 100px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+      }
+      button {
+        font-size: 24px;
+        padding: 10px 30px;
+        cursor: pointer;
+        background-color: #ff5722;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background 0.3s;
+      }
+      button:hover {
+        background-color: #e64a19;
+      }
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      #message {
+        margin-top: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        min-height: 40px;
+      }
+      .win {
+        color: #2e7d32;
+      }
+      .lose {
+        color: #c62828;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎰 Slot Game 🎰</h1>
+      <div class="slots">
+        <div class="slot" id="slot1">❓</div>
+        <div class="slot" id="slot2">❓</div>
+        <div class="slot" id="slot3">❓</div>
+      </div>
+      <button id="spinBtn">SPIN!</button>
+      <div id="message"></div>
+    </div>
+
+    <script>
+      const emojis = ["🍒", "🍋", "🍉", "🍇", "⭐", "7️⃣", "🔔"];
+      const slot1 = document.getElementById("slot1");
+      const slot2 = document.getElementById("slot2");
+      const slot3 = document.getElementById("slot3");
+      const spinBtn = document.getElementById("spinBtn");
+      const messageDiv = document.getElementById("message");
+
+      function getRandomEmoji() {
+        return emojis[Math.floor(Math.random() * emojis.length)];
+      }
+
+      spinBtn.addEventListener("click", () => {
+        messageDiv.textContent = "";
+        spinBtn.disabled = true;
+
+        let count = 0;
+        const maxCount = 10; // 애니메이션 반복 횟수
+
+        const interval = setInterval(() => {
+          // 슬롯이 돌아가는 효과
+          slot1.textContent = getRandomEmoji();
+          slot2.textContent = getRandomEmoji();
+          slot3.textContent = getRandomEmoji();
+          count++;
+
+          if (count >= maxCount) {
+            clearInterval(interval);
+
+            // 최종 결과 결정
+            const result1 = getRandomEmoji();
+            const result2 = getRandomEmoji();
+            const result3 = getRandomEmoji();
+
+            slot1.textContent = result1;
+            slot2.textContent = result2;
+            slot3.textContent = result3;
+
+            checkWin(result1, result2, result3);
+            spinBtn.disabled = false;
+          }
+        }, 100); // 0.1초마다 변경
+      });
+
+      function checkWin(s1, s2, s3) {
+        if (s1 === s2 && s2 === s3) {
+          messageDiv.textContent = "JACKPOT! 🎉 WINNER!";
+          messageDiv.className = "win";
+        } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+          messageDiv.textContent = "WOW, So close. Try Again!";
+          messageDiv.className = ""; // 기본 색상 또는 별도 클래스
+        } else {
+          messageDiv.textContent = "Try Again!";
+          messageDiv.className = "lose";
+        }
+      }
+    </script>
+  </body>
+</html>
