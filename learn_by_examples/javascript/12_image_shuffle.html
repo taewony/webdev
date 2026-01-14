@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cat Image Gallery</title>
+  </head>
+  <body>
+    <h1>Cat Image Gallery</h1>
+    <div id="gallery">
+      <!-- <img src="images/cat7.png" alt="Cat 1" width="200" />
+      <img src="images/cat8.png" alt="Cat 2" width="200" />
+      <img src="images/cat9.png" alt="Cat 3" width="200" /> -->
+    </div>
+    <button id="shuffleButton">Shuffle Images</button><br /><br />
+    <button id="ImgChgButton">ImgChgButton</button>
+    <div id="bottomContainer"></div>
+
+    <script>
+      const shuffleButton = document.getElementById("shuffleButton");
+      const imgChgButton = document.getElementById("ImgChgButton");
+      const gallery = document.getElementById("gallery");
+      const bottomContainer = document.getElementById("bottomContainer");
+
+      // 이미지 셔플 기능
+      shuffleButton.addEventListener("click", () => {
+        const images = Array.from(gallery.getElementsByTagName("img"));
+        for (let i = images.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [images[i].src, images[j].src] = [images[j].src, images[i].src];
+        }
+      });
+
+      // 순환할 이미지 목록
+      const imagePaths = [
+        "images/cat7.png",
+        "images/cat8.png",
+        "images/cat9.png",
+      ];
+      let nextIndex = 0;
+
+      // 첫 번째 이미지를 아래 div에 표시하고, 클릭 시 이미지 순환
+      imgChgButton.addEventListener("click", () => {
+        // 기존 내용 지우고 새로운 이미지 요소 생성
+        bottomContainer.innerHTML = "";
+        const newImg = document.createElement("img");
+        newImg.src = imagePaths[nextIndex];
+        newImg.width = 200;
+        newImg.style.cursor = "pointer"; // 클릭 가능하다는 표시
+
+        // 생성된 이미지 클릭 시 다음 이미지로 변경
+        newImg.addEventListener("click", () => {
+          // 다음 인덱스 계산 (나머지 연산으로 순환)
+          nextIndex = (nextIndex + 1) % imagePaths.length;
+          newImg.src = imagePaths[nextIndex];
+        });
+
+        bottomContainer.appendChild(newImg);
+      });
+    </script>
+  </body>
+</html>

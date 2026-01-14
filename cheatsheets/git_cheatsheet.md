@@ -18,6 +18,37 @@ git reset --hard origin/main
 
 > **💡 암기법 (Factory Reset):** > **"내 껀 다 필요 없고(Hard), 원본(Origin)으로 리셋(Reset) 해줘!"**
 
+로컬 수정사항을 임시 저장하고 Pull (아직 커밋하지 않은 경우)
+# 1. 작업 중인 내용 임시 저장 (stash)
+git stash
+
+# 2. 원격 저장소에서 변경사항 가져오기
+git pull origin main
+
+# 3. 임시 저장한 내용 다시 적용
+git stash pop
+
+# 충돌 파일 확인
+git status
+
+# 충돌 해결 후
+git add .
+git commit -m "충돌 해결"
+git push origin main
+
+# 1. 원격 변경사항만 가져오기 (병합은 하지 않음)
+git fetch origin
+
+# 2. 현재 상태 확인
+git status
+
+# 3. 원격 브랜치와 로컬 브랜치 비교
+git log HEAD..origin/main --oneline
+
+# 4. 로컬 수정사항을 먼저 커밋한 후 병합
+git add .
+git commit -m "로컬 작업 커밋"
+git merge origin/main
 ---
 
 ## 2. ⚙️ 초기 설정 및 조회 (Configuration)
