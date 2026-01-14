@@ -19,3 +19,5 @@ for (let i = 0; i < myParagraphs.length; i++) {
 for (mp of myParagraphs) {
   mp.style.backgroundColor = "#ebebeb";
 }
+
+document.getElementsByTagName("h2")[0].style.color = "red";

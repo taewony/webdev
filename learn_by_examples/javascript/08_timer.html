@@ -13,8 +13,8 @@
       //시간, 소진되면 할일
       //setTimeout(할일,시간)
       setTimeout(function () {
-        document.write("반갑습니다!!");
-      }, 4000);
+        document.write("after 7sec, say HELLO!");
+      }, 7000);
 
       greeting = setTimeout(function () {
         document.write("반갑습니다.");
@@ -26,10 +26,11 @@
     <script>
       let count = 0;
       greeting2 = setInterval(function () {
+        // make periodic timer job
         count++;
         document.write(count + "초 경과<br>");
         if (count > 10) {
-          clearInterval(greeting2);
+          clearInterval(greeting2); // stop timer
         }
       }, 1000);
     </script>

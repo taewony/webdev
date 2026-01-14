@@ -17,13 +17,35 @@
         name: "John",
         age: 30,
         greet: function () {
-          console.log("Hello, my name is " + this.name);
+          document.write("Hello, my name is " + this.name + "<br>");
         },
       };
       person.greet();
       document.write("Name: " + person.name + "<br>");
       const { name, age } = person;
       document.write("Destructured Name: " + name + ", Age: " + age + "<br>");
+      document.write("<hr>");
+      let cars = [
+        {
+          maker: "Toyota",
+          model: "Camry",
+          year: 2020,
+          getInfo: function () {
+            return this.year + " " + this.maker + " " + this.model;
+          },
+        },
+        {
+          maker: "Honda",
+          model: "Accord",
+          year: 2019,
+          getInfo: function () {
+            return this.year + " " + this.maker + " " + this.model;
+          },
+        },
+      ];
+
+      document.write("Car Info: " + cars[0].getInfo() + "<br>");
+      document.write("Car Info: " + cars[1].getInfo() + "<br>");
     </script>
     <h1>Merged Object</h1>
     <pre>
