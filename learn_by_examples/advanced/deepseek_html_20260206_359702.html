@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Blue Text with Drop Shadow</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+        }
+        
+        .styled-text {
+            font-size: 72pt;           /* 72pt 크기 */
+            font-family: "Cambria", serif; /* Cambria 폰트 */
+            font-weight: bold;         /* 굵게 */
+            color: royalblue;          /* 로열 블루 색상 */
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); /* 드롭 섀도우 */
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .info-box {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #4169E1;
+            font-family: "Cambria", serif;
+        }
+        
+        .color-swatch {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: royalblue;
+            margin-right: 10px;
+            vertical-align: middle;
+            border: 1px solid #ccc;
+        }
+        
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="styled-text">Hello World.</div>
+        
+        <div class="info-box">
+            <h2>적용된 스타일 정보</h2>
+            <p><strong>텍스트:</strong> "Hello World."</p>
+            <p><strong>폰트 크기:</strong> <code>72pt</code></p>
+            <p><strong>폰트 패밀리:</strong> <code>Cambria</code> (폴백: serif)</p>
+            <p><strong>폰트 두께:</strong> <code>bold</code></p>
+            <p><strong>색상:</strong> <span class="color-swatch"></span> <code>royalblue</code> (HEX: #4169E1)</p>
+            <p><strong>드롭 섀도우:</strong> <code>text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);</code></p>
+            <p>가로 오프셋: 3px, 세로 오프셋: 3px, 블러: 6px, 색상: 검정 50% 투명도</p>
+        </div>
+    </div>
+</body>
+</html>

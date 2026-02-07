@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lit Component DSL Page Generator</title>
+    
+    <!-- Lit 라이브러리 -->
+    <script type="module">
+        import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
+
+        // DSL 파서 컴포넌트
+        class DSLEditor extends LitElement {
+            static styles = css`
+                :host {
+                    display: block;
+                    font-family: 'Segoe UI', system-ui, sans-serif;
+                }
+                
+                .editor-container {
+                    background: #1e293b;
+                    border-radius: 12px;
+                    padding: 24px;
+                    margin: 20px 0;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                }
+                
+                .editor-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 16px;
+                    padding-bottom: 12px;
+                    border-bottom: 2px solid #334155;
+                }
+                
+                .editor-title {
+                    color: #e2e8f0;
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    margin: 0;
+                }
+                
+                .dsl-badge {
+                    background: #3b82f6;
+                    color: white;
+                    padding: 4px 12px;
+                    border-radius: 20px;
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                }
+                
+                .dsl-code {
+                    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                    font-size: 14px;
+                    line-height: 1.6;
+                    color: #cbd5e1;
+                    white-space: pre;
+                    overflow-x: auto;
+                    padding: 16px;
+                    background: #0f172a;
+                    border-radius: 8px;
+                    border: 1px solid #334155;
+                    min-height: 180px;
+                }
+                
+                .dsl-line {
+                    margin: 4px 0;
+                }
+                
+                .dsl-key {
+                    color: #60a5fa;
+                }
+                
+                .dsl-value {
+                    color: #fbbf24;
+                }
+                
+                .dsl-string {
+                    color: #34d399;
+                }
+                
+                .dsl-number {
+                    color: #f472b6;
+                }
+                
+                .dsl-comment {
+                    color: #64748b;
+                }
+            `;
+
+            render() {
+                return html`
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <h3 class="editor-title">📋 DSL Specification Editor</h3>
+                            <span class="dsl-badge">YAML-Like Syntax</span>
+                        </div>
+                        <div class="dsl-code">
+                            <div class="dsl-line"><span class="dsl-key">page</span>: <span class="dsl-string">"Styled Text Example"</span></div>
+                            <div class="dsl-line"><span class="dsl-key">layout</span>: <span class="dsl-string">"centered"</span></div>
+                            <div class="dsl-line"><span class="dsl-key">theme</span>: <span class="dsl-string">"light"</span></div>
+                            <div class="dsl-line"></div>
+                            <div class="dsl-line"><span class="dsl-key">components</span>:</div>
+                            <div class="dsl-line">  - <span class="dsl-key">type</span>: <span class="dsl-string">"heading"</span></div>
+                            <div class="dsl-line">    <span class="dsl-key">content</span>: <span class="dsl-string">"Hello World."</span></div>
+                            <div class="dsl-line">    <span class="dsl-key">styles</span>:</div>
+                            <div class="dsl-line">      <span class="dsl-key">font-size</span>: <span class="dsl-number">72pt</span></div>
+                            <div class="dsl-line">      <span class="dsl-key">font-family</span>: <span class="dsl-string">"Cambria"</span></div>
+                            <div class="dsl-line">      <span class="dsl-key">font-weight</span>: <span class="dsl-string">"bold"</span></div>
+                            <div class="dsl-line">      <span class="dsl-key">color</span>: <span class="dsl-string">"royalblue"</span></div>
+                            <div class="dsl-line">      <span class="dsl-key">text-shadow</span>: <span class="dsl-string">"drop-shadow"</span></div>
+                            <div class="dsl-line"></div>
+                            <div class="dsl-line"><span class="dsl-comment"># DSL Specification v1.0</span></div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        customElements.define('dsl-editor', DSLEditor);
+
+        // 스타일 정의 컴포넌트
+        class StyleDefinition extends LitElement {
+            static styles = css`
+                :host {
+                    display: block;
+                }
+                
+                .style-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                    gap: 16px;
+                    margin: 20px 0;
+                }
+                
+                .style-card {
+                    background: white;
+                    border-radius: 10px;
+                    padding: 20px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                    border-left: 4px solid #3b82f6;
+                    transition: transform 0.2s ease;
+                }
+                
+                .style-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+                }
+                
+                .style-property {
+                    font-weight: 600;
+                    color: #1e293b;
+                    font-size: 0.95rem;
+                    margin-bottom: 6px;
+                }
+                
+                .style-value {
+                    color: #3b82f6;
+                    font-family: 'Monaco', 'Menlo', monospace;
+                    font-size: 0.9rem;
+                    background: #f1f5f9;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                    display: inline-block;
+                }
+                
+                .color-preview {
+                    width: 100%;
+                    height: 40px;
+                    border-radius: 6px;
+                    margin-top: 10px;
+                    border: 1px solid #e2e8f0;
+                }
+                
+                .font-preview {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #1e293b;
+                    margin-top: 10px;
+                }
+            `;
+
+            render() {
+                return html`
+                    <div class="style-grid">
+                        <div class="style-card">
+                            <div class="style-property">font-size</div>
+                            <div class="style-value">72pt</div>
+                            <div class="font-preview" style="font-size: 24px;">Aa</div>
+                        </div>
+                        
+                        <div class="style-card">
+                            <div class="style-property">font-family</div>
+                            <div class="style-value">Cambria, serif</div>
+                            <div class="font-preview" style="font-family: Cambria, serif; font-weight: bold;">Cambria</div>
+                        </div>
+                        
+                        <div class="style-card">
+                            <div class="style-property">font-weight</div>
+                            <div class="style-value">bold</div>
+                            <div class="font-preview" style="font-weight: bold;">Bold Text</div>
+                        </div>
+                        
+                        <div class="style-card">
+                            <div class="style-property">color</div>
+                            <div class="style-value">royalblue (#4169E1)</div>
+                            <div class="color-preview" style="background-color: royalblue;"></div>
+                        </div>
+                        
+                        <div class="style-card">
+                            <div class="style-property">text-shadow</div>
+                            <div class="style-value">drop-shadow effect</div>
+                            <div class="font-preview" style="text-shadow: 3px 3px 6px rgba(0,0,0,0.3);">Shadow</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        customElements.define('style-definition', StyleDefinition);
+
+        // DSL 렌더링 컴포넌트
+        class DSLRenderer extends LitElement {
+            static properties = {
+                dslData: { type: Object }
+            };
+
+            static styles = css`
+                :host {
+                    display: block;
+                }
+                
+                .rendered-output {
+                    min-height: 400px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+                    border-radius: 16px;
+                    padding: 40px;
+                    margin: 30px 0;
+                    box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.1);
+                    border: 1px solid #bfdbfe;
+                }
+                
+                .styled-heading {
+                    font-size: 72pt;
+                    font-family: "Cambria", "Times New Roman", serif;
+                    font-weight: bold;
+                    color: royalblue;
+                    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+                    text-align: center;
+                    margin: 0;
+                    padding: 20px;
+                    line-height: 1.2;
+                }
+                
+                .rendered-info {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 12px;
+                    margin-top: 30px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                    max-width: 600px;
+                    width: 100%;
+                }
+                
+                .info-title {
+                    color: #1e293b;
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    margin: 0 0 16px 0;
+                    border-bottom: 2px solid #e2e8f0;
+                    padding-bottom: 8px;
+                }
+                
+                .info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 12px;
+                }
+                
+                .info-item {
+                    font-size: 0.9rem;
+                }
+                
+                .info-label {
+                    color: #64748b;
+                    font-weight: 500;
+                }
+                
+                .info-value {
+                    color: #1e293b;
+                    font-weight: 600;
+                }
+            `;
+
+            constructor() {
+                super();
+                this.dslData = {
+                    page: "Styled Text Example",
+                    layout: "centered",
+                    theme: "light",
+                    components: [
+                        {
+                            type: "heading",
+                            content: "Hello World.",
+                            styles: {
+                                "font-size": "72pt",
+                                "font-family": "Cambria",
+                                "font-weight": "bold",
+                                "color": "royalblue",
+                                "text-shadow": "drop-shadow"
+                            }
+                        }
+                    ]
+                };
+            }
+
+            render() {
+                return html`
+                    <div class="rendered-output">
+                        <h1 class="styled-heading">Hello World.</h1>
+                        
+                        <div class="rendered-info">
+                            <h3 class="info-title">🎯 DSL 렌더링 결과</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">컴포넌트 타입:</div>
+                                    <div class="info-value">${this.dslData.components[0].type}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">컨텐츠:</div>
+                                    <div class="info-value">"${this.dslData.components[0].content}"</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">적용 스타일:</div>
+                                    <div class="info-value">5개 속성</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">DSL 버전:</div>
+                                    <div class="info-value">1.0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        customElements.define('dsl-renderer', DSLRenderer);
+
+        // 페이지 레이아웃 컴포넌트
+        class PageLayout extends LitElement {
+            static styles = css`
+                :host {
+                    display: block;
+                    font-family: 'Segoe UI', system-ui, sans-serif;
+                }
+                
+                .page-container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 30px;
+                }
+                
+                .page-header {
+                    text-align: center;
+                    margin-bottom: 40px;
+                    padding: 30px;
+                    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                    border-radius: 16px;
+                    color: white;
+                    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+                }
+                
+                .page-title {
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    margin: 0 0 12px 0;
+                }
+                
+                .page-subtitle {
+                    font-size: 1.1rem;
+                    opacity: 0.9;
+                    max-width: 700px;
+                    margin: 0 auto;
+                    line-height: 1.6;
+                }
+                
+                .section {
+                    margin-bottom: 50px;
+                }
+                
+                .section-title {
+                    font-size: 1.75rem;
+                    font-weight: 600;
+                    color: #1e293b;
+                    margin: 0 0 20px 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+                
+                .section-title::before {
+                    content: '';
+                    display: block;
+                    width: 6px;
+                    height: 24px;
+                    background: #3b82f6;
+                    border-radius: 3px;
+                }
+                
+                .tech-stack {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 12px;
+                    margin: 25px 0;
+                }
+                
+                .tech-item {
+                    background: #f1f5f9;
+                    color: #334155;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-size: 0.9rem;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                
+                .tech-item::before {
+                    content: '✓';
+                    color: #10b981;
+                    font-weight: bold;
+                }
+                
+                .lit-badge {
+                    background: #324fff;
+                    color: white;
+                    padding: 4px 12px;
+                    border-radius: 6px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    display: inline-block;
+                    margin-left: 10px;
+                }
+            `;
+
+            render() {
+                return html`
+                    <div class="page-container">
+                        <header class="page-header">
+                            <h1 class="page-title">Lit Component DSL Page Generator</h1>
+                            <p class="page-subtitle">
+                                반응형 웹 컴포넌트 기반의 DSL(도메인 특화 언어) 페이지 생성 시스템
+                            </p>
+                        </header>
+                        
+                        <section class="section">
+                            <h2 class="section-title">DSL 명세 정의 <span class="lit-badge">Lit Component</span></h2>
+                            <p>YAML 형식의 DSL로 페이지 구조와 스타일을 명시적으로 정의합니다.</p>
+                            <dsl-editor></dsl-editor>
+                        </section>
+                        
+                        <section class="section">
+                            <h2 class="section-title">스타일 매핑 시스템</h2>
+                            <p>DSL 속성이 실제 CSS 속성으로 어떻게 변환되는지 확인합니다.</p>
+                            <style-definition></style-definition>
+                            
+                            <div class="tech-stack">
+                                <div class="tech-item">Web Components</div>
+                                <div class="tech-item">Custom Elements</div>
+                                <div class="tech-item">Shadow DOM</div>
+                                <div class="tech-item">ES Modules</div>
+                            </div>
+                        </section>
+                        
+                        <section class="section">
+                            <h2 class="section-title">실시간 렌더링 <span class="lit-badge">Live Preview</span></h2>
+                            <p>DSL 명세가 Lit 컴포넌트를 통해 즉시 렌더링됩니다.</p>
+                            <dsl-renderer></dsl-renderer>
+                        </section>
+                        
+                        <footer style="text-align: center; padding: 30px 0; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 40px;">
+                            <p>Lit Component DSL System • 요청된 스타일: 72pt, Cambria Bold, royal blue, drop shadow</p>
+                            <p style="margin-top: 8px; font-size: 0.9rem;">DSL 페이지 생성 명세 v1.0 • 단일 HTML 파일</p>
+                        </footer>
+                    </div>
+                `;
+            }
+        }
+        customElements.define('page-layout', PageLayout);
+    </script>
+
+    <style>
+        /* 글로벌 스타일 및 폰트 정의 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        /* Cambria 폰트 대체 */
+        @font-face {
+            font-family: 'Cambria';
+            src: local('Cambria'), local('Cambria Math');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Cambria';
+            src: local('Cambria Bold'), local('Cambria Math');
+            font-weight: bold;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <!-- 페이지 로딩 인디케이터 -->
+    <div id="loading" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        transition: opacity 0.3s ease;
+    ">
+        <div style="
+            width: 50px;
+            height: 50px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        "></div>
+        <p style="color: #64748b; font-weight: 500;">Lit 컴포넌트 로드 중...</p>
+    </div>
+
+    <!-- 메인 페이지 레이아웃 -->
+    <page-layout></page-layout>
+
+    <script>
+        // 로딩 화면 제거
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 300);
+            }, 800);
+        });
+
+        // 스피너 애니메이션
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

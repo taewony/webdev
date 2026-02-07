@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Generation Spec - DSL Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Cambria 폰트 정의 */
+        @font-face {
+            font-family: 'Cambria';
+            src: local('Cambria'), local('Cambria Math');
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- DSL 스펙 섹션 -->
+        <section class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">📋 Page Generation Spec (DSL Format)</h1>
+            
+            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-3">📝 DSL Specification:</h2>
+                <pre class="bg-gray-800 text-green-300 p-4 rounded overflow-x-auto">
+                page: "Styled Text Example"
+                layout: centered
+                components:
+                  - type: heading
+                    content: "Hello World."
+                    styles:
+                      font-size: 72pt
+                      font-family: "Cambria"
+                      font-weight: bold
+                      color: royalblue
+                      text-shadow: drop-shadow
+                </pre>
+            </div>
+
+            <!-- Tailwind 구현 -->
+            <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                <h3 class="text-xl font-semibold text-blue-800 mb-3">🎨 Tailwind CSS Implementation:</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-2">DSL to Tailwind Mapping:</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center">
+                                <span class="w-32 font-medium">font-size: 72pt</span>
+                                <span class="text-blue-600">→</span>
+                                <code class="ml-2 bg-gray-200 px-2 py-1 rounded">text-[72pt]</code>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-32 font-medium">font-family: Cambria</span>
+                                <span class="text-blue-600">→</span>
+                                <code class="ml-2 bg-gray-200 px-2 py-1 rounded">font-['Cambria']</code>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-32 font-medium">font-weight: bold</span>
+                                <span class="text-blue-600">→</span>
+                                <code class="ml-2 bg-gray-200 px-2 py-1 rounded">font-bold</code>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-32 font-medium">color: royalblue</span>
+                                <span class="text-blue-600">→</span>
+                                <code class="ml-2 bg-gray-200 px-2 py-1 rounded">text-[#4169E1]</code>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-32 font-medium">text-shadow</span>
+                                <span class="text-blue-600">→</span>
+                                <code class="ml-2 bg-gray-200 px-2 py-1 rounded">drop-shadow-lg</code>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-900 p-4 rounded-lg">
+                        <h4 class="font-medium text-gray-300 mb-2">Combined Tailwind Classes:</h4>
+                        <code class="text-green-300 text-sm block">
+                            class="text-[72pt] font-['Cambria'] font-bold text-[#4169E1] drop-shadow-lg"
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 렌더링 결과 -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">🎯 Rendered Output</h2>
+            
+            <div class="flex flex-col items-center justify-center min-h-[400px] bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow-inner p-8">
+                <!-- DSL로 명시된 스타일 적용 -->
+                <div class="
+                    text-[72pt] 
+                    font-['Cambria'] 
+                    font-bold 
+                    text-[#4169E1]
+                    drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]
+                    text-center
+                    mb-8
+                ">
+                    Hello World.
+                </div>
+                
+                <div class="mt-8 text-gray-600 text-center max-w-md">
+                    <p class="mb-2">✅ DSL 스펙이 Tailwind CSS 클래스로 변환되었습니다.</p>
+                    <p class="text-sm">모든 스타일 속성이 정확히 매핑되어 렌더링됩니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 확장된 DSL 예제 -->
+        <section class="p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl shadow">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🚀 Extended DSL Example</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Full Page DSL Spec:</h3>
+                    <pre class="bg-gray-800 text-amber-100 p-4 rounded text-sm overflow-x-auto">
+page: "Product Dashboard"
+layout: grid-2-column
+theme: light-blue
+components:
+  - type: header
+    content: "Sales Analytics"
+    styles:
+      font-size: 48pt
+      font-family: "Cambria"
+      font-weight: bold
+      color: navy
+      text-shadow: subtle
+  
+  - type: metric
+    title: "Revenue"
+    value: "$125,430"
+    styles:
+      font-size: 36pt
+      font-family: "Arial"
+      color: green-600
+  
+  - type: chart
+    data: monthly-sales
+    styles:
+      border: rounded-lg
+      shadow: medium
+                    </pre>
+                </div>
+                
+                <div class="flex items-center justify-center">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="text-xl font-['Cambria'] font-bold text-navy-800 mb-4">DSL → Tailwind 변환 시스템</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-center">
+                                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                                <span>DSL 파서 엔진</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                                <span>Tailwind 클래스 매핑</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                                <span>실시간 렌더링</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-3 h-3 bg-amber-500 rounded-full mr-3"></div>
+                                <span>스타일 검증</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 푸터 -->
+        <footer class="mt-12 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
+            <p>DSL Page Generation Spec v1.0 • Tailwind CSS 변환 시스템</p>
+            <p class="mt-1">요청된 스타일: 72pt, Cambria Bold, royal blue, drop shadow</p>
+        </footer>
+    </div>
+</body>
+</html>
