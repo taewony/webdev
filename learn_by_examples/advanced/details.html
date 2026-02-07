@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Styled Details Components</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid royalblue;
+        }
+        
+        /* details 스타일 */
+        details {
+            margin-bottom: 0.5rem;
+
+        
+			/* summary 스타일 */
+			summary {
+				cursor: pointer;
+				border: 2px solid silver;
+				background-color: gainsboro;
+				padding: 0.5rem;
+				border-radius: 6px;
+				font-weight: bold;
+				font-size: 1.1em;
+				+ * { margin-top: 0; }
+			}
+        
+			&:open {
+				summary {
+					border-radius: 6px, 6px, 0, 0;
+					background-color: royalblue;
+					border-color: navy;
+					color: white;
+				}
+				/* details 내용 영역 스타일 */
+				&::details-content {
+					border-radius: 0 0 6px 6px;
+					border-color: silver;
+					border-style: solid;
+					border-width: 0 2px 2px 2px;
+					padding: 0.5rem;
+					background-color: white;
+				}
+			}
+		}
+    </style>
+</head>
+<body>
+    <h1>Melodic Rock Artists</h1>
+    
+    <!-- Chez Kane -->
+    <details name="singer">
+        <summary>Chez Kane</summary>
+        <div class="details-content">
+            <p>Chez Kane is a Welsh rock singer whose music channels the spirit of 1980s melodic rock and glam metal, infused with a powerful, modern edge. Signed to Frontiers Records and produced by Danny Rexon of Crazy Lixx, her self-titled debut album revived the sound of artists like Vixen and Pat Benatar — soaring vocals, shimmering synths, and hook-laden choruses that celebrate the golden age of AOR with fresh charisma.</p>
+            
+            <div class="discography-title">Chez Kane Discography</div>
+            <ul>
+                <li><strong>Chez Kane</strong> (2021)</li>
+                <li><strong>Powerzone</strong> (2022)</li>
+            </ul>
+        </div>
+    </details>
+    
+    <!-- Scarlet Rebels -->
+    <details name="singer">
+        <summary>Scarlet Rebels</summary>
+        <div class="details-content">
+            <p>Scarlet Rebels are a Welsh rock band known for their energetic live performances and socially conscious lyrics. Formed in the early 2010s, they blend classic rock influences with modern alternative sounds, creating music that speaks to contemporary issues while maintaining a timeless rock sensibility.</p>
+            
+            <div class="discography-title">Scarlet Rebels Discography</div>
+            <ul>
+                <li><strong>Show Your Colours</strong> (2019)</li>
+                <li><strong>See Through Blue</strong> (2022)</li>
+            </ul>
+        </div>
+    </details>
+    
+    <!-- South of Salem -->
+    <details name="singer">
+        <summary>South of Salem</summary>
+        <div class="details-content">
+            <p>South of Salem is a British hard rock band that emerged in the late 2010s, drawing inspiration from classic 80s rock and metal while adding a modern twist. Their sound combines catchy melodies with powerful riffs and anthemic choruses, quickly earning them a following in the UK rock scene.</p>
+            
+            <div class="discography-title">South of Salem Discography</div>
+            <ul>
+                <li><strong>The Sinner Takes It All</strong> (2020)</li>
+                <li><strong>Death of the Party</strong> (2022)</li>
+            </ul>
+        </div>
+    </details>
+    
+    <!-- Neon Nox -->
+    <details name="singer">
+        <summary>Neon Nox</summary>
+        <div class="details-content">
+            <p>Neon Nox is a synthwave/retrowave artist known for creating atmospheric, nostalgic electronic music that evokes the sounds and aesthetics of 1980s film soundtracks and video games. With pulsating synthesizers and driving beats, Neon Nox transports listeners to a neon-lit, cyberpunk-inspired world.</p>
+            
+            <div class="discography-title">Neon Nox Discography</div>
+            <ul>
+                <li><strong>Programmed</strong> (2018)</li>
+                <li><strong>Prototype</strong> (2020)</li>
+                <li><strong>Syndicate Shadow</strong> (2022)</li>
+            </ul>
+        </div>
+    </details>
+    
+</body>
+</html>
