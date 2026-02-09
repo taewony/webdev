@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Basic Properties</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      import {
+        LitElement,
+        css,
+        html,
+      } from "https://unpkg.com/lit@3/index.js?module";
+
+      class BasicProperties extends LitElement {
+        static properties = {
+          name: { type: String },
+        };
+        static styles = css`
+          p {
+            color: orange;
+          }
+        `;
+        constructor() {
+          super();
+          this.name = "";
+        }
+
+        render() {
+          return html`<p>Hello I'm ${this.name}.</p>`;
+        }
+      }
+
+      customElements.define("basic-properties", BasicProperties);
+
+      /*document.createElement('name-tag'): 'name-tag'라는 태그 이름을 가진 새로운 HTML 요소를 생성한다. 이 요소는 아직 DOM에 연결되지 않았다.
+tag.name = 'dynamically created': 생성된 요소에 name 속성을 설정한다. 여기서 name은 사용자 정의 속성.
+document.body.appendChild(tag): 생성된 요소를 document.body의 자식으로 추가한다. appendChild 메서드는 부모 노드의 자식 노드 리스트의 끝에 새로운 자식 노드를 추가한다.*/
+      const tag = document.createElement("basic-properties");
+      tag.name = "dynamically created";
+      document.body.appendChild(tag);
+    </script>
+    <basic-properties name="statically initialized"></basic-properties>
+
+    <hr />
+  </body>
+</html>

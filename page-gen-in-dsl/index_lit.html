@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fashion Store – Lit</title>
+
+  <!-- Lit -->
+  <script type="module">
+    import { LitElement, html, css } from "https://unpkg.com/lit@3/index.js?module";
+
+    /* -----------------------------
+       Product Card
+    ------------------------------*/
+    class ProductCard extends LitElement {
+      static properties = {
+        product: { type: Object }
+      };
+
+      static styles = css`
+        :host {
+          display: block;
+        }
+
+        .card {
+          background: white;
+          border-radius: 14px;
+          overflow: hidden;
+          position: relative;
+          transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+          transform: scale(1.02);
+        }
+
+        img {
+          width: 100%;
+          height: 280px;
+          object-fit: cover;
+          display: block;
+        }
+
+        .info {
+          padding: 12px;
+        }
+
+        .price {
+          font-weight: 600;
+        }
+
+        .rating {
+          color: gold;
+          font-size: 14px;
+        }
+
+        .wishlist {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          background: rgba(255,255,255,0.85);
+          border-radius: 50%;
+          padding: 6px;
+          cursor: pointer;
+          font-size: 14px;
+        }
+      `;
+
+      render() {
+        const { name, price, rating, image } = this.product;
+        return html`
+          <div class="card">
+            <div class="wishlist">♡</div>
+            <img src="${image}" alt="${name}" />
+            <div class="info">
+              <div>${name}</div>
+              <div class="price">${price}</div>
+              <div class="rating">${"★".repeat(rating)}</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    customElements.define("product-card", ProductCard);
+
+    /* -----------------------------
+       Sidebar Filters
+    ------------------------------*/
+    class SidebarFilters extends LitElement {
+      static styles = css`
+        :host {
+          display: block;
+        }
+
+        aside {
+          background: white;
+          padding: 16px;
+          border-radius: 12px;
+          width: 240px;
+        }
+
+        h3 {
+          margin-top: 0;
+        }
+
+        .colors {
+          display: flex;
+          gap: 8px;
+        }
+
+        .color {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+        }
+
+        .red { background: red; }
+        .black { background: black; }
+        .blue { background: blue; }
+
+        @media (max-width: 768px) {
+          aside {
+            width: 100%;
+          }
+        }
+      `;
+
+      render() {
+        return html`
+          <aside>
+            <h3>Filters</h3>
+
+            <section>
+              <h4>Categories</h4>
+              <label><input type="checkbox" /> Dresses</label><br />
+              <label><input type="checkbox" /> Jackets</label><br />
+              <label><input type="checkbox" /> Shoes</label>
+            </section>
+
+            <section>
+              <h4>Price</h4>
+              <input type="range" min="0" max="500" />
+            </section>
+
+            <section>
+              <h4>Colors</h4>
+              <div class="colors">
+                <span class="color red"></span>
+                <span class="color black"></span>
+                <span class="color blue"></span>
+              </div>
+            </section>
+          </aside>
+        `;
+      }
+    }
+
+    customElements.define("sidebar-filters", SidebarFilters);
+
+    /* -----------------------------
+       Product Grid
+    ------------------------------*/
+    class ProductGrid extends LitElement {
+      static properties = {
+        products: { type: Array },
+        visibleCount: { type: Number }
+      };
+
+      constructor() {
+        super();
+        this.visibleCount = 12;
+        this.products = Array.from({ length: 100 }, (_, i) => ({
+          name: `Product ${i + 1}`,
+          price: `$${(50 + i).toFixed(2)}`,
+          rating: Math.floor(Math.random() * 5) + 1,
+          image: `https://picsum.photos/400/600?random=${i}`
+        }));
+      }
+
+      static styles = css`
+        :host {
+          display: block;
+          flex: 1;
+        }
+
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+          gap: 16px;
+        }
+      `;
+
+      firstUpdated() {
+        const observer = new IntersectionObserver(entries => {
+          if (entries[0].isIntersecting) {
+            this.visibleCount += 8;
+          }
+        });
+
+        observer.observe(this.shadowRoot.getElementById("sentinel"));
+      }
+
+      render() {
+        return html`
+          <div class="grid">
+            ${this.products.slice(0, this.visibleCount).map(
+              p => html`<product-card .product=${p}></product-card>`
+            )}
+          </div>
+          <div id="sentinel"></div>
+        `;
+      }
+    }
+
+    customElements.define("product-grid", ProductGrid);
+
+    /* -----------------------------
+       App Shell
+    ------------------------------*/
+    class FashionApp extends LitElement {
+      static styles = css`
+        :host {
+          display: block;
+          background: #fafafa;
+          min-height: 100vh;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 24px;
+        }
+
+        .layout {
+          display: flex;
+          gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+          .layout {
+            flex-direction: column;
+          }
+        }
+      `;
+
+      render() {
+        return html`
+          <div class="container">
+            <div class="layout">
+              <sidebar-filters></sidebar-filters>
+              <product-grid></product-grid>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    customElements.define("fashion-app", FashionApp);
+  </script>
+</head>
+
+<body>
+  <fashion-app></fashion-app>
+</body>
+</html>

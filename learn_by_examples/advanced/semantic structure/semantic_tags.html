@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>반응형 Flexbox 레이아웃</title>
+
+<style type="text/css">
+/* Step 1: 기본 리셋 및 전체 설정 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  /* Step 2: 메인 컨테이너 - CSS Nesting 적용 */
+  & .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Step 3: 헤더 영역 */
+  & header#top {
+    background-color: #4a6fa5;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 8px;
+    
+    & h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    & p {
+      opacity: 0.9;
+    }
+  }
+  
+  /* Step 4: 네비게이션 - Flexbox 적용 */
+  & nav {
+    background-color: #d9534f;
+    color: white;
+    border-radius: 8px;
+    
+    & ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 0;
+      
+      & li {
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+        
+        & a {
+          display: block;
+          padding: 12px 0;
+          color: white;
+          text-decoration: none;
+          font-weight: bold;
+          transition: background-color 0.3s;
+          
+          &:hover {
+            background-color: #c9302c;
+          }
+        }
+      }
+    }
+  }
+  
+  /* Step 5: 메인 콘텐츠 영역 - Flexbox 레이아웃 */
+  & .main-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    
+    /* Step 6: 사이드바 */
+    & aside {
+      flex: 1;
+      min-width: 250px;
+      background-color: #ff9800;
+      border-radius: 8px;
+      padding: 20px;
+      
+      & h2 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+      }
+      
+      & ul {
+        list-style: none;
+        
+        & li {
+          margin-bottom: 10px;
+          
+          & a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            padding: 8px 12px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            transition: all 0.3s;
+            
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.4);
+              transform: translateX(5px);
+            }
+          }
+        }
+      }
+    }
+    
+    /* Step 7: 섹션 영역 */
+    & section {
+      flex: 3;
+      min-width: 300px;
+      background-color: #f0f9f0;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      
+      & header {
+        background-color: #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        
+        & h2 {
+          color: #333;
+          font-size: 1.8rem;
+          margin-bottom: 10px;
+        }
+        
+        & p {
+          color: #666;
+          line-height: 1.6;
+        }
+      }
+      
+      & article {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        flex: 1;
+        
+        & h3 {
+          color: #333;
+          margin-bottom: 15px;
+          font-size: 1.5rem;
+        }
+        
+        & p {
+          color: #555;
+          line-height: 1.7;
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
+  
+  /* Step 8: 푸터 */
+  & footer {
+    background-color: #4a6fa5;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    
+    & p {
+      margin-bottom: 10px;
+    }
+    
+    & .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+      
+      & a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 12px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.4);
+        }
+      }
+    }
+  }
+  
+  /* Step 9: 반응형 미디어 쿼리 - CSS Nesting 적용 */
+  @media (max-width: 768px) {
+    & .main-content {
+      flex-direction: column;
+      
+      & aside, & section {
+        min-width: 100%;
+      }
+    }
+    
+    & nav ul {
+      flex-direction: column;
+      
+      & li {
+        min-width: 100%;
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    & .container {
+      padding: 0 10px;
+      gap: 10px;
+    }
+    
+    & header#top {
+      padding: 20px 15px;
+      
+      & h1 {
+        font-size: 1.5rem;
+      }
+    }
+    
+    & .main-content {
+      gap: 10px;
+      
+      & aside, & section {
+        padding: 15px;
+      }
+    }
+    
+    & footer {
+      padding: 20px 15px;
+    }
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header id="top">
+    <h1>반응형 Flex&middot;box 레이아웃</h1>
+    <p>CSS Nesting과 Flexbox를 활용한 모던 웹 디자인</p>
+  </header>
+  
+  <nav>
+    <ul>
+      <li><a href="#">홈</a></li>
+      <li><a href="#">소개</a></li>
+      <li><a href="#">서비스</a></li>
+      <li><a href="#">포트폴리오</a></li>
+      <li><a href="#">연락처</a></li>
+    </ul>
+  </nav>
+  
+  <div class="main-content">
+    <section>
+      <header>
+        <h2>주요 콘텐츠 영역</h2>
+        <p>Flexbox를 사용하면 복잡한 레이아웃도 쉽게 구현할 수 있습니다.</p>
+      </header>
+      <article>
+        <h3>CSS Flexbox의 장점</h3>
+        <p>Flexbox는 웹 페이지의 레이아웃을 구성하는 데 매우 유용한 CSS 모듈입니다. 수평이나 수직 정렬, 아이템의 간격 조정, 순서 변경 등을 간편하게 처리할 수 있습니다.</p>
+        <p>반응형 웹 디자인과 함께 사용하면 다양한 화면 크기에 맞춰 유연하게 레이아웃을 조정할 수 있어 모바일 기기에서도 최적의 사용자 경험을 제공할 수 있습니다.</p>
+      </article>
+    </section>
+    
+    <aside>
+      <h2>사이드바 메뉴</h2>
+      <ul>
+        <li><a href="#">최신 글</a></li>
+        <li><a href="#">인기 글</a></li>
+        <li><a href="#">카테고리</a></li>
+        <li><a href="#">아카이브</a></li>
+        <li><a href="#">태그 클라우드</a></li>
+      </ul>
+    </aside>
+  </div>
+  
+  <footer>
+    <p>&copy; 2023 반응형 웹사이트. 모든 권리 보유.</p>
+    <p>CSS Nesting과 Flexbox를 활용한 모던 레이아웃</p>
+    <div class="social-links">
+      <a href="#">페이스북</a>
+      <a href="#">트위터</a>
+      <a href="#">인스타그램</a>
+      <a href="#">링크드인</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

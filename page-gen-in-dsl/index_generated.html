@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fashion Store</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="layout">
+  <!-- Sidebar Filters -->
+  <aside class="filters">
+    <h3>Filters</h3>
+
+    <section>
+      <h4>Categories</h4>
+      <ul>
+        <li><input type="checkbox"> Dresses</li>
+        <li><input type="checkbox"> Jackets</li>
+        <li><input type="checkbox"> Shoes</li>
+      </ul>
+    </section>
+
+    <section>
+      <h4>Price</h4>
+      <input type="range" min="0" max="500" />
+    </section>
+
+    <section>
+      <h4>Colors</h4>
+      <div class="colors">
+        <span class="color red"></span>
+        <span class="color black"></span>
+        <span class="color blue"></span>
+      </div>
+    </section>
+  </aside>
+
+  <!-- Product Grid -->
+  <main class="product-grid" id="productGrid">
+    <!-- Products injected here -->
+  </main>
+</div>
+
+<div id="scrollSentinel"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

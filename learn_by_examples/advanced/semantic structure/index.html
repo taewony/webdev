@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML5 Semantic + Flexbox Layout</title>
+<style>
+/* Root styles */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #ecf0f1;
+    --accent-color: #3498db;
+    --padding: 1rem;
+    --gap: 1rem;
+}
+
+/* Reset some defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Layout container */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: var(--padding);
+}
+
+/* Navigation inside header */
+header nav {
+    display: flex;
+    gap: var(--gap);
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+/* Main content area */
+main {
+    flex: 1;
+    display: flex;
+    gap: var(--gap);
+    padding: var(--padding);
+}
+
+/* Article and aside layout */
+article {
+    flex: 3;
+    background: white;
+    padding: var(--padding);
+    border-radius: 5px;
+}
+
+aside {
+    flex: 1;
+    background: #f7f7f7;
+    padding: var(--padding);
+    border-radius: 5px;
+}
+
+/* Footer */
+footer {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: var(--padding);
+}
+
+/* Responsive: stack columns on small screens */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>My Website</h1>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <article>
+        <h2>Main Article</h2>
+        <p>This is the main content area. It uses the <code>&lt;article&gt;</code> tag inside <code>&lt;main&gt;</code>.</p>
+        <section>
+            <h3>Nested Section</h3>
+            <p>This section is nested inside the article, demonstrating semantic nesting.</p>
+        </section>
+    </article>
+
+    <aside>
+        <h2>Sidebar</h2>
+        <p>This is an <code>&lt;aside&gt;</code> element, often used for related links or ads.</p>
+    </aside>
+</main>
+
+<footer>
+    <p>&copy; 2026 My Website</p>
+</footer>
+
+</body>
+</html>

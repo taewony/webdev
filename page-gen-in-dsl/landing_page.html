@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lit Landing Page</title>
+
+    <script type="module">
+      import {
+        LitElement,
+        html,
+        css,
+      } from "https://unpkg.com/lit@3/index.js?module";
+
+      class LandingPage extends LitElement {
+        static styles = css`
+          header {
+            padding: 24px;
+            background: #111;
+            color: white;
+          }
+
+          .hero-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 64px 24px;
+            text-align: center;
+          }
+
+          .hero-title {
+            font-size: 2.2rem;
+            margin-bottom: 32px;
+          }
+
+          .card-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+          }
+
+          .card {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 16px;
+            border-radius: 12px;
+            background: #fafafa;
+          }
+
+          footer {
+            margin-top: 64px;
+            padding: 24px;
+            background: #f0f0f0;
+            text-align: center;
+          }
+        `;
+
+        render() {
+          return html`
+            <header id="siteHeader">
+              <h1>My Product</h1>
+            </header>
+
+            <main>
+              <section id="hero" class="hero-container">
+                <h2 class="hero-title">Build Faster with GPU-Powered AI</h2>
+
+                <div class="card-row">
+                  <article class="card">
+                    <h3>Fast</h3>
+                    <p>Optimized kernels and pipelines</p>
+                  </article>
+
+                  <article class="card">
+                    <h3>Scalable</h3>
+                    <p>From laptop to multi-GPU clusters</p>
+                  </article>
+
+                  <article class="card">
+                    <h3>Reliable</h3>
+                    <p>Formal specs and runtime checks</p>
+                  </article>
+                </div>
+              </section>
+            </main>
+
+            <footer id="siteFooter">© 2026 SPAK Lab</footer>
+          `;
+        }
+      }
+
+      customElements.define("landing-page", LandingPage);
+    </script>
+  </head>
+
+  <body>
+    <landing-page></landing-page>
+  </body>
+</html>

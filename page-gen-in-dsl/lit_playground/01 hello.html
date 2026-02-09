@@ -1,0 +1,37 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <title>Hello Lit</title>
+  <script type="module">
+    import {
+      LitElement,
+      html,
+      css,
+    } from "https://unpkg.com/lit@3/index.js?module";
+
+    export class SimpleGreeting extends LitElement {
+      static styles = css`
+        p {
+          color: blue;
+        }
+      `;
+
+      static properties = {
+        name: { type: String },
+      };
+
+      constructor() {
+        super();
+        this.name = "Somebody";
+      }
+
+      render() {
+        return html`<p>Hello, ${this.name}!</p>`;
+      }
+    }
+    customElements.define("simple-greeting", SimpleGreeting);
+  </script>
+</head>
+<body>
+  <simple-greeting name="HTML5 and Javascript"></simple-greeting>
+</body>

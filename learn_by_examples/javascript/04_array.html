@@ -147,6 +147,9 @@
         { id: 2, name: "Jane", age: 30 },
         { id: 3, name: "Jack", age: 35 },
       ];
+      users.forEach((user) => {
+        console.log(`${user.name} is ${user.age} years old.`);
+      });
       const filteredUsers = users
         .map((user) => user.age * 2)
         .filter((age) => age > 60);

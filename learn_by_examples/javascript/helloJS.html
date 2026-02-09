@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <script>
+    // function greet(name) {
+    //   return "Hello, " + name + "!";
+    // }
+    const greet = (name) => `Greeting: Hello ${name}!`;
+    const user = {
+      name: "Javascript",
+      sayHi: () => {
+        alert(greet(user.name));
+      },
+    };
+  </script>
+  <body>
+    <h1>Greeting</h1>
+    <p id="greeting"></p>
+    <script>
+      document.getElementById("greeting").innerText = greet("Javascript");
+      user.sayHi();
+
+      const button = document.createElement("button");
+      button.innerText = "Greet User";
+      button.onclick = user.sayHi;
+      document.body.appendChild(button);
+      button.addEventListener("click", function () {
+        console.log(this);
+      });
+      button.addEventListener("click", () => {
+        console.log(this);
+      });
+    </script>
+  </body>
+</html>

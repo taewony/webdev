@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #fafafa;
+}
+
+.layout {
+  display: flex;
+  padding: 16px;
+  gap: 24px;
+}
+
+/* Sidebar */
+.filters {
+  width: 240px;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  position: sticky;
+  top: 16px;
+  height: fit-content;
+}
+
+.filters h3 {
+  margin-top: 0;
+}
+
+/* Product Grid */
+.product-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+/* Product Card */
+.product-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.02);
+}
+
+.product-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 12px;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.rating {
+  color: gold;
+  font-size: 14px;
+}
+
+/* Wishlist */
+.wishlist {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+}
+
+/* Colors */
+.colors {
+  display: flex;
+  gap: 8px;
+}
+
+.color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.red {
+  background: red;
+}
+.black {
+  background: black;
+}
+.blue {
+  background: blue;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .filters {
+    width: 100%;
+  }
+}

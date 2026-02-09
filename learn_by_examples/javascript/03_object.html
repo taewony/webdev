@@ -52,6 +52,11 @@
         객체병합(merged object) = 객체1 + 객체2  // 스프레드 연산자(...)
     </pre>
     <script>
+      const nameA = "Alice";
+      const ageA = 25;
+      const userA = { nameA, ageA };
+      document.write("User A: ", userA.nameA, ", ", userA.ageA, "<br>");
+
       const obj1 = { a: 1, b: 2 };
       const obj2 = { b: 3, c: 4 };
       const mergedObj = { ...obj1, ...obj2 };
