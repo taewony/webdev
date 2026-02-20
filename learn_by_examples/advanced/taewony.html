@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>taewwony page</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+        h1 {
+          color: #fff;
+          margin-top: 50px;
+        }
+        p {
+          color: #979696;
+        }
+      }
+
+      main {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+
+        article {
+          background: #fff;
+          border: 1px solid #eee;
+          border-radius: 5px;
+          padding: 15px;
+          margin-bottom: 20px;
+          h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+          }
+          p {
+            line-height: 1.6;
+            font-size: 1.1em;
+            font-style: italic;
+          }
+          a {
+            display: block; /* Make link block-level */
+            text-align: center;
+            width: 200px;
+            margin: 10px auto;
+            margin-top: 20px;
+            padding: 6px;
+            border-radius: 5px;
+            color: #333;
+            background-color: orange;
+            text-decoration: none;
+            &:hover {
+              text-decoration: underline;
+              transform: translateY(-2px); /* 살짝 떠오르는 효과 */
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+            }
+          }
+        }
+        section {
+          a {
+            display: block;
+            margin: 5px auto;
+            width: 200px;
+            padding: 6px;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #fff;
+            text-align: center;
+            background-color: purple;
+            .notice {
+              display: block;
+              color: red;
+              background-color: gold;
+              font-weight: bold;
+              margin-left: 10px;
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to the Taewony Page</h1>
+      <p>This is a simple HTML page for demonstration purposes.</p>
+    </header>
+    <main>
+      <article>
+        <h2>Article Title</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+        <a href="#none">Learn more</a>
+      </article>
+      <section>
+        <a href="none">
+          click here
+          <span class="notice">notice text here</span>
+        </a>
+      </section>
+    </main>
+  </body>
+</html>

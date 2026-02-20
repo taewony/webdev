@@ -1,0 +1,190 @@
+body {
+  font-family: Arial, Sans-serif;
+  color: #2d5597; /* 주요 텍스트 색상을 짙은 파란 계열(#2d5597)로 지정하여 차분하고 전문적인 인상. */
+  background-color: #fffffc; /* 약간 미색(#fffffc)을 배경으로 사용해 눈의 피로를 줄이고 따뜻한 느낌. */
+}
+
+header {
+  background-color: #023047; /* 다크 블루 (#023047) 배경색으로 사이트의 헤더를 강조. */
+  padding: 20px;
+  transition: 2s; /* 호버 시 테두리가 둥글게 변하는 효과를 부드럽게 표현. */
+
+  &:hover {
+    border-radius: 35px;
+  }
+
+  h1 {
+    color: #fffeef;
+    margin: 5px;
+
+    &:hover {
+      /* text-shadow를 줘서 형광펜처럼 빛나는 효과 → 사용자 인터랙션 재미. */
+      text-shadow:
+        0 0 10px #06f,
+        0 0 20px #fff;
+    }
+  }
+
+  h2 {
+    color: #eff0ef;
+    margin: 0;
+
+    &:hover {
+      text-shadow:
+        0 0 10px #06f,
+        0 0 20px #fff;
+    }
+  }
+
+  .head-image {
+    /* rotatePY는 이미지가 Y축으로 회전하며 앞으로 튀어나오는 3D 느낌 → 헤더에 동적 요소를 추가. */
+    height: 30px;
+    margin: 0 7px 0 20px;
+    animation: rotatePY 10s infinite alternate;
+  }
+}
+
+nav {
+  background-color: #ffe1a8; /* 따뜻한 노란 계열(#ffe1a8)로 헤더와 대비, 시선 유도. */
+  padding: 10px;
+  transition: 2s;
+
+  &:hover {
+    /* 호버 시 배경색이 부드러운 청록(#d9fbfd)으로 변하고 그림자 생성 → 사용자가 현재 nav 영역에 있음을 직관적으로 알림. */
+    background-color: #d9fbfd;
+    box-shadow: 3px 3px 5px;
+  }
+
+  ul {
+    font-size: 14px; /* 기본 폰트 크기 14px로 간결하게. */
+    list-style-type: none; /* 기본 리스트 스타일 제거 */
+    margin: 0;
+    padding: 0;
+
+    li {
+      /* 가로 배치(inline-block)하고 margin으로 간격 조절. */
+      display: inline-block;
+      margin-left: 10px;
+      margin-right: 20px;
+
+      &:hover {
+        background-color: #dfe;
+        animation: blink 2s infinite alternate;
+      }
+    }
+  }
+}
+
+section.container {
+  display: flex; /* 좌우 콘텐츠를 나란히 배치하기 위해 flexbox 사용 → 반응형에 유연하게 대처 */
+
+  .left {
+    /* 고정 폭(width 430px)과 높이(630px)를 줘서 일관된 크기 유지. */
+    width: 430px;
+    height: 630px;
+  }
+
+  .right {
+    flex: auto; /* flex: auto로 남은 공간을 모두 차지. */
+    background-color: #fff;
+    padding: 10px;
+    margin-right: -15px; /* -15px는 오른쪽 여백을 살짝 좁혀서 디자인적으로 더 타이트하게 보이도록 의도한 듯. */
+    border: 2px solid #f6f6ff; /* 배경 흰색, 약간의 패딩, 연한 보더(#f6f6ff)로 카드 느낌. */
+    border-radius: 15px;
+    transition: 2s;
+
+    &:hover {
+      border: 2px solid #ddf; /* 호버 시 보더 색상이 진해지는(ddf) 효과로 인터랙션 강조. */
+    }
+  }
+}
+
+.index {
+  display: flex; /* flex로 내부 요소들을 가로로 배치하려는 의도. */
+  margin-left: 15px; /* 좌측 여백을 줘서 다른 콘텐츠와의 거리감 확보. */
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  table {
+    border-collapse: separate; /* separate와 border-spacing으로 셀 사이 간격을 넓혀 여유로운 레이아웃. */
+    border-spacing: 15px 10px;
+    margin-left: 0;
+    margin-top: -15px;
+
+    td {
+      padding: 1px;
+    }
+
+    a:hover {
+      background-color: #dfe; /* 테이블 안의 링크나 h3 호버 시 배경색과 굵게 강조 */
+      font-weight: bold;
+    }
+  }
+}
+
+a {
+  color: #004e98; /* 기본 링크 색상을 진한 파랑(#004e98)으로 통일. */
+  text-decoration-line: none; /* 밑줄 제거로 깔끔하게. */
+
+  /* target="_blank"나 onclick 속성이 있는 링크는 호버 시 배경색 연한 노랑(#fff3bf)과 물결무늬 밑줄로 특별 강조 */
+  &[target="_blank"]:hover,
+  &[onclick]:hover {
+    background-color: #fff3bf;
+    text-decoration: wavy underline #cdf;
+  }
+}
+
+footer {
+  text-align: center;
+  color: #8d99ae; /* 색상은 차분한 회청(#8d99ae)과 연한 민트 배경(#eaf5ef)으로 부드러운 마무리. */
+  background-color: #eaf5ef;
+  padding: 5px;
+  transition: 2s;
+
+  &:hover {
+    color: #55a; /* 호버 시 글자색이 약간 더 진해지고(#55a), 배경이 거의 흰색으로, 테두리가 둥글게 변하며 그림자 생성 */
+    background-color: #f8fff3;
+    border-radius: 25px;
+    box-shadow: 3px 3px 5px;
+  }
+}
+
+/* 애니메이션 키프레임 (계속 사용) */
+@keyframes rotatePY {
+  0%,
+  30%,
+  100% {
+    transform: perspective(30px) rotateY(0);
+  }
+  20% {
+    transform: perspective(30px) rotateY(720deg) translateZ(15px);
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0.4;
+  }
+  97% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/*  Nested CSS 적용 시 사고 흐름 정리
+전역 스타일(base) 먼저: body, a 등 전체에 적용되는 규칙을 최상위에.
+큰 레이아웃 블록(header, nav, section, footer)을 부모로 설정하고 내부 요소들을 중첩.
+의미 단위로 그룹화하여 가독성과 유지보수성 향상.
+호버 효과나 애니메이션은 해당 요소의 &:hover 내부에 배치하여 관련 스타일을 한곳에서 관리.
+공통적으로 사용되는 애니메이션 키프레임은 분리하되, 어떤 요소에 적용되는지 주석으로 표시하면 좋음. */
+
+/*이렇게 적용하면 좋은 점
+구조 파악이 쉬움: HTML 구조와 CSS 구조가 유사하게 매핑되어, 어떤 스타일이 어디에 영향을 미치는지 직관적.
+수정 용이: 특정 컴포넌트(예: header)의 스타일을 수정하려면 해당 블록만 찾으면 됨.
+코드 재사용성: 중첩 내에서도 클래스나 태그를 조합하여 다양한 변형을 쉽게 추가 가능.
+유지보수 효율: 여러 파일로 분리된 CSS보다 하나의 구조화된 파일에서 관리하기 편리. */
