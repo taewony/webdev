@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>viewport unit</title>
+    <style>
+      /* html,
+      body,
+      .parent {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      } */
+      header {
+        width: 100vw;
+        background-color: silver;
+      }
+      .parent {
+        width: 600px;
+      }
+      .child {
+        width: 50%;
+        height: 50%;
+        background-color: lightgray;
+      }
+      .child2 {
+        width: 50vw;
+        height: 50vh;
+        background-color: green;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Logo</h1>
+    </header>
+    <hr />
+    <div class="parent">
+      <div class="child">Percent</div>
+      <div class="child2">vw</div>
+    </div>
+  </body>
+</html>
