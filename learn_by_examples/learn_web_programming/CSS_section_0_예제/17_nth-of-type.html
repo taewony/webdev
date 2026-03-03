@@ -1,22 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nth-of type Selector</title>
     <style>
-
+      h2:first-of-type {
+        background-color: lightpink;
+      }
+      h2:nth-of-type(2) {
+        background-color: lightblue;
+      }
+      h2:nth-of-type(3) {
+        background-color: lightgreen;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>nth-of-type</h1>
     <h2>heading 2</h2>
     <h2>heading 2</h2>
     <h2>heading 2</h2>
-
-</body>
-
+  </body>
 </html>
