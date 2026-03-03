@@ -7,21 +7,86 @@
 
   <body>
     <h1>Join form</h1>
-    <form>
+    <form action="#" method="post">
       <fieldset>
         <legend>필수 사항</legend>
         <p>
           <label for="username">Name : </label>
-          <input type="text" id="username" />
+          <input type="text" id="username" required />
+        </p>
+        <p>
+          <label for="useremail">Email : </label>
+          <input type="email" id="useremail" required />
+        </p>
+        <p>
+          <label for="password">Password : </label>
+          <input type="password" id="password" required />
+        </p>
+        <p>
+          <!-- <input type="submit" value="가입하기" /> -->
+          <button>
+            <img src="images/iconfinder_tick_red_619540.png" alt="가입하기" />
+          </button>
         </p>
       </fieldset>
       <fieldset>
         <legend>옵션사항</legend>
         <p>
+          <label for="address">주소 : </label>
+          <select name="address" id="address">
+            <option value="seoul">서울</option>
+            <option value="busan">부산</option>
+            <option value="incheon">인천</option>
+          </select>
+        </p>
+        <p>
+          <span>성별</span>
+          <label for="male">남성</label>
+          <input type="radio" id="male" name="gender" value="남성" />
+          <label for="female">여성</label>
+          <input type="radio" id="female" name="gender" value="여성" />
+        </p>
+        <p>
+          <span>관심사항</span>
+          <label for="html">HTML</label>
+          <input type="checkbox" id="html" name="interest" value="html" />
+          <label for="css">CSS</label>
+          <input type="checkbox" id="css" name="interest" value="css" />
+          <label for="js">JavaScript</label>
+          <input type="checkbox" id="js" name="interest" value="js" />
+        </p>
+        <p>
+          <label for="message">인사말 : </label>
+          <textarea id="message" name="message" rows="10" cols="30"></textarea>
+        </p>
+        <p>
           <label for="profile">이미지 등록</label>
           <input type="file" id="profile" name="profile" />
         </p>
       </fieldset>
+      <fieldset>
+        <p>
+          <label for="website">웹사이트 : </label>
+          <input type="url" id="website" name="website" required />
+        </p>
+        <p>
+          <label for="birthday">생년월일 : </label>
+          <input type="date" id="birthday" name="birthday" required />
+        </p>
+        <p>
+          <label for="langs">학습할 언어</label>
+          <input id="langs" name="langs" list="langs-list" required />
+          <datalist id="langs-list">
+            <option value="HTML" />
+            <option value="CSS" />
+            <option value="JavaScript" />
+            <option value="Python" />
+          </datalist>
+        </p>
+      </fieldset>
+      <p>
+        <input type="submit" />
+      </p>
     </form>
   </body>
 </html>
