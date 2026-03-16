@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지구톤 컬러 탐험 🌍</title>
+  <style>
+    /* ----- 디자인 토큰 (그대로 유지 + 확장) ----- */
+    :root {
+      /* Primary Earth Tones */
+      --earth-sand: #E8DCC4;
+      --earth-clay: #C9A67C;
+      --earth-terracotta: #B8765F;
+      --earth-sage: #9CAF88;
+      --earth-moss: #6B7D5C;
+      --earth-stone: #736B5E;
+      --earth-bark: #4A4238;
+
+      /* Neutral Backgrounds */
+      --bg-cream: #FAF8F3;
+      --bg-linen: #F5F1E8;
+      --bg-parchment: #EDE5D8;
+
+      /* Text Colors */
+      --text-primary: #3D3428;
+      --text-secondary: #655D52;
+      --text-muted: #8C8379;
+
+      /* Accent & Interactive */
+      --accent-amber: #D4A574;
+      --accent-green: #7FA063;
+      --accent-rust: #A85F44;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: var(--bg-linen);
+      border-bottom: 2px solid var(--earth-sand);
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    header h1 {
+      color: var(--earth-bark);
+      font-size: 2.5rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      flex: 1;
+    }
+
+    /* 카드 컨테이너 */
+    .card-container {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background-color: var(--bg-parchment);
+      border-radius: 24px;
+      padding: 2rem;
+      flex: 1 1 300px;
+      border-top: 6px solid var(--earth-sage);
+      box-shadow: 0 8px 20px rgba(99, 75, 55, 0.08);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card h2 {
+      color: var(--earth-bark);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    /* 버튼 스타일 (기본 디자인 계승 + 창의적 변형) */
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 1.8rem;
+      border: none;
+      border-radius: 60px;          /* 더 부드럽게 */
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      letter-spacing: 0.02em;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-amber);
+      color: #2f2a24;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-rust);
+      color: white;
+      box-shadow: 0 8px 14px rgba(168, 95, 68, 0.25);
+      transform: scale(1.02);
+    }
+
+    /* 두 번째 카드의 상단 색상은 이미 인라인 스타일로 지정되어 있음 */
+    
+    /* 상태 표시줄 (기존 유지) */
+    .status-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-green);
+      font-weight: bold;
+      margin: 2rem 0 1rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--bg-linen);
+      border-radius: 40px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      background-color: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ----- 새로 추가: 상세 컬러 패널 (창의적 디테일) ----- */
+    .detail-panel {
+      background-color: var(--bg-linen);
+      border-radius: 32px;
+      padding: 2rem 2rem 2.2rem;
+      margin: 2rem 0 3rem;
+      border: 1px solid var(--earth-sand);
+      box-shadow: 0 15px 30px -12px rgba(75, 55, 40, 0.2);
+      display: none;  /* 기본 숨김 */
+      animation: slideFade 0.4s ease;
+    }
+
+    @keyframes slideFade {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      border-bottom: 2px dashed var(--earth-clay);
+      padding-bottom: 0.8rem;
+    }
+
+    .panel-header h3 {
+      font-size: 1.9rem;
+      font-weight: 400;
+      color: var(--earth-bark);
+      letter-spacing: -0.01em;
+    }
+
+    .close-btn {
+      background: var(--bg-parchment);
+      border: none;
+      font-size: 2rem;
+      line-height: 1;
+      cursor: pointer;
+      color: var(--earth-stone);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      background-color: var(--earth-clay);
+      color: white;
+      transform: rotate(90deg);
+    }
+
+    /* 컬러 그리드 */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .color-item {
+      background: var(--bg-cream);
+      border-radius: 20px;
+      padding: 1.2rem 1rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      border: 1px solid var(--earth-sand);
+      transition: all 0.15s;
+    }
+
+    .color-item:hover {
+      transform: scale(1.02);
+      border-color: var(--earth-terracotta);
+    }
+
+    .color-swatch {
+      width: 100%;
+      height: 70px;
+      border-radius: 16px;
+      margin-bottom: 0.8rem;
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .color-name {
+      font-weight: 700;
+      color: var(--earth-bark);
+      font-size: 1.1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .color-token {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      background: var(--bg-parchment);
+      padding: 0.2rem 0.5rem;
+      border-radius: 30px;
+      display: inline-block;
+      color: var(--text-secondary);
+      margin: 0.4rem 0 0.2rem;
+    }
+
+    .color-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      border-top: 1px dotted var(--earth-sand);
+      padding-top: 0.5rem;
+      margin-top: 0.4rem;
+    }
+
+    /* 패널 내부 구분선 (두 데이터셋에 따라 다르게 보여도 OK) */
+    .accent-badge {
+      background: var(--accent-green);
+      color: white;
+      font-size: 0.8rem;
+      border-radius: 40px;
+      padding: 0.2rem 0.9rem;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    /* 반응형 */
+    @media (max-width: 650px) {
+      .card-container { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌱 Earth Tones 디자인 토큰</h1>
+    <p>자연에서 영감받은 색상들 — 버튼을 눌러 상세한 팔레트를 만나보세요</p>
+  </header>
+
+  <main>
+    <div class="card-container">
+      <!-- 카드 1: 자연스러운 타이포그래피 -->
+      <article class="card" style="border-top-color: var(--earth-sage);">
+        <h2>📜 텍스트 & 배경</h2>
+        <p>글자와 배경에 사용된 earth-tone 변수들. 순수한 흑백 대신 부드러운 갈색과 크림 색조로 눈이 편안한 구성을 만들어냅니다.</p>
+        <button class="btn btn-primary" id="btnTypography">자세히 알아보기</button>
+      </article>
+
+      <!-- 카드 2: 따뜻한 인터랙션 -->
+      <article class="card" style="border-top-color: var(--earth-clay);">
+        <h2>🔥 인터랙션 & 포인트</h2>
+        <p>버튼, 활성 상태, 강조에 사용되는 악센트 컬러. 앰버, 그린, 러스트가 인터페이스에 생명력을 불어넣습니다.</p>
+        <button class="btn btn-primary" id="btnInteraction">체험해보기</button>
+      </article>
+    </div>
+
+    <!-- 기존 상태 표시줄 (약간 변경) -->
+    <div class="status-active">
+      <span class="status-dot"></span>
+      <span>지구톤 팔레트 — 아래 버튼을 눌러 자세한 설명을 확인하세요</span>
+    </div>
+
+    <!-- 숨겨진 상세 패널 (창의적 컬러 설명 구역) -->
+    <div id="colorDetailPanel" class="detail-panel">
+      <div class="panel-header">
+        <h3 id="panelTitle">🎨 지구톤 컬러 가이드</h3>
+        <button class="close-btn" id="closePanelBtn" aria-label="닫기">✕</button>
+      </div>
+      <div id="panelContent">
+        <!-- 콘텐츠는 자바스크립트로 동적 채움 -->
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    (function() {
+      // ---- 디자인 토큰 상세 데이터 (창의적인 설명 포함) ----
+      const colorLibrary = {
+        // 기본 어스 톤 + 텍스트 계열
+        typographySet: [
+          { name: '샌드', token: '--earth-sand', value: '#E8DCC4', desc: '배경 경계와 은은한 구분선. 햇살 머금은 모래밭.' },
+          { name: '클레이', token: '--earth-clay', value: '#C9A67C', desc: '따뜻한 점토색. 카드 강조나 부드러운 경계에 사용.' },
+          { name: '테라코타', token: '--earth-terracotta', value: '#B8765F', desc: '구운 흙의 색. 포인트로 따뜻함을 더함.' },
+          { name: '세이지', token: '--earth-sage', value: '#9CAF88', desc: '차분한 세이지 그린. 자연의 침묵을 상징.' },
+          { name: '모스', token: '--earth-moss', value: '#6B7D5C', desc: '깊은 이끼색. 안정감과 무게감.' },
+          { name: '스톤', token: '--earth-stone', value: '#736B5E', desc: '중성적인 돌멩이색. 그레이의 대체재.' },
+          { name: '바크', token: '--earth-bark', value: '#4A4238', desc: '나무껍질처럼 짙고 고급스러운 헤더색.' }
+        ],
+        neutralTextSet: [
+          { name: '크림', token: '--bg-cream', value: '#FAF8F3', desc: '전반적인 배경. 우유빛 크림.' },
+          { name: '리넨', token: '--bg-linen', value: '#F5F1E8', desc: '헤더와 살짝 다른 영역. 린넨 질감.' },
+          { name: '파치먼트', token: '--bg-parchment', value: '#EDE5D8', desc: '카드 배경. 오래된 양피지의 느낌.' },
+          { name: '프라이머리 텍스트', token: '--text-primary', value: '#3D3428', desc: '진한 갈색 — 기본 본문.' },
+          { name: '세컨더리 텍스트', token: '--text-secondary', value: '#655D52', desc: '조금 연한 갈색 — 보조 정보.' },
+          { name: '뮤트드 텍스트', token: '--text-muted', value: '#8C8379', desc: '가장 연하게 — 설명, 비활성.' }
+        ],
+        // 악센트 & 인터랙티브
+        interactionSet: [
+          { name: '앰버', token: '--accent-amber', value: '#D4A574', desc: '주요 버튼/CTA. 따뜻한 환영의 색.' },
+          { name: '그린', token: '--accent-green', value: '#7FA063', desc: '활성 상태, 성공 메시지. 생명력.' },
+          { name: '러스트', token: '--accent-rust', value: '#A85F44', desc: '호버/강조. 흙속의 철분.' }
+        ]
+      };
+
+      // DOM 요소
+      const panel = document.getElementById('colorDetailPanel');
+      const panelTitle = document.getElementById('panelTitle');
+      const panelContent = document.getElementById('panelContent');
+      const closeBtn = document.getElementById('closePanelBtn');
+      const btnTypo = document.getElementById('btnTypography');
+      const btnInter = document.getElementById('btnInteraction');
+
+      // 헬퍼: 컬러 아이템 HTML 생성
+      function renderColorItems(items) {
+        return items.map(item => `
+          <div class="color-item">
+            <div class="color-swatch" style="background-color: ${item.value};"></div>
+            <div class="color-name">${item.name}</div>
+            <div class="color-token">${item.token}</div>
+            <div class="color-desc">${item.desc}</div>
+          </div>
+        `).join('');
+      }
+
+      // 타이포그래피 + 뉴트럴 통합 (창의적으로 묶어서 전시)
+      function showTypographyDetail() {
+        panelTitle.innerText = '📖 텍스트 & 배경 컬러 스토리';
+        // 두 그룹을 합쳐서 표시 (자연스럽게 그룹화)
+        const combined = [...colorLibrary.typographySet, ...colorLibrary.neutralTextSet];
+        panelContent.innerHTML = `
+          <p style="margin-bottom:1.5rem; color: var(--text-secondary);">
+            <span class="accent-badge">배경·텍스트·어스톤</span> 
+            모든 기본 변수들이 조화를 이룹니다. 깊은 갈색(${colorLibrary.typographySet[6].value})에서 부드러운 크림까지.
+          </p>
+          <div class="color-grid">
+            ${renderColorItems(combined)}
+          </div>
+        `;
+      }
+
+      // 인터랙션 + 악센트 + 추가로 어스톤 중 일부(클레이, 테라코타)도 인터랙션에 어울리게 포함
+      function showInteractionDetail() {
+        panelTitle.innerText = '🔥 인터랙션 & 악센트 익스플로러';
+        // interactionSet 에 약간의 earth 톤을 더해 더 풍부하게 (클레이, 테라코타)
+        const extra = colorLibrary.typographySet.filter(c => c.token === '--earth-clay' || c.token === '--earth-terracotta');
+        const combined = [...colorLibrary.interactionSet, ...extra];
+        panelContent.innerHTML = `
+          <p style="margin-bottom:1.5rem; color: var(--text-secondary);">
+            <span class="accent-badge" style="background:var(--accent-rust);">호버·활성·강조</span> 
+            버튼과 상태 변화에 반응하는 따뜻한 컬러들. 앰버(${colorLibrary.interactionSet[0].value})는 클릭을 유도하고, 러스트(${colorLibrary.interactionSet[2].value})는 포근한 피드백을 줍니다.
+          </p>
+          <div class="color-grid">
+            ${renderColorItems(combined)}
+          </div>
+        `;
+      }
+
+      // 패널 보이기
+      function openPanel(contentType) {
+        if (contentType === 'typo') {
+          showTypographyDetail();
+        } else {
+          showInteractionDetail();
+        }
+        panel.style.display = 'block';
+        // 스크롤을 패널 쪽으로 부드럽게
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      // 패널 닫기
+      function closePanel() {
+        panel.style.display = 'none';
+      }
+
+      // 버튼 이벤트
+      btnTypo.addEventListener('click', (e) => {
+        e.preventDefault();
+        openPanel('typo');
+      });
+
+      btnInter.addEventListener('click', (e) => {
+        e.preventDefault();
+        openPanel('inter');
+      });
+
+      closeBtn.addEventListener('click', closePanel);
+
+      // 패널 외부 클릭시 닫기? (선택사항 - 창의적 편의)
+      window.addEventListener('click', (e) => {
+        if (panel.style.display === 'block' && !panel.contains(e.target) && e.target !== btnTypo && e.target !== btnInter) {
+          // 단, 버튼 클릭시 패널이 열리는 중복 방지를 위해 약간의 조건
+          if (!btnTypo.contains(e.target) && !btnInter.contains(e.target)) {
+            closePanel();
+          }
+        }
+      });
+
+      // ESC 키로 닫기
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && panel.style.display === 'block') {
+          closePanel();
+        }
+      });
+    })();
+  </script>
+
+  <!-- 추가 푸터 (분위기) -->
+  <footer style="text-align: center; padding: 2rem; color: var(--text-muted); border-top: 1px solid var(--earth-sand); background: var(--bg-linen);">
+    <p>🌍 지구빛 컬러 시스템 — 디자인 토큰을 직접 만져보세요</p>
+  </footer>
+</body>
+</html>

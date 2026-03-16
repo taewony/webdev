@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Tokens Sample</title>
+  <style>
+    /* 1. 디자인 토큰 정의 (전역 변수) */
+    :root {
+      /* Primary Earth Tones */
+      --earth-sand: #E8DCC4;
+      --earth-clay: #C9A67C;
+      --earth-terracotta: #B8765F;
+      --earth-sage: #9CAF88;
+      --earth-moss: #6B7D5C;
+      --earth-stone: #736B5E;
+      --earth-bark: #4A4238;
+
+      /* Neutral Backgrounds */
+      --bg-cream: #FAF8F3;
+      --bg-linen: #F5F1E8;
+      --bg-parchment: #EDE5D8;
+
+      /* Text Colors */
+      --text-primary: #3D3428;
+      --text-secondary: #655D52;
+      --text-muted: #8C8379;
+
+      /* Accent & Interactive */
+      --accent-amber: #D4A574;
+      --accent-green: #7FA063;
+      --accent-rust: #A85F44;
+    }
+
+    /* 2. 토큰을 활용한 기본 스타일링 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream); /* 배경 토큰 */
+      color: var(--text-primary);        /* 기본 텍스트 토큰 */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* 3. 레이아웃 및 컴포넌트 스타일링 */
+    header {
+      background-color: var(--bg-linen);
+      border-bottom: 2px solid var(--earth-sand);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      color: var(--earth-bark);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted); /* 보조 텍스트 토큰 */
+    }
+
+    main {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    .card-container {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background-color: var(--bg-parchment);
+      border-radius: 8px;
+      padding: 1.5rem;
+      flex: 1;
+      border-top: 4px solid var(--earth-sage);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .card h2 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .card p {
+      color: var(--text-secondary); /* 본문 텍스트 토큰 */
+      margin-bottom: 1.5rem;
+    }
+
+    /* 4. 인터랙티브 요소 (버튼, 링크 등) */
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    /* 주 행동 버튼 (CTA) */
+    .btn-primary {
+      background-color: var(--accent-amber); /* 앰버 색상 포인트 */
+      color: #fff;
+    }
+
+    /* 버튼 호버 상태 */
+    .btn-primary:hover {
+      background-color: var(--accent-rust); /* 마우스 오버 시 러스트 색상으로 변경 */
+    }
+
+    /* 활성 상태 표시 요소 */
+    .status-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-green); /* 활성 상태 초록색 */
+      font-weight: bold;
+      margin-top: 2rem;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: var(--accent-green);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Nature Web Design</h1>
+    <p>디자인 토큰을 활용한 Earth Tones 테마의 웹페이지 샘플</p>
+  </header>
+
+  <main>
+    <div class="card-container">
+      <article class="card">
+        <h2>자연스러운 타이포그래피</h2>
+        <p>글자색도 순수한 검은색 대신, 배경과 어울리는 깊은 갈색(Deep brown)과 중간 갈색(Medium brown)을 사용하여 눈의 피로를 덜어줍니다.</p>
+        <a href="#" class="btn btn-primary">자세히 알아보기</a>
+      </article>
+
+      <article class="card" style="border-top-color: var(--earth-clay);">
+        <h2>따뜻한 인터랙션</h2>
+        <p>사용자의 행동을 유도하는 버튼에는 따뜻한 앰버(Warm amber) 색상을, 마우스를 올렸을 때는 러스트(Rust) 색상을 적용했습니다.</p>
+        <a href="#" class="btn btn-primary">체험해보기</a>
+      </article>
+    </div>
+
+    <div class="status-active">
+      <span class="status-dot"></span>
+      시스템이 정상적으로 작동 중입니다.
+    </div>
+  </main>
+
+</body>
+</html>
