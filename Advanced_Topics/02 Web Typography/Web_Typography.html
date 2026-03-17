@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Typography Education Demo</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Playfair+Display:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* =================================
+5️⃣ Design System Font Tokens
+================================= */
+
+      :root {
+        --font-heading: "Playfair Display", serif;
+        --font-body: "Inter", sans-serif;
+
+        --font-weight-light: 300;
+        --font-weight-normal: 400;
+        --font-weight-bold: 700;
+
+        --font-size-title: 42px;
+        --font-size-section: 28px;
+        --font-size-body: 18px;
+      }
+
+      body {
+        font-family: var(--font-body);
+        margin: 40px;
+        line-height: 1.7;
+      }
+
+      section {
+        margin-bottom: 70px;
+      }
+
+      h1 {
+        font-family: var(--font-heading);
+        font-size: var(--font-size-title);
+      }
+
+      h2 {
+        font-size: var(--font-size-section);
+      }
+
+      /* =================================
+1️⃣ Heading Typography Design
+================================= */
+
+      .heading-demo h3 {
+        font-family: var(--font-heading);
+        font-size: 34px;
+        letter-spacing: 1px;
+      }
+
+      .heading-demo p {
+        max-width: 600px;
+      }
+
+      /* =================================
+2️⃣ Serif vs Sans-serif
+================================= */
+
+      .font-compare {
+        display: flex;
+        gap: 40px;
+      }
+
+      .serif {
+        font-family: serif;
+      }
+
+      .sans {
+        font-family: sans-serif;
+      }
+
+      /* =================================
+3️⃣ Variable Font Demo
+================================= */
+
+      .variable-demo span {
+        font-family: "Inter", sans-serif;
+        font-size: 28px;
+      }
+
+      .w100 {
+        font-weight: 100;
+      }
+      .w300 {
+        font-weight: 300;
+      }
+      .w500 {
+        font-weight: 500;
+      }
+      .w700 {
+        font-weight: 700;
+      }
+      .w900 {
+        font-weight: 900;
+      }
+
+      /* =================================
+4️⃣ Responsive Typography
+================================= */
+
+      .responsive-text {
+        font-size: clamp(16px, 2vw, 26px);
+      }
+
+      /* ================================= */
+
+      .demo-box {
+        background: #f4f4f4;
+        padding: 20px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Web Typography Design Demo</h1>
+
+    <!-- 1 Heading typography -->
+
+    <section class="heading-demo">
+      <h2>1️⃣ Heading Typography Design</h2>
+
+      <div class="demo-box">
+        <h3>Designing Headlines</h3>
+
+        <p>
+          Headings usually use a different font family and larger spacing to
+          create a visual hierarchy.
+        </p>
+      </div>
+    </section>
+
+    <!-- 2 Serif vs Sans -->
+
+    <section>
+      <h2>2️⃣ Serif vs Sans-serif Comparison</h2>
+
+      <div class="font-compare">
+        <div class="demo-box serif">
+          <h3>Serif</h3>
+
+          <p>
+            Serif fonts have small decorative strokes at the end of letters.
+            Traditionally used in books and editorial design.
+          </p>
+        </div>
+
+        <div class="demo-box sans">
+          <h3>Sans-serif</h3>
+
+          <p>
+            Sans-serif fonts have clean lines and are commonly used in modern
+            web interfaces.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 Variable font -->
+
+    <section class="variable-demo">
+      <h2>3️⃣ Variable Font Weight Demo</h2>
+
+      <div class="demo-box">
+        <span class="w100">Weight 100</span><br />
+        <span class="w300">Weight 300</span><br />
+        <span class="w500">Weight 500</span><br />
+        <span class="w700">Weight 700</span><br />
+        <span class="w900">Weight 900</span>
+      </div>
+    </section>
+
+    <!-- 4 Responsive typography -->
+
+    <section>
+      <h2>4️⃣ Responsive Typography</h2>
+
+      <div class="demo-box">
+        <p class="responsive-text">
+          Resize the browser window. This text automatically scales using CSS
+          clamp().
+        </p>
+      </div>
+    </section>
+
+    <!-- 5 Design system tokens -->
+
+    <section>
+      <h2>5️⃣ Design System Font Tokens</h2>
+
+      <div class="demo-box">
+        <p>This page uses CSS variables as typography tokens.</p>
+
+        <pre>
+
+--font-heading
+--font-body
+--font-size-title
+--font-size-body
+--font-weight-bold
+
+</pre
+        >
+      </div>
+    </section>
+  </body>
+</html>

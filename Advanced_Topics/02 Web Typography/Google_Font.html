@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google 웹폰트로 배우는 타이포그래피</title>
+    <!-- Google Fonts 로드: 여러 폰트를 한 번에 요청 (serif, sans-serif, variable) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Open+Sans:ital,wght@0,300;0,600;1,300&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Montserrat:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* 기본 스타일 및 리셋 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #faf9f8;
+        color: #1e1e1e;
+        line-height: 1.6;
+        padding: 2rem;
+        font-family: "Open Sans", sans-serif; /* 기본 폰트 */
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        padding: 2.5rem;
+      }
+      section {
+        margin-bottom: 3.5rem;
+        border-bottom: 1px solid #eaeaea;
+        padding-bottom: 2rem;
+      }
+      section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1.2rem;
+        font-family: "Montserrat", sans-serif;
+        letter-spacing: -0.02em;
+        color: #2c3e50;
+        border-left: 5px solid #3498db;
+        padding-left: 1rem;
+      }
+      h3 {
+        font-size: 1.5rem;
+        margin: 1.5rem 0 0.8rem;
+        font-family: "Montserrat", sans-serif;
+        color: #2c3e50;
+      }
+      p {
+        margin-bottom: 1rem;
+        word-break: keep-all;
+      }
+      .note {
+        background: #f0f7ff;
+        padding: 1rem 1.5rem;
+        border-radius: 16px;
+        margin: 1.2rem 0;
+        font-size: 0.95rem;
+        border-left: 4px solid #2980b9;
+      }
+      .example-box {
+        background: #f9f9f9;
+        border-radius: 20px;
+        padding: 1.8rem;
+        margin: 1.5rem 0;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .flex-row {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .col {
+        flex: 1 1 250px;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      }
+
+      /* ---------- 섹션 1: Heading 디자인 ---------- */
+      .heading-demo h1 {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 900;
+        font-size: 3rem;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        color: #1e3c5c;
+        margin: 0.5rem 0;
+        text-transform: capitalize;
+      }
+      .heading-demo h2 {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 2.5rem;
+        letter-spacing: -0.01em;
+        border-left: none;
+        padding-left: 0;
+        color: #2c3e50;
+        margin: 0.5rem 0;
+      }
+      .heading-demo h3 {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 400;
+        font-size: 2rem;
+        letter-spacing: normal;
+        color: #4a6f8e;
+        margin: 0.5rem 0;
+      }
+      .heading-demo p {
+        color: #4a5568;
+        font-size: 1rem;
+      }
+
+      /* ---------- 섹션 2: Serif vs Sans-Serif ---------- */
+      .serif-font {
+        font-family: "Lora", serif;
+      }
+      .sans-font {
+        font-family: "Open Sans", sans-serif;
+      }
+      .compare-card {
+        background: #fff;
+        padding: 1.2rem;
+        border-radius: 14px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        margin-bottom: 1rem;
+      }
+      .compare-card h4 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 1px dashed #ccc;
+        padding-bottom: 0.3rem;
+      }
+      .compare-card.serif h4 {
+        font-family: "Lora", serif;
+      }
+      .compare-card.sans h4 {
+        font-family: "Open Sans", sans-serif;
+      }
+
+      /* ---------- 섹션 3: 가변 폰트 (Variable Font) ---------- */
+      .variable-demo {
+        text-align: center;
+      }
+      #variable-text {
+        font-family: "Roboto Flex", sans-serif;
+        font-size: 3rem;
+        font-weight: 400; /* 기본값 */
+        transition: font-weight 0.2s;
+        margin: 1.5rem 0 1rem;
+        line-height: 1.2;
+        word-break: break-word;
+      }
+      .slider-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+      input[type="range"] {
+        width: 100%;
+        height: 8px;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #9b59b6 0%, #3498db 100%);
+        -webkit-appearance: none;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 24px;
+        height: 24px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        border: 2px solid #3498db;
+        cursor: pointer;
+      }
+      #weight-value {
+        font-weight: 600;
+        background: #2c3e50;
+        color: white;
+        padding: 0.3rem 1.2rem;
+        border-radius: 40px;
+        font-size: 1.1rem;
+      }
+
+      /* ---------- 섹션 4: 반응형 타이포그래피 ---------- */
+      .responsive-example {
+        background: linear-gradient(145deg, #e8f0fe, #f9fcff);
+        padding: 2rem;
+        border-radius: 24px;
+        text-align: center;
+      }
+      .responsive-headline {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        /* clamp(최소값, 선호값, 최대값) */
+        font-size: clamp(2rem, 8vw, 5rem);
+        color: #1f3a5f;
+        line-height: 1.2;
+        margin: 0.5rem 0;
+      }
+      .responsive-caption {
+        font-size: clamp(0.9rem, 4vw, 1.5rem);
+        color: #4b6584;
+        font-family: "Open Sans", sans-serif;
+      }
+      .info-text {
+        font-size: 0.9rem;
+        color: #6c7a89;
+        margin-top: 1rem;
+      }
+
+      /* ---------- 섹션 5: 디자인 시스템 토큰 ---------- */
+      .token-system {
+        --font-family-heading: "Montserrat", sans-serif;
+        --font-family-body: "Open Sans", sans-serif;
+        --font-size-xs: 0.75rem;
+        --font-size-sm: 0.875rem;
+        --font-size-md: 1rem;
+        --font-size-lg: 1.5rem;
+        --font-size-xl: 2rem;
+        --font-size-xxl: 3rem;
+        --font-weight-light: 300;
+        --font-weight-regular: 400;
+        --font-weight-bold: 700;
+        --line-height-tight: 1.2;
+        --line-height-normal: 1.6;
+      }
+      .token-demo {
+        background: #f2f5f7;
+        border-radius: 24px;
+        padding: 2rem;
+      }
+      .token-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+      }
+      .token-card h5 {
+        font-family: var(--font-family-heading);
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-tight);
+        color: #1e3c5c;
+      }
+      .token-card p {
+        font-family: var(--font-family-body);
+        font-size: var(--font-size-md);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--line-height-normal);
+        color: #2d3e50;
+      }
+      .token-badge {
+        display: inline-block;
+        background: #d0e0f0;
+        font-family: var(--font-family-body);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-bold);
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+        color: #1e3c5c;
+        margin-right: 0.5rem;
+      }
+      .token-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1
+        style="
+          font-family: &quot;Montserrat&quot;;
+          font-weight: 900;
+          font-size: 3rem;
+          letter-spacing: -1px;
+          color: #0b253b;
+        "
+      >
+        📐 Google 웹폰트로 타이포그래피 마스터하기
+      </h1>
+      <p style="font-size: 1.2rem; margin-bottom: 2rem">
+        학생을 위한 실습 예제: 각 섹션을 통해 웹폰트 사용법과 타이포그래피
+        개념을 익혀보세요.
+      </p>
+
+      <!-- 섹션 0: 타이포그래피 일반 -->
+      <section>
+        <h2>🔤 0. 타이포그래피 기본 개념</h2>
+        <div class="note">
+          <strong>타이포그래피</strong>란 글자를 아름답고 읽기 쉽게 배열하는
+          기술입니다. 글꼴(서체), 크기, 두께, 줄간격, 자간 등이 포함됩니다.
+          웹에서는 <strong>웹폰트</strong>를 사용해 디자이너가 의도한 글꼴을
+          모든 사용자에게 일관되게 보여줄 수 있습니다. Google Fonts는 무료로
+          다양한 글꼴을 제공하는 대표적인 서비스입니다.
+        </div>
+        <p>
+          👉 이 페이지의 모든 글꼴은 Google Fonts에서 불러왔습니다. 브라우저
+          개발자 도구로 확인해보세요!
+        </p>
+      </section>
+
+      <!-- 섹션 1: Heading 디자인 -->
+      <section>
+        <h2>🥇 1. 제목(Heading) 타이포그래피 디자인</h2>
+        <p>
+          제목은 콘텐츠의 위계를 나타냅니다. 같은 글꼴이라도
+          <strong>굵기, 자간, 크기</strong>를 조절하여 중요도를 표현할 수
+          있습니다.
+        </p>
+        <div class="example-box heading-demo">
+          <h1>h1. 가장 중요한 제목 (900, 자간 타이트)</h1>
+          <h2>h2. 다음으로 중요한 제목 (700, 약간 타이트)</h2>
+          <h3>h3. 소제목 (400, 보통 자간)</h3>
+          <p style="margin-top: 1rem">
+            모두 동일한 'Montserrat' 패밀리이지만, 굵기와 자간으로 위계를
+            만들었습니다.
+          </p>
+        </div>
+        <div class="note">
+          ✅ <strong>팁:</strong> heading 태그(h1~h6)는 기본적으로 브라우저
+          스타일이 있지만, 웹폰트와 커스텀 스타일로 자유롭게 디자인할 수
+          있습니다.
+        </div>
+      </section>
+
+      <!-- 섹션 2: Serif vs Sans-serif -->
+      <section>
+        <h2>⚖️ 2. Serif vs Sans-serif 비교</h2>
+        <p>
+          <strong>Serif</strong>는 글자 획 끝에 장식이 있는 글꼴(예: Lora),
+          <strong>Sans-serif</strong>는 장식이 없는 깔끔한 글꼴(예: Open
+          Sans)입니다. 분위기와 가독성에 차이가 있습니다.
+        </p>
+        <div class="flex-row">
+          <div class="col compare-card serif">
+            <h4>✨ Serif (Lora)</h4>
+            <p class="serif-font">
+              차분하고 고전적인 느낌. 장문의 본문에서 눈의 피로를 덜어준다는
+              연구도 있습니다. 가로획과 세로획의 대비가 특징입니다.
+            </p>
+            <p class="serif-font" style="font-weight: 600">
+              굵기를 600으로 주면 강조 효과를 줍니다.
+            </p>
+          </div>
+          <div class="col compare-card sans">
+            <h4>🔹 Sans-serif (Open Sans)</h4>
+            <p class="sans-font">
+              모던하고 깔끔한 느낌. 화면에서 특히 가독성이 좋으며, 제목이나 짧은
+              문장에 많이 쓰입니다. 다양한 굵기를 지원합니다.
+            </p>
+            <p class="sans-font" style="font-weight: 300">
+              300(가늘게)도 사용 가능합니다.
+            </p>
+          </div>
+        </div>
+        <div class="note">
+          💡 <strong>비교 요령:</strong> 같은 내용을 두 글꼴로 나란히 놓고
+          분위기 차이를 느껴보세요.
+        </div>
+      </section>
+
+      <!-- 섹션 3: Variable Font 사용 -->
+      <section>
+        <h2>🎛️ 3. 가변 글꼴 (Variable Font)</h2>
+        <p>
+          가변 글꼴은 하나의 파일에서 <strong>굵기, 너비, 기울기 등</strong>을
+          자유롭게 조절할 수 있는 기술입니다. 아래 슬라이더로 'Roboto Flex'의
+          굵기(weight)를 바꿔보세요.
+        </p>
+        <div class="example-box variable-demo">
+          <div id="variable-text">가변 글꼴 예시</div>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="weight-slider"
+              min="100"
+              max="1000"
+              value="400"
+              step="1"
+            />
+            <span id="weight-value">굵기: 400</span>
+          </div>
+          <p style="margin-top: 1rem; font-size: 0.9rem">
+            슬라이드를 움직이면 글자 굵기가 실시간으로 변합니다. (100~1000)
+          </p>
+        </div>
+        <script>
+          const textElement = document.getElementById("variable-text");
+          const slider = document.getElementById("weight-slider");
+          const weightSpan = document.getElementById("weight-value");
+          slider.addEventListener("input", function () {
+            const val = slider.value;
+            textElement.style.fontWeight = val;
+            weightSpan.textContent = `굵기: ${val}`;
+          });
+        </script>
+        <div class="note">
+          🧪 <strong>확장:</strong> 가변 글꼴은 weight 외에도 'width', 'slant'
+          등 다양한 축(axis)을 지원합니다. Google Fonts에서 'Roboto Flex'를
+          검색해보세요.
+        </div>
+      </section>
+
+      <!-- 섹션 4: 반응형 타이포그래피 -->
+      <section>
+        <h2>📱 4. 반응형 타이포그래피</h2>
+        <p>
+          화면 크기에 따라 글자 크기가 유연하게 변해야 합니다. CSS의
+          <code>clamp()</code> 함수를 사용하면 최소/최대 크기를 정하고 그
+          사이에서 유연하게 조절할 수 있습니다.
+        </p>
+        <div class="responsive-example">
+          <div class="responsive-headline">반응형 제목</div>
+          <div class="responsive-caption">
+            화면 너비를 줄였다 늘였다 해보세요
+          </div>
+          <div class="info-text">
+            지금 이 제목은 <code>clamp(2rem, 8vw, 5rem)</code>으로 설정되어
+            있습니다. 2rem보다 작아지지 않고, 5rem보다 커지지 않으면서 뷰포트에
+            비례합니다.
+          </div>
+        </div>
+      </section>
+
+      <!-- 섹션 5: 디자인 시스템 폰트 토큰 -->
+      <section>
+        <h2>🧩 5. 디자인 시스템 폰트 토큰 (Design Tokens)</h2>
+        <p>
+          디자인 시스템에서 <strong>폰트 토큰</strong>은 글꼴 관련 값을 변수로
+          정의해 일관된 디자인을 유지하게 합니다. CSS 사용자 정의 속성(CSS
+          변수)을 활용해보겠습니다.
+        </p>
+        <div class="token-system token-demo">
+          <div class="token-card">
+            <h5>토큰 적용 카드 제목 (--font-family-heading, --font-size-lg)</h5>
+            <p>
+              본문 내용입니다. 본문용 폰트와 크기(--font-family-body,
+              --font-size-md)가 적용되었습니다. 일관된
+              간격(--line-height-normal)도 유지됩니다.
+            </p>
+            <div>
+              <span class="token-badge">--font-size-xs</span>
+              <span class="token-badge">--font-weight-bold</span>
+            </div>
+          </div>
+          <div class="token-grid">
+            <span class="token-badge" style="font-size: var(--font-size-xs)"
+              >xs (0.75rem)</span
+            >
+            <span class="token-badge" style="font-size: var(--font-size-sm)"
+              >sm (0.875rem)</span
+            >
+            <span class="token-badge" style="font-size: var(--font-size-md)"
+              >md (1rem)</span
+            >
+            <span class="token-badge" style="font-size: var(--font-size-lg)"
+              >lg (1.5rem)</span
+            >
+            <span class="token-badge" style="font-size: var(--font-size-xl)"
+              >xl (2rem)</span
+            >
+          </div>
+          <p style="margin-top: 1.5rem">
+            ✨ CSS 변수( <code>--font-family-heading</code> 등 )만 수정하면 이
+            섹션 전체 폰트가 한 번에 바뀝니다. 디자인 시스템의 강력함을 체험할
+            수 있습니다.
+          </p>
+        </div>
+      </section>
+
+      <!-- 마무리 푸터 -->
+      <footer
+        style="
+          margin-top: 3rem;
+          text-align: center;
+          color: #95a5a6;
+          font-size: 0.9rem;
+        "
+      >
+        <p>
+          © 2025 - Google Fonts와 함께하는 타이포그래피 실습. 모든 폰트는 Google
+          Fonts에서 제공합니다.
+        </p>
+      </footer>
+    </div>
+    <!-- 설명: 각 섹션은 학생들이 직접 코드를 보면서 수정하고 테스트할 수 있도록 구성했습니다. -->
+  </body>
+</html>
