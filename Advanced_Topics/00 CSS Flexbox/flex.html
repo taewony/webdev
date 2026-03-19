@@ -8,11 +8,13 @@
       .container {
         /* Flexbox 컨테이너 */
         display: flex;
-        /* flex-direction: row-reverse; 기본값 */
-        flex-direction: column-reverse;
-        margin: 10px 10px;
+        flex-direction: row-reverse;
+        /* flex-direction: column-reverse; */
+        justify-content: space-evenly; /*center;*/
+        margin: 0 10px;
         /* display: inline-flex; */
-        height: 300px;
+        /* height: 300px; */
+        border: #ccc 1px solid;
 
         .item {
           /* Flexbox 아이템 */
@@ -22,6 +24,7 @@
           text-align: center;
         }
       }
+
       .flex-wrap {
         display: flex;
         flex-wrap: wrap;
@@ -36,6 +39,26 @@
           width: 200px;
         }
       }
+
+      .align-content {
+        display: flex;
+        /* align-content: space-evenly; */
+        flex-direction: column;
+        justify-content: space-evenly;
+        margin: 10px 0;
+        width: 500px;
+        height: 300px;
+        border: #ccc 1px solid;
+
+        .item {
+          /* Flexbox 아이템 */
+          width: 100%;
+          height: 50px;
+          background-color: #d2dab7;
+          border: #ccc 1px solid;
+          text-align: center;
+        }
+      }
     </style>
   </head>
   <body>
@@ -48,6 +71,11 @@
       <div class="item">Item 4</div>
       <div class="item">Item 5</div>
       <div class="item">Item 6</div>
+    </div>
+    <div class="align-content">
+      <div class="item">Item 7</div>
+      <div class="item">Item 8</div>
+      <div class="item">Item 9</div>
     </div>
   </body>
 </html>

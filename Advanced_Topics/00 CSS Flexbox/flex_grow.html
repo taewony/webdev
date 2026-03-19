@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flex</title>
+    <style>
+      .parent {
+        width: 400px;
+        display: flex;
+        border: 1px solid;
+
+        /* .parent 안의 div BOX들의 공통 스타일 */
+        div {
+          width: 100px;
+          height: 50px;
+          background: #ebebeb;
+          border: 1px solid #ccc;
+          padding: 10px;
+          box-sizing: border-box;
+          text-transform: uppercase;
+        }
+
+        /* .parent 안의 .grow */
+        .grow {
+          flex-grow: 1; /*1은 100%를 의미합니다. 남은 공간을 모두 차지합니다.*/
+        }
+
+        /* .parent 이면서 .shrink 클래스를 가질 때 (.parent.shrink) */
+        &.shrink {
+          div {
+            width: 200px;
+
+            /* 그 div 중 마지막 요소 (.parent.shrink div:last-child) */
+            &:last-child {
+              flex-shrink: 2;
+            }
+          }
+        }
+        /* .parent 안의 .basis */
+        .basis {
+          flex-basis: 180px;
+        }
+
+        /* .parent 이면서 .all 클래스를 가질 때 (.parent.all) */
+        &.all > div {
+          flex: 1 1 0;
+          transition: 0.5s;
+
+          /* 그 div에 hover 했을 때 (.parent.all div:hover) */
+          &:hover {
+            flex: 2;
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>flex - grow, shrink, basis</h1>
+
+    <h2>flex-grow</h2>
+    <div class="parent">
+      <div>box1</div>
+      <div>box2</div>
+      <div class="grow">box3</div>
+    </div>
+
+    <h2>flex-shrink</h2>
+    <div class="parent shrink">
+      <div>box1</div>
+      <div>box2</div>
+      <div>box3</div>
+    </div>
+
+    <h2>flex-basis</h2>
+    <div class="parent">
+      <div>box1</div>
+      <div>box2</div>
+      <div class="basis">box3</div>
+    </div>
+
+    <h2>flex-hover</h2>
+    <div class="parent all">
+      <div>box1</div>
+      <div>box2</div>
+      <div>box3</div>
+    </div>
+  </body>
+</html>
