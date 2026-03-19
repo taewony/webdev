@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Layout: Flexbox Mastery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;700&family=Azeret+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* 1. THE SETUP & GLOBAL STYLES */
+      html,
+      body,
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #f3f4f6;
+        margin: 0;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+        color: #333;
+        min-height: 100vh;
+      }
+
+      .slide-container {
+        align-items: center;
+        background-color: #fffaf1;
+        border-radius: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        font-family: "Arimo", sans-serif;
+        height: 720px;
+        justify-content: center;
+        overflow: hidden;
+        padding: 60px;
+        position: relative;
+        width: 1280px;
+        flex-shrink: 0;
+      }
+
+      /* BACKGROUND DECORATION (Warm Abstract Overlay) */
+      .slide-container::after {
+        content: "";
+        position: absolute;
+        top: -20%;
+        right: -10%;
+        width: 50%;
+        height: 60%;
+        background: radial-gradient(
+          circle,
+          rgba(74, 144, 226, 0.05) 0%,
+          rgba(255, 250, 241, 0) 70%
+        );
+        border-radius: 50%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .slide-container > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* 2. CONSISTENT TYPOGRAPHY */
+      .slide-container h1 {
+        font-size: 85px;
+        font-family: "Azeret Mono", monospace;
+        margin-bottom: 20px;
+        letter-spacing: -2px;
+        color: #222;
+        line-height: 1.1;
+      }
+
+      .slide-container h2.slide-title {
+        font-size: 50px;
+        font-family: "Azeret Mono", monospace;
+        margin-bottom: 40px;
+        letter-spacing: -1px;
+        width: 100%;
+        text-align: left;
+        color: #222;
+        margin-top: 0;
+      }
+
+      .slide-container p,
+      .slide-container li {
+        font-size: 22px;
+        line-height: 1.6;
+        color: #444;
+        margin: 0;
+      }
+
+      .slide-container p {
+        margin-bottom: 20px;
+      }
+
+      .slide-container .subtitle {
+        font-size: 24px;
+        font-family: "Arimo", sans-serif;
+        color: #555;
+        margin: 0;
+      }
+
+      /* Educational Code Highlight Badge */
+      .code-badge {
+        font-family: "Azeret Mono", monospace;
+        font-weight: 700;
+        background-color: #e4e1d9;
+        padding: 4px 10px;
+        border-radius: 6px;
+        color: #4a90e2;
+        font-size: 0.9em;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .content-area {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* 3. LAYOUT DEFINITIONS */
+
+      /* Title Layout */
+      .title-layout {
+        background-color: #fffaf1;
+        border-radius: 50px;
+        border: 1px solid #e4e1d9;
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.02);
+      }
+      .title-layout:before,
+      .title-layout:after {
+        content: "";
+        height: 1px;
+        background-color: #e4e1d9;
+        position: absolute;
+        left: 60px;
+        right: 60px;
+      }
+      .title-layout:before {
+        top: 60px;
+      }
+      .title-layout:after {
+        bottom: 60px;
+      }
+
+      /* Section Title */
+      .section-title-layout {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+      }
+      .section-title-layout h2 {
+        font-size: 75px;
+        margin-bottom: 20px;
+        font-family: "Azeret Mono", monospace;
+        color: #4a90e2;
+        letter-spacing: -2px;
+      }
+      .section-title-layout p {
+        font-size: 28px;
+        margin: 0 auto;
+        max-width: 800px;
+        color: #555;
+      }
+      .section-title-layout hr {
+        background-color: #3c4043;
+        border: none;
+        height: 4px;
+        margin: 40px auto;
+        width: 80px;
+      }
+
+      /* Two Column Layout */
+      .two-column {
+        display: flex;
+        gap: 60px;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+      }
+      .two-column > div {
+        flex-basis: 50%;
+        flex-grow: 1;
+      }
+      .image-wrapper {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .image-wrapper img {
+        border: 1px solid #e4e1d9;
+        border-radius: 20px;
+        max-height: 460px;
+        width: 100%;
+        object-fit: cover;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      }
+
+      /* Bleed Image Right Layout */
+      .slide-container.bleed-image-layout {
+        align-items: start;
+        display: grid;
+        gap: 0;
+        grid-template-columns: 1.1fr 0.9fr;
+        padding: 0;
+      }
+      .slide-container.bleed-image-layout > .content-container {
+        padding: 80px 60px 80px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+      }
+      .slide-container.bleed-image-layout > .image-container {
+        height: 100%;
+        width: 100%;
+        position: relative;
+      }
+      .slide-container.bleed-image-layout img.bleed-image-side {
+        display: block;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-left: 1px solid #e4e1d9;
+      }
+
+      /* Tiled Content */
+      .tiled-layout {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+      }
+      .tile-container {
+        display: flex;
+        gap: 30px;
+        width: 100%;
+        align-items: stretch;
+      }
+      .tile {
+        border-radius: 20px;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        background-color: #f4f0e6;
+        text-align: left;
+        border: 1px solid #e4e1d9;
+      }
+      .tile-icon-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fffaf1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      }
+      .tile-icon-circle i {
+        font-size: 30px;
+        color: #4a90e2;
+      }
+      .tile-title {
+        font-size: 26px;
+        font-family: "Azeret Mono", monospace;
+        margin: 0 0 15px 0;
+        color: #222;
+      }
+
+      /* Styled Bullet Points */
+      .bullet-list {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .bullet-list ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .bullet-list li {
+        margin-bottom: 40px;
+        padding-left: 60px;
+        position: relative;
+      }
+      .bullet-list i {
+        color: #4a90e2;
+        font-size: 32px;
+        left: 0;
+        margin-top: 2px;
+        position: absolute;
+        text-align: center;
+        top: 0;
+      }
+      .bullet-list li strong {
+        color: #222;
+        font-weight: 700;
+        font-family: "Azeret Mono", monospace;
+        font-size: 26px;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      /* Timeline Layout */
+      .timeline-layout {
+        align-items: stretch;
+        display: flex;
+        height: 100%;
+        justify-content: space-between;
+        position: relative;
+        width: 100%;
+        padding-top: 100px;
+      }
+      .timeline-layout .timeline-line {
+        background-color: #e4e1d9;
+        height: 4px;
+        left: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-2px);
+        width: 100%;
+        z-index: 0;
+      }
+      .timeline-item {
+        position: relative;
+        text-align: center;
+        width: 23%;
+      }
+      .timeline-item::after {
+        background-color: #fffaf1;
+        border-radius: 50%;
+        border: 4px solid #4a90e2;
+        content: "";
+        height: 24px;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 24px;
+        z-index: 1;
+      }
+      .timeline-item .content-wrapper {
+        left: 0;
+        position: absolute;
+        width: 100%;
+      }
+      .timeline-item:nth-child(odd) .content-wrapper {
+        bottom: 50%;
+        margin-bottom: 40px;
+      }
+      .timeline-item:nth-child(even) .content-wrapper {
+        margin-top: 40px;
+        top: 50%;
+      }
+      .timeline-item h3 {
+        color: #4a90e2;
+        font-size: 22px;
+        font-family: "Azeret Mono", monospace;
+        margin: 0 0 10px 0;
+      }
+      .timeline-item p {
+        font-size: 18px;
+        color: #555;
+        margin: 0;
+      }
+
+      /* Q&A Layout */
+      .qa-layout {
+        text-align: center;
+        width: 100%;
+        align-self: center;
+      }
+      .qa-layout h2 {
+        font-size: 90px;
+        font-family: "Azeret Mono", monospace;
+        margin: 0 0 30px 0;
+        color: #4a90e2;
+        letter-spacing: -2px;
+      }
+      .qa-layout p {
+        font-size: 28px;
+        color: #555;
+      }
+      .qa-layout .contact-info {
+        font-family: "Azeret Mono", monospace;
+        color: #888;
+        font-size: 18px;
+        margin-top: 80px;
+        padding-top: 30px;
+        border-top: 1px solid #e4e1d9;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Slide 1: Title_Slide -->
+    <div class="slide-container" id="slide1">
+      <div class="title-layout">
+        <p
+          class="subtitle"
+          style="margin-bottom: 20px; color: #4a90e2; font-weight: bold"
+        >
+          [ MACRO to MICRO ]
+        </p>
+        <h1>CSS Layout<br />Flexbox Mastery</h1>
+        <p class="subtitle">
+          학생을 위한 웹페이지 구조화 가이드: 큰 숲에서 나무까지
+        </p>
+      </div>
+    </div>
+
+    <!-- Slide 2: Section_Title -->
+    <div class="slide-container" id="slide2">
+      <div class="section-title-layout">
+        <hr />
+        <h2>01. The Big Picture</h2>
+        <p>거시적 배치 (Macro Layout) - 전체 화면의 뼈대를 잡는 방법</p>
+      </div>
+    </div>
+
+    <!-- Slide 3: Image_Right_Text_Left (Box Model) -->
+    <div class="slide-container" id="slide3">
+      <h2 class="slide-title">모든 것은 '박스'다</h2>
+      <div class="content-area">
+        <div class="two-column">
+          <div>
+            <p>
+              웹페이지의 화려한 디자인에 현혹되지 마세요. CSS의 관점에서
+              브라우저는 모든 요소를 크고 작은
+              <strong>'네모난 박스(Box)'</strong>로 인식합니다.
+            </p>
+            <p>
+              레이아웃 설계의 첫걸음은 화면 전체를 가장 큰 덩어리 박스들로
+              쪼개는 것입니다. Header,
+              <span class="code-badge">&lt;main&gt;</span>, Footer 구역을 나누는
+              것이 그 시작점입니다.
+            </p>
+            <p>
+              이 큰 상자들 안에 점차 작은 상자(Component)들을 채워 넣는 것이
+              구조화의 핵심입니다.
+            </p>
+          </div>
+          <div>
+            <div class="image-wrapper">
+              <img src="" alt="CSS Box Model illustration" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Bleed_Image_Right (Main Container) -->
+    <div class="slide-container bleed-image-layout" id="slide4">
+      <div class="content-container">
+        <h2 class="slide-title" style="margin-bottom: 20px">
+          <span class="code-badge" style="font-size: 40px">&lt;main&gt;</span>
+          Container
+        </h2>
+        <div class="content-area">
+          <div class="bleed-text-side">
+            <p>페이지의 핵심 콘텐츠를 담는 가장 거대한 그릇입니다.</p>
+            <p>
+              이 그릇 안에 우리가 만들 '히어로 배너', '최신 상품 목록', 'MD 추천
+              상품'과 같은 큰 <strong>블록(Component)</strong>들을 차곡차곡 담게
+              됩니다.
+            </p>
+            <p>
+              보통 <span class="code-badge">max-width</span> 속성을 주어 화면이
+              너무 넓어지더라도 콘텐츠가 한가운데에 보기 좋게 정렬되도록
+              기준점(Anchor) 역할을 수행합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="image-container">
+        <img
+          class="bleed-image-side"
+          src=""
+          alt="Modern website wireframe showing structural layout"
+        />
+      </div>
+    </div>
+
+    <!-- Slide 5: Section_Title -->
+    <div class="slide-container" id="slide5">
+      <div class="section-title-layout">
+        <hr />
+        <h2>02. Flexbox & Details</h2>
+        <p>미시적 배치 (Micro Layout) - Flexbox로 컴포넌트 내부 꾸미기</p>
+      </div>
+    </div>
+
+    <!-- Slide 6: What is Flexbox -->
+    <div class="slide-container" id="slide6">
+      <h2 class="slide-title">배치의 마술사, Flexbox란?</h2>
+      <div class="content-area">
+        <div class="two-column">
+          <div>
+            <p>
+              부모 요소에 <span class="code-badge">display: flex</span>를
+              선언하는 순간, 내부에 있는 자식 요소들을 마음대로 주무를 수 있는
+              <strong>1차원(가로/세로) 배치 시스템</strong>이 가동됩니다.
+            </p>
+            <p>
+              Flexbox의 핵심은 <strong>'부모가 자식을 통제한다'</strong>는
+              점입니다. 왼쪽, 가운데, 오른쪽 정렬은 물론이고 남는 여백을 어떻게
+              나눠 가질지 부모가 완벽하게 결정합니다.
+            </p>
+            <p>
+              과거의 복잡했던 화면 배치를 혁명적으로 쉽게 만들어준 현대 CSS의
+              표준 기술입니다.
+            </p>
+          </div>
+          <div>
+            <div class="image-wrapper">
+              <img src="" alt="Flexbox architecture container and items" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Flex Direction (Macro Stacking) -->
+    <div class="slide-container" id="slide7">
+      <div class="tiled-layout">
+        <h2 class="slide-title">Component 세로 배치 (Stacking)</h2>
+        <div class="tile-container">
+          <div class="tile">
+            <div class="tile-icon-circle">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <h3 class="tile-title">기본 흐름 (Block)</h3>
+            <p>
+              블록 요소들은 원래 위아래로 자연스럽게 쌓이지만, 세밀한 간격
+              조절(margin)이 번거로울 때가 많습니다.
+            </p>
+          </div>
+          <div class="tile">
+            <div class="tile-icon-circle">
+              <i class="fa-solid fa-arrows-up-down"></i>
+            </div>
+            <h3 class="tile-title">Flex Column 통제</h3>
+            <p>
+              가장 큰 부모인 &lt;main&gt;에
+              <span class="code-badge">flex-direction: column</span>을 선언하면
+              큰 컴포넌트들의 세로 배치를 직관적으로 지휘할 수 있습니다.
+            </p>
+          </div>
+          <div class="tile">
+            <div class="tile-icon-circle">
+              <i class="fa-solid fa-text-height"></i>
+            </div>
+            <h3 class="tile-title">일괄 여백 (Gap)</h3>
+            <p>
+              <span class="code-badge">gap: 80px</span> 속성 하나로 여러
+              컴포넌트 사이의 간격을 완벽하고 일정하게 띄워줍니다. 마진이 겹치는
+              오류를 방지합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Image_Right_Text_Left (Hero Banner) -->
+    <div class="slide-container" id="slide8">
+      <h2 class="slide-title">Component 1: Hero Banner</h2>
+      <div class="content-area">
+        <div class="two-column">
+          <div>
+            <p>
+              거대한 <span class="code-badge">&lt;main&gt;</span> 영역에 담기는
+              첫 번째 부품, '히어로 배너' 내부를 살펴봅시다.
+            </p>
+            <p>
+              배너는 보통 커다란 배경 이미지 위에 주요 텍스트 내용이 정중앙에
+              위치해야 합니다.
+            </p>
+            <p>
+              이때 텍스트를 감싸는 배너 컨테이너에
+              <span class="code-badge">display: flex</span>와 함께
+              <span class="code-badge">justify-content: center</span> (가로
+              중앙), <span class="code-badge">align-items: center</span> (세로
+              중앙)를 적용하면 완벽한 십자 중앙 정렬이 완성됩니다.
+            </p>
+          </div>
+          <div>
+            <div class="image-wrapper">
+              <img
+                src=""
+                alt="Fashion hero banner for spring collection showcasing minimal aesthetic"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Styled_Bullet_Points (Flex Wrap Magic) -->
+    <div class="slide-container" id="slide9">
+      <h2 class="slide-title">Component 2: Product Group (다중 배치)</h2>
+      <div class="content-area">
+        <div class="bullet-list">
+          <ul>
+            <li>
+              <i class="fa-solid fa-arrows-left-right"></i>
+              <strong>가로 배치와 줄바꿈 (Flex Wrap)</strong>
+              카드를 감싸는 부모에게
+              <span class="code-badge">display: flex</span>를 주면 가로로
+              나열됩니다. 여기에
+              <span class="code-badge">flex-wrap: wrap</span>을 추가하면 자리가
+              부족할 때 카드가 자연스럽게 다음 줄로 넘어갑니다.
+            </li>
+            <li>
+              <i class="fa-solid fa-calculator"></i>
+              <strong>크기 분할 계산 (Calc)</strong>
+              한 줄에 카드 4개를 꽉 차게 넣으려면 너비를 지정해야 합니다.
+              <span class="code-badge">width: calc((100% - 72px) / 4)</span>
+              처럼 여백을 뺀 나머지를 수학적으로 계산하여 크기를 분배합니다.
+            </li>
+            <li>
+              <i class="fa-solid fa-grip-lines"></i>
+              <strong>규칙적인 여백 (Gap)</strong>
+              <span class="code-badge">gap: 24px</span>을 적용하면 카드와 카드
+              사이, 윗줄과 아랫줄 사이의 여백이 격자처럼 아주 일정하고 깔끔하게
+              유지됩니다.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Two Column (Product Card Anatomy) -->
+    <div class="slide-container" id="slide10">
+      <h2 class="slide-title">Component 3: Product Card</h2>
+      <div class="content-area">
+        <div class="two-column">
+          <div>
+            <p>
+              이제 화면을 구성하는 가장 작은 단위인 '카드' 내부(Micro Layout)를
+              들여다볼 차례입니다.
+            </p>
+            <p>
+              카드의 상단에는 썸네일 이미지 영역이, 하단에는 상품 이름과 가격
+              같은 텍스트 정보 영역이 들어갑니다.
+            </p>
+            <p>
+              카드 내부 역시
+              <span class="code-badge">flex-direction: column</span>을 띠며,
+              정보 영역 안에서는 미세한
+              <span class="code-badge">gap: 8px</span>을 사용해 텍스트(제목,
+              가격) 사이의 간격을 정교하게 조율합니다.
+            </p>
+          </div>
+          <div>
+            <div class="image-wrapper">
+              <img
+                src=""
+                alt="Clean product shot of a classic analog watch on a white background"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Summary (Timeline) -->
+    <div class="slide-container" id="slide11">
+      <h2 class="slide-title">Summary: Layout Flow</h2>
+      <div class="content-area">
+        <div class="timeline-layout">
+          <div class="timeline-line"></div>
+          <div class="timeline-item">
+            <div class="content-wrapper">
+              <h3>1. Main Container</h3>
+              <p>
+                전체 화면의 중심 뼈대를 잡고 콘텐츠 최대 폭 영역을 제한합니다.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="content-wrapper">
+              <h3>2. Flex Column</h3>
+              <p>
+                섹션 단위의 거대한 컴포넌트들을 세로 방향(Column)으로
+                나열합니다.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="content-wrapper">
+              <h3>3. Flex Wrap</h3>
+              <p>
+                다중 아이템(상품 카드)들을 가로로 나열하고(Wrap) 비율을
+                나눕니다.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="content-wrapper">
+              <h3>4. Micro Layout</h3>
+              <p>
+                카드 내부의 작은 텍스트와 이미지 간격을 세밀하게 조율하여
+                완성합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 12: Q&A -->
+    <div class="slide-container" id="slide12">
+      <div class="qa-layout">
+        <h2>Any Questions?</h2>
+        <p>CSS Flexbox를 이용한 레이아웃의 논리적 흐름이 이해되셨나요?</p>
+        <div class="contact-info">
+          Thank you for participating in the CSS Masterclass.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

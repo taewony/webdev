@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Pages 과제 제출 가이드</title>
+    <style>
+      :root {
+        --primary: #0969da;
+        --primary-hover: #0353a4;
+        --bg: #f6f8fa;
+        --text-main: #24292f;
+        --text-muted: #57606a;
+        --border: #d0d7de;
+        --code-bg: #1e1e1e;
+        --code-text: #d4d4d4;
+        --success: #2da44e;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+          sans-serif;
+        line-height: 1.6;
+        color: var(--text-main);
+        background-color: var(--bg);
+        padding: 40px 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+      }
+
+      .header {
+        background-color: var(--text-main);
+        color: #fff;
+        padding: 40px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        color: #8b949e;
+        font-size: 1.1rem;
+      }
+
+      .content {
+        padding: 40px;
+      }
+
+      .step {
+        margin-bottom: 50px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+
+      .step:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: var(--primary);
+        color: #fff;
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+      }
+
+      .step h2 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        color: var(--text-main);
+      }
+
+      .step p {
+        margin-bottom: 15px;
+        color: var(--text-muted);
+      }
+
+      .step ul,
+      .step ol {
+        margin-bottom: 15px;
+        padding-left: 25px;
+        color: var(--text-muted);
+      }
+
+      .step li {
+        margin-bottom: 8px;
+      }
+
+      /* 코드 블록 스타일 */
+      .code-block-wrapper {
+        position: relative;
+        margin: 20px 0;
+        background: var(--code-bg);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .code-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #2d2d2d;
+        padding: 8px 15px;
+        color: #aaa;
+        font-size: 0.85rem;
+        border-bottom: 1px solid #444;
+      }
+
+      .copy-btn {
+        background: #444;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 4px 10px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .copy-btn:hover {
+        background: #666;
+      }
+
+      .copy-btn.copied {
+        background: var(--success);
+      }
+
+      pre {
+        padding: 15px;
+        overflow-x: auto;
+        font-family:
+          ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          "Liberation Mono", monospace;
+        font-size: 0.95rem;
+        color: var(--code-text);
+        line-height: 1.5;
+      }
+
+      /* 팁 박스 스타일 */
+      .tip-box {
+        background-color: #ddf4ff;
+        border-left: 4px solid var(--primary);
+        padding: 15px 20px;
+        border-radius: 0 8px 8px 0;
+        margin: 20px 0;
+      }
+
+      .tip-box strong {
+        display: block;
+        color: var(--primary);
+        margin-bottom: 5px;
+        font-size: 1.05rem;
+      }
+
+      .image-placeholder {
+        width: 100%;
+        height: auto;
+        background: #e9ecef;
+        border: 1px dashed #adb5bd;
+        border-radius: 8px;
+        padding: 40px 20px;
+        text-align: center;
+        color: #6c757d;
+        margin: 20px 0;
+        font-style: italic;
+      }
+
+      .highlight {
+        background-color: #fff8c5;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: monospace;
+        color: #b08800;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>🚀 과제 제출을 위한 GitHub Pages 배포 가이드</h1>
+        <p>
+          내가 만든 웹페이지를 전 세계 누구나 볼 수 있게 인터넷에 올리고,
+          교수님께 링크를 제출해 봅시다!
+        </p>
+      </header>
+
+      <main class="content">
+        <!-- Step 1 -->
+        <section class="step">
+          <div class="step-number">1</div>
+          <h2>준비물 챙기기 (계정 및 프로그램)</h2>
+          <p>
+            코드를 올리려면 먼저 GitHub 계정과 코드를 전송해 줄 프로그램이
+            필요합니다.
+          </p>
+          <ol>
+            <li>
+              <a href="https://github.com" target="_blank">GitHub 홈페이지</a>에
+              접속해서 회원가입(Sign up)을 진행해 주세요.
+            </li>
+            <li>
+              PC에 <strong>Git</strong>이 설치되어 있어야 합니다. (설치되어 있지
+              않다면
+              <a href="https://git-scm.com/downloads" target="_blank"
+                >여기서 다운로드 및 설치</a
+              >해 주세요.)
+            </li>
+            <li>
+              완성된 내 과제 폴더가 있어야 합니다. <br />⚠️
+              <strong>중요:</strong> 메인 HTML 파일의 이름은 반드시
+              <span class="highlight">index.html</span> 이어야 합니다!
+            </li>
+          </ol>
+        </section>
+
+        <!-- Step 2 -->
+        <section class="step">
+          <div class="step-number">2</div>
+          <h2>GitHub에 원격 저장소(Repository) 만들기</h2>
+          <p>내 코드를 보관할 인터넷 상의 폴더(저장소)를 만듭니다.</p>
+          <ol>
+            <li>
+              로그인 후 GitHub 메인 화면 왼쪽 위, 또는 우측 상단
+              <code>+</code> 아이콘을 눌러 <strong>[New repository]</strong>를
+              클릭합니다.
+            </li>
+            <li>
+              <strong>Repository name</strong>에 과제 이름(예:
+              <code>web-programming-hw1</code>)을 적습니다.
+              영문/숫자/하이픈(-)만 사용하세요.
+            </li>
+            <li>
+              Public(공개)이 체크된 상태로 둡니다. (그래야 교수님이 볼 수
+              있습니다!)
+            </li>
+            <li>
+              다른 것은 건드리지 말고, 맨 아래
+              <strong>[Create repository]</strong> 초록색 버튼을 클릭합니다.
+            </li>
+          </ol>
+          <div class="image-placeholder"></div>
+        </section>
+
+        <!-- Step 3 -->
+        <section class="step">
+          <div class="step-number">3</div>
+          <h2>로컬 PC에서 GitHub로 코드 업로드하기</h2>
+          <p>
+            이제 VS Code(또는 터미널)를 열고, 내가 작업한 과제 폴더에서 아래
+            명령어들을 순서대로 입력합니다.
+          </p>
+          <p>
+            VS Code의 상단 메뉴에서 <strong>Terminal > New Terminal</strong>을
+            열면 됩니다.
+          </p>
+
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span>터미널 명령어 (순서대로 한 줄씩 입력 후 Enter)</span>
+              <button class="copy-btn" onclick="copyCode('code1', this)">
+                복사하기
+              </button>
+            </div>
+            <pre id="code1">
+git init
+git add .
+git commit -m "첫 번째 과제 제출"
+git branch -M main
+</pre
+            >
+          </div>
+
+          <p>
+            이제 방금 만든 GitHub 저장소의 주소를 연결하고 코드를
+            밀어넣습니다(Push).<br />
+            (저장소 주소는 Step 2 완료 화면에서
+            <code>https://github.com/내아이디/레포지토리이름.git</code> 형태로
+            찾을 수 있습니다.)
+          </p>
+
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span>저장소 연결 및 업로드 (자신의 주소로 변경하세요)</span>
+              <button class="copy-btn" onclick="copyCode('code2', this)">
+                복사하기
+              </button>
+            </div>
+            <pre id="code2">
+git remote add origin 본인의_GitHub_저장소_주소.git
+git push -u origin main
+</pre
+            >
+          </div>
+
+          <div class="tip-box">
+            <strong>💡 처음 Git을 사용할 때 에러가 난다면?</strong>
+            이메일과 이름을 설정하라는 에러가 뜰 수 있습니다. 그때는 아래
+            명령어를 입력한 후, 다시 <code>git commit</code>부터 진행하세요.
+            <br /><br />
+            <span style="font-family: monospace"
+              >git config --global user.email "내이메일@example.com"</span
+            ><br />
+            <span style="font-family: monospace"
+              >git config --global user.name "내이름"</span
+            >
+          </div>
+        </section>
+
+        <!-- Step 4 -->
+        <section class="step">
+          <div class="step-number">4</div>
+          <h2>GitHub Pages로 무료 웹사이트 배포하기</h2>
+          <p>
+            코드가 잘 올라갔다면, 이제 이 코드를 웹사이트로 만들어주는(배포)
+            마법의 버튼을 누를 차례입니다.
+          </p>
+          <ol>
+            <li>
+              내 GitHub 저장소 페이지에서 상단의
+              <strong>[Settings]</strong> (톱니바퀴 아이콘) 탭을 클릭합니다.
+            </li>
+            <li>
+              왼쪽 사이드바 메뉴에서 <strong>[Pages]</strong>를 클릭합니다.
+            </li>
+            <li>
+              Build and deployment 항목 아래의 <strong>Branch</strong> 설정을
+              <code>None</code>에서 <code>main</code>으로 변경합니다.
+            </li>
+            <li>옆의 <strong>[Save]</strong> 버튼을 누릅니다.</li>
+          </ol>
+          <div class="image-placeholder"></div>
+        </section>
+
+        <!-- Step 5 -->
+        <section class="step">
+          <div class="step-number">5</div>
+          <h2>URL 확인 및 교수님께 제출하기 🎉</h2>
+          <p>
+            Save를 누른 후 <strong>약 1~2분 정도 기다려야</strong> 웹사이트가
+            생성됩니다.
+          </p>
+          <ol>
+            <li>
+              1~2분 후 새로고침(F5)을 해보면, Pages 설정 화면 맨 위에
+              <strong>"Your site is live at https://..."</strong> 라는 문구와
+              함께 링크가 나타납니다.
+            </li>
+            <li>
+              해당 링크를 클릭하여 내가 만든 웹페이지가 잘 나오는지 확인합니다.
+            </li>
+            <li>
+              만약 404 에러가 뜬다면, 조금 더 기다렸다가 새로고침하거나 메인
+              파일 이름이 <code>index.html</code>인지 다시 확인하세요.
+            </li>
+            <li>
+              <strong
+                >최종적으로 확인된 이 웹사이트 URL 주소를 복사하여 교수님(LMS
+                과제 제출란 등)께 제출하면 끝입니다! 수고하셨습니다.</strong
+              >
+            </li>
+          </ol>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // 코드 복사 기능 스크립트
+      function copyCode(elementId, button) {
+        const textToCopy = document.getElementById(elementId).innerText;
+
+        // 클립보드에 복사
+        navigator.clipboard
+          .writeText(textToCopy)
+          .then(() => {
+            // 복사 성공 시 버튼 텍스트와 스타일 변경
+            const originalText = button.innerText;
+            button.innerText = "복사 완료!";
+            button.classList.add("copied");
+
+            // 2초 후 원래대로 복구
+            setTimeout(() => {
+              button.innerText = originalText;
+              button.classList.remove("copied");
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error("Failed to copy text: ", err);
+            alert("복사에 실패했습니다. 직접 드래그하여 복사해 주세요.");
+          });
+      }
+    </script>
+  </body>
+</html>

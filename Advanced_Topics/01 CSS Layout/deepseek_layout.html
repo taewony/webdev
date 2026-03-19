@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📐 CSS 레이아웃 학습: Flexbox 2단 레이아웃</title>
+    <style>
+      /* ----- 기본 리셋 & 폰트 ----- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+        background-color: #f4f7fc;
+        color: #1e2b3a;
+        line-height: 1.6;
+        padding: 20px;
+      }
+
+      /* ----- 헤더 & 푸터 (공통) ----- */
+      header,
+      footer {
+        background: linear-gradient(135deg, #1e3c5f, #0f2b40);
+        color: white;
+        text-align: center;
+        padding: 24px 20px;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      footer {
+        border-radius: 0 0 20px 20px;
+        margin-top: 40px;
+        padding: 18px;
+        font-size: 0.95rem;
+        background: linear-gradient(135deg, #1e3c5f, #122b3e);
+      }
+
+      /* ----- 네비게이션 (CSS 네스팅 활용 + 설명) ----- */
+      nav {
+        background-color: #ffffffdd;
+        backdrop-filter: blur(4px);
+        border-bottom: 1px solid #cfddee;
+        padding: 18px 24px;
+        margin: 10px 0 20px;
+        border-radius: 60px;
+        box-shadow: 0 4px 8px rgba(0, 20, 40, 0.06);
+
+        ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          gap: 42px; /* 메뉴 항목 간격 */
+
+          li {
+            font-weight: 600;
+            color: #1e3c5f;
+            cursor: pointer;
+            padding: 6px 0;
+            border-bottom: 3px solid transparent;
+            transition: 0.2s;
+
+            &:hover {
+              color: #0066cc;
+              border-bottom-color: #0066cc;
+            }
+          }
+        }
+      }
+
+      /* ----- 메인: Flexbox 2단 레이아웃 (설명 포함) ----- */
+      main {
+        max-width: 1200px;
+        margin: 30px auto;
+        display: flex;
+        gap: 28px; /* 컬럼 사이 간격 */
+        min-height: 480px;
+        background: rgba(200, 220, 240, 0.2);
+        border-radius: 32px;
+        padding: 8px; /* 컨테이너 자체에 살짝 패딩 (flex 배치에 영향 없음) */
+        border: 2px dashed #7b9eb5; /* 컨테이너 영역 시각화 */
+      }
+
+      /* 왼쪽 고정 컬럼 (설명 강화) */
+      .fixed-col {
+        width: 280px; /* 고정 너비 */
+        flex-shrink: 0; /* 절대 줄어들지 않음 (고정 보장) */
+        background-color: #ffffff;
+        padding: 28px 22px;
+        border-radius: 28px;
+        box-shadow: 0 12px 26px -8px rgba(0, 60, 100, 0.2);
+        border-left: 6px solid #1e6f9f;
+      }
+
+      /* 오른쪽 가변 컬럼 */
+      .flexible-col {
+        flex: auto; /* 남은 공간 모두 차지 (1 1 auto) */
+        background-color: #ffffff;
+        padding: 28px 30px;
+        border-radius: 28px;
+        box-shadow: 0 12px 26px -8px rgba(0, 60, 100, 0.2);
+        border-right: 6px solid #2b9c76;
+      }
+
+      /* 공통 컬럼 내 스타일 */
+      .fixed-col h3,
+      .flexible-col h2 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 2px solid #e2edf5;
+        padding-bottom: 16px;
+        margin-bottom: 20px;
+      }
+
+      .fixed-col h3 {
+        color: #1e6f9f;
+      }
+
+      .flexible-col h2 {
+        color: #1e8a6a;
+      }
+
+      code {
+        background: #eaf0f8;
+        padding: 4px 10px;
+        border-radius: 40px;
+        font-family: "JetBrains Mono", "Courier New", monospace;
+        font-size: 0.9rem;
+        color: #004070;
+        border: 1px solid #b9d2e7;
+        white-space: nowrap;
+      }
+
+      .highlight {
+        background: #fffacd;
+        padding: 4px 8px;
+        border-radius: 20px;
+        font-weight: 500;
+      }
+
+      .note-box {
+        background: #f0f7fe;
+        border-radius: 24px;
+        padding: 18px;
+        margin: 24px 0 12px;
+        border-left: 5px solid #3c8dbc;
+        font-size: 0.98rem;
+      }
+
+      .note-box p {
+        margin: 8px 0;
+      }
+
+      /* ----- 하단 학습 노트 섹션 (개념 정리) ----- */
+      .lesson-notes {
+        max-width: 1200px;
+        margin: 50px auto 20px;
+        background: white;
+        border-radius: 32px;
+        padding: 36px 32px;
+        box-shadow: 0 20px 30px -10px rgba(0, 40, 70, 0.15);
+        border: 1px solid #dae6f0;
+      }
+
+      .lesson-notes h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #103a5c;
+        margin-bottom: 28px;
+        border-left: 12px solid #1e6f9f;
+        padding-left: 28px;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 28px;
+      }
+
+      .card {
+        background: #f8fafd;
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 4px 10px rgba(0, 30, 50, 0.04);
+        transition: all 0.2s;
+        border: 1px solid #d7e4f0;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 28px -8px #1e3c5f40;
+        border-color: #9dc0da;
+      }
+
+      .card h3 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #0f3e60;
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        border-bottom: 2px dotted #b0cde0;
+        padding-bottom: 10px;
+      }
+
+      .card ul {
+        list-style: none;
+      }
+
+      .card li {
+        margin-bottom: 14px;
+        font-size: 1rem;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+
+      .card li code {
+        background: #e4ecf5;
+        font-size: 0.9rem;
+      }
+
+      .badge {
+        display: inline-block;
+        background: #1e6f9f;
+        color: white;
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 50px;
+        letter-spacing: 0.3px;
+        margin-right: 8px;
+      }
+
+      hr {
+        border: none;
+        border-top: 2px solid #bcd3e7;
+        margin: 36px 0 20px;
+      }
+
+      /* 반응형 작은 화면에서 main 처리 (세로로 쌓기) */
+      @media (max-width: 680px) {
+        main {
+          flex-wrap: wrap;
+        }
+        .fixed-col {
+          width: 100%;
+          flex-shrink: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 헤더: 사이트 아이덴티티 + 학습 목표 -->
+    <header>
+      <h1 style="font-size: 2.2rem; letter-spacing: -0.5px">
+        🧩 CSS 레이아웃 실험실
+      </h1>
+      <p style="opacity: 0.9; margin-top: 8px">
+        Flexbox 2단 레이아웃 · 고정 컬럼 + 가변 컬럼
+      </p>
+    </header>
+
+    <!-- 네비게이션: Flexbox 가로 메뉴 (설명 포함) -->
+    <nav>
+      <ul>
+        <li>🏠 홈</li>
+        <li>👤 프로필</li>
+        <li>🖼️ 포트폴리오</li>
+        <li>📬 연락처</li>
+      </ul>
+      <!-- 아주 작은 힌트 (네비게이션 자체에 마우스 오버하면 설명) -->
+      <div
+        style="
+          text-align: center;
+          font-size: 0.8rem;
+          margin-top: 12px;
+          color: #2c577a;
+          background: #e9f0f7;
+          width: fit-content;
+          margin-left: auto;
+          margin-right: auto;
+          padding: 6px 18px;
+          border-radius: 40px;
+        "
+      >
+        ⚡ nav ul { display: flex; gap: 42px; justify-content: center; }
+      </div>
+    </nav>
+
+    <!-- ----- 메인: 실제 2단 레이아웃 + 풍부한 설명 ----- -->
+    <main>
+      <!-- 왼쪽 고정 컬럼 (fixed) -->
+      <section class="fixed-col">
+        <h3>🔒 고정 너비 컬럼 (250px → 280px로 강화)</h3>
+        <p><code>width: 280px;</code> + <code>flex-shrink: 0;</code></p>
+        <div class="note-box">
+          <p>
+            ✅ <strong>flex-shrink: 0</strong> 으로 인해 컨테이너가 아무리
+            좁아져도 <span class="highlight">절대 줄어들지 않습니다</span>.
+            (원래 250px에서 280px로 변경, 고정폭 개념 강조)
+          </p>
+          <p>
+            📏 옆의 가변 영역이 늘거나 줄 때 이 컬럼은 항상
+            <code>280px</code> 을 유지해요.
+          </p>
+        </div>
+        <p>
+          <span class="badge">💡 핵심</span> 고정폭 컬럼을 만들 때는 width 와
+          함께 <code>flex-shrink: 0</code>을 기억하세요.
+        </p>
+        <p
+          style="
+            margin-top: 24px;
+            background: #eaf4f0;
+            padding: 16px;
+            border-radius: 20px;
+          "
+        >
+          ⭐ 창 크기를 조절해 보세요! 오른쪽 영역만 부드럽게 변하고 이쪽은
+          그대로입니다.
+        </p>
+      </section>
+
+      <!-- 오른쪽 가변 컬럼 (flexible) -->
+      <aside class="flexible-col">
+        <h2>🌊 가변 너비 컬럼 (flex: auto)</h2>
+        <p>
+          <code>flex: auto;</code> ⇢
+          <code>flex-grow: 1; flex-shrink: 1; flex-basis: auto;</code>
+        </p>
+        <div class="note-box">
+          <p>
+            ✅ <strong>flex: auto</strong> 는 "남은 공간을 전부 알아서 채워라"
+            는 의미입니다.
+          </p>
+          <p>
+            📐 옆에 280px 고정 컬럼이 자리 잡고, 나머지 폭을 이 영역이 100%
+            사용합니다.
+          </p>
+        </div>
+        <p>
+          <span class="badge">🔍 관찰</span> 브라우저 폭을 늘리면 이 영역만
+          커지고, 줄이면 이 영역만 작아집니다. 고정 컬럼은 요지부동!
+        </p>
+        <p
+          style="
+            margin-top: 28px;
+            background: #edf6fd;
+            padding: 18px;
+            border-radius: 22px;
+            border-left: 4px solid #1e8a6a;
+          "
+        >
+          ⭐ 메인 컨테이너 <code>display: flex; gap: 28px;</code> 가 두 컬럼
+          사이에 일정한 간격을 만들어 줍니다.
+        </p>
+      </aside>
+    </main>
+
+    <!-- 푸터 (간단한 카피라이트) -->
+    <footer>
+      <p>✏️ 직접 조작하며 배우는 CSS 레이아웃 · 예제는 Flexbox 기반 2단 구조</p>
+      <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.7">
+        © 2026 레이아웃 스터디
+      </p>
+    </footer>
+
+    <!-- ----- 하단 개념 정리 노트 (학생들에게 설명할 내용) ----- -->
+    <section class="lesson-notes">
+      <h2>📚 CSS 레이아웃 개념 노트 (Flexbox 중심)</h2>
+
+      <div class="card-grid">
+        <!-- 카드 1: flex container -->
+        <div class="card">
+          <h3>🧩 1. Flex 컨테이너</h3>
+          <ul>
+            <li><code>display: flex;</code> → 자식 요소들이 가로로 배치됨</li>
+            <li><code>gap: 28px;</code> → 아이템 사이 간격</li>
+            <li><code>max-width, margin: auto</code>로 가운데 정렬</li>
+            <li>💡 <strong>main</strong> 태그가 flex 컨테이너 역할</li>
+          </ul>
+        </div>
+        <!-- 카드 2: 고정 컬럼 -->
+        <div class="card">
+          <h3>📌 2. 고정 너비 컬럼</h3>
+          <ul>
+            <li><code>width: 280px;</code> (기본 너비 지정)</li>
+            <li><code>flex-shrink: 0;</code> → 작은 화면에서도 안 줄어듦</li>
+            <li>✅ <strong>고정폭 + 유연한 이웃</strong> 조합의 전형</li>
+            <li>flex-basis 대신 width 사용 가능</li>
+          </ul>
+        </div>
+        <!-- 카드 3: 가변 컬럼 -->
+        <div class="card">
+          <h3>🌱 3. 가변 너비 컬럼</h3>
+          <ul>
+            <li>
+              <code>flex: auto;</code> (flex-grow 1, flex-shrink 1, flex-basis
+              auto)
+            </li>
+            <li>남은 공간을 모두 차지 → '스펀지' 역할</li>
+            <li>컨테이너 크기 변화에 따라 실시간 리사이징</li>
+            <li><code>flex: 1;</code> 과의 차이점: basis가 auto vs 0</li>
+          </ul>
+        </div>
+        <!-- 카드 4: 네비게이션 flex -->
+        <div class="card">
+          <h3>🧭 4. 내비게이션 바</h3>
+          <ul>
+            <li><code>ul { display: flex; }</code> 간편한 가로 정렬</li>
+            <li><code>justify-content: center;</code> 중앙 배치</li>
+            <li><code>gap: 42px;</code> 균일한 메뉴 간격</li>
+            <li>CSS 네스팅 사용 (<code>nav ul li:hover</code> 등)</li>
+          </ul>
+        </div>
+        <!-- 카드 5: CSS 네스팅 & 리셋 -->
+        <div class="card">
+          <h3>🪆 5. CSS Nesting & box-sizing</h3>
+          <ul>
+            <li>
+              <code>nav ul { ... }</code> 내부에 <code>li</code> 스타일 중첩
+            </li>
+            <li><code>&:hover</code> 로 부모 참조</li>
+            <li><code>box-sizing: border-box</code> 전역 적용</li>
+            <li>패딩을 줘도 너비가 늘어나지 않음</li>
+          </ul>
+        </div>
+        <!-- 카드 6: 반응형 힌트 -->
+        <div class="card">
+          <h3>📱 6. 반응형 전환</h3>
+          <ul>
+            <li><code>@media (max-width: 680px)</code> 적용됨</li>
+            <li>화면이 좁아지면 main이 <code>flex-wrap: wrap</code></li>
+            <li>고정 컬럼이 100% 너비로 쌓임</li>
+            <li>모바일에서도 내용 가독성 유지</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- 추가 심화 설명: 시각적 비유와 함께 -->
+      <div
+        style="
+          background: #e4f0fa;
+          border-radius: 36px;
+          padding: 28px;
+          margin-top: 24px;
+        "
+      >
+        <h3
+          style="color: #0d3d60; margin-bottom: 20px; display: flex; gap: 12px"
+        >
+          ⚙️ 지금 이 페이지에 적용된 레이아웃 공식
+        </h3>
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px 60px;
+            justify-content: space-around;
+          "
+        >
+          <div style="min-width: 200px">
+            <div style="font-weight: 700; margin-bottom: 10px">
+              🔷 헤더 & 푸터
+            </div>
+            <p>블록 요소, 배경색, 여백<br />→ 자연스러운 위아래 구분</p>
+          </div>
+          <div style="min-width: 200px">
+            <div style="font-weight: 700; margin-bottom: 10px">
+              🔶 네비게이션
+            </div>
+            <p>display: flex + gap<br />→ 정렬과 간격을 한 번에</p>
+          </div>
+          <div style="min-width: 220px">
+            <div style="font-weight: 700; margin-bottom: 10px">
+              ⬜ 메인 (flex 컨테이너)
+            </div>
+            <p>
+              display: flex; gap: 28px;<br />→ 두 자식 (.fixed-col,
+              .flexible-col) 배치
+            </p>
+          </div>
+          <div style="min-width: 200px">
+            <div style="font-weight: 700; margin-bottom: 10px">
+              📐 자식 아이템
+            </div>
+            <p>
+              왼쪽: width + flex-shrink:0 (고정)<br />오른쪽: flex:auto (유연)
+            </p>
+          </div>
+        </div>
+        <p
+          style="
+            margin-top: 30px;
+            background: white;
+            border-radius: 40px;
+            padding: 16px 24px;
+            border-left: 6px solid #1177aa;
+          "
+        >
+          ✨ <strong>실습 팁:</strong> 브라우저 개발자 도구로 main 영역의 flex
+          속성을 켜고 꺼보세요. (display: flex 해제 / gap 변경) 레이아웃이
+          어떻게 무너지는지 관찰하면 원리가 더 잘 보입니다.
+        </p>
+      </div>
+
+      <!-- 꼬리말 설명 -->
+      <p
+        style="
+          text-align: center;
+          margin-top: 40px;
+          color: #305d81;
+          font-size: 0.95rem;
+        "
+      >
+        ⭐ 위 예제는 <code>header, nav, main, footer</code> 시맨틱 태그로
+        구성되어 있습니다. main 내부에 두 영역을 flexbox로 배치했습니다.
+      </p>
+    </section>
+
+    <!-- 간단한 안내선 -->
+    <div
+      style="
+        max-width: 1200px;
+        margin: 20px auto 0;
+        text-align: right;
+        opacity: 0.6;
+        font-size: 0.9rem;
+      "
+    >
+      🧪 고정 + 가변 조합 · Flexbox 학습용 페이지
+    </div>
+  </body>
+</html>

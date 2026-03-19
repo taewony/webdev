@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쇼핑몰 샘플</title>
+    <style>
+      /* Reset & base */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f8f9fa;
+      }
+
+      /* 메인 컨테이너: 세로로 배치 (flex column) */
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 40px; /* 블록 사이 간격 */
+        max-width: 1200px;
+        margin: 0 auto; /* 가운데 정렬 */
+        padding: 20px;
+      }
+
+      /* ===== 히어로 배너 블록 ===== */
+      .hero {
+        background-color: #e9ecef;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero__container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 40px;
+      }
+
+      .hero__content {
+        flex: 1;
+        padding-right: 30px;
+      }
+
+      .hero__title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: #2b2b2b;
+      }
+
+      .hero__description {
+        font-size: 1.2rem;
+        margin-bottom: 24px;
+        color: #555;
+      }
+
+      .hero__button {
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.3s;
+      }
+
+      .hero__button:hover {
+        background-color: #0056b3;
+      }
+
+      .hero__image {
+        flex: 1;
+        text-align: center;
+      }
+
+      .hero__image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* ===== 상품 목록 공통 스타일 ===== */
+      .product-section {
+        background-color: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .product-section__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .product-section__title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #222;
+      }
+
+      .product-section__link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .product-section__link:hover {
+        text-decoration: underline;
+      }
+
+      /* 상품 그리드 (flex-wrap 활용) */
+      .product-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+      }
+
+      /* 상품 카드 */
+      .product-card {
+        flex: 1 1 calc(25% - 30px); /* 4열, 간격 제외 */
+        min-width: 200px;
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+        border: 1px solid #eee;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .product-card__image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover; /* 이미지 비율 유지하며 채움 */
+      }
+
+      .product-card__content {
+        padding: 16px;
+      }
+
+      .product-card__name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      .product-card__price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #007bff;
+        margin-bottom: 12px;
+      }
+
+      .product-card__button {
+        display: inline-block;
+        background-color: #28a745;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: background-color 0.3s;
+      }
+
+      .product-card__button:hover {
+        background-color: #1e7e34;
+      }
+
+      /* 반응형: 화면이 좁아지면 열 개수 조정 */
+      @media (max-width: 992px) {
+        .product-card {
+          flex: 1 1 calc(33.333% - 30px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero__container {
+          flex-direction: column;
+          text-align: center;
+          padding: 30px;
+        }
+        .hero__content {
+          padding-right: 0;
+          margin-bottom: 30px;
+        }
+        .product-card {
+          flex: 1 1 calc(50% - 30px);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .product-card {
+          flex: 1 1 100%;
+        }
+      }
+
+      /* 푸터 (간단히 추가) */
+      .footer {
+        text-align: center;
+        padding: 30px;
+        background-color: #343a40;
+        color: white;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 메인 콘텐츠: flex column으로 세로 배치 -->
+    <main class="main-content">
+      <!-- 히어로 배너 블록 (hero) -->
+      <section class="hero">
+        <div class="hero__container">
+          <div class="hero__content">
+            <h1 class="hero__title">신상품 세일! 최대 70% 할인</h1>
+            <p class="hero__description">
+              트렌디한 스타일을 지금 만나보세요. 한정 수량 특가!
+            </p>
+            <a href="#" class="hero__button">쇼핑하러 가기 →</a>
+          </div>
+          <div class="hero__image">
+            <!-- Unsplash의 쇼핑 관련 이미지 (무료) -->
+            <img
+              src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+              alt="히어로 배너 이미지"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- 최신 상품 목록 블록 -->
+      <section class="product-section">
+        <div class="product-section__header">
+          <h2 class="product-section__title">🔥 최신 상품</h2>
+          <a href="#" class="product-section__link">전체보기 &gt;</a>
+        </div>
+        <div class="product-grid">
+          <!-- 상품 카드 1 -->
+          <div class="product-card">
+            <img
+              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+              alt="상품 이미지"
+              class="product-card__image"
+            />
+            <div class="product-card__content">
+              <h3 class="product-card__name">프리미엄 헤드폰</h3>
+              <div class="product-card__price">₩129,000</div>
+              <a href="#" class="product-card__button">구매하기</a>
+            </div>
+          </div>
+          <!-- 상품 카드 2 -->
+          <div class="product-card">
+            <img
+              src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=1099&q=80"
+              alt="상품 이미지"
+              class="product-card__image"
+            />
+            <div class="product-card__content">
+              <h3 class="product-card__name">가죽 스마트워치</h3>
+              <div class="product-card__price">₩249,000</div>
+              <a href="#" class="product-card__button">구매하기</a>
+            </div>
+          </div>
+          <!-- 상품 카드 3 -->
+          <div class="product-card">
+            <img
+              src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80"
+              alt="상품 이미지"
+              class="product-card__image"
+            />
+            <div class="product-card__content">
+              <h3 class="product-card__name">에스프레소 머신</h3>
+              <div class="product-card__price">₩359,000</div>
+              <a href="#" class="product-card__button">구매하기</a>
+            </div>
+          </div>
+          <!-- 상품 카드 4 -->
+          <div class="product-card">
+            <img
+              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+              alt="상품 이미지"
+              class="product-card__image"
+            />
+            <div class="product-card__content">
+              <h3 class="product-card__name">운동화 런닝화</h3>
+              <div class="product-card__price">₩89,000</div>
+              <a href="#" class="product-card__button">구매하기</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 추천 상품 목록 블록 -->
+      <section class="product-section">
+        <div class="product-section__header">
+          <h2 class="product-section__title">✨ 당신을 위한 추천 상품</h2>
+          <a href="#" class="product-section__link">더 보기 &gt;</a>
+        </div>
+        <div class="product-grid">
+          <!-- 상품 카드 1 -->
+          <div class="product-card">
+            <img
+              src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+              alt="상품 이미지"
+              class="product-card__image"
+            />
+            <div class="product-card__content">
+              <h3 class="product-card__name">폴라로이드 카메라</h3>
+              <div class="product-card__price">₩159,000</div>
+              <a href="#" class="product-card__button">구매하기</a>
+            </div>
+          </div>
+          <!-- 상품 카드 2 -->
+          <div class="product-card">
+            <img
+              src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+              alt="상품 이미지"
+              class="product-card__image"
+            />
+            <div class="product-card__content">
+              <h3 class="product-card__name">오버핏 후드티</h3>
+              <div class="product-card__price">₩49,000</div>
+              <a href="#" class="product-card__button">구매하기</a>
+            </div>
+          </div>
+          <!-- 상품 카드 3 -->
+          <div class="product-card">
+            <img
+              src="https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80"
+              alt="상품 이미지"
+              class="product-card__image"
+            />
+            <div class="product-card__content">
+              <h3 class="product-card__name">미니 블루투스 스피커</h3>
+              <div class="product-card__price">₩79,000</div>
+              <a href="#" class="product-card__button">구매하기</a>
+            </div>
+          </div>
+          <!-- 상품 카드 4 -->
+          <div class="product-card">
+            <img
+              src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1158&q=80"
+              alt="상품 이미지"
+              class="product-card__image"
+            />
+            <div class="product-card__content">
+              <h3 class="product-card__name">아로마 디퓨저</h3>
+              <div class="product-card__price">₩32,000</div>
+              <a href="#" class="product-card__button">구매하기</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 간단한 푸터 (선택사항) -->
+    <footer class="footer">
+      <p>© 2026 쇼핑몰 샘플. 모든 이미지는 Unsplash에서 제공되었습니다.</p>
+    </footer>
+  </body>
+</html>

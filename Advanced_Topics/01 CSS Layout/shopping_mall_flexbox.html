@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semantic & Nested CSS 쇼핑몰</title>
+    <style>
+      /* =========================================
+       1. Reset & Base
+       ========================================= */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Pretendard", "Segoe UI", sans-serif;
+        background-color: #f8f9fa;
+        color: #111;
+        line-height: 1.5;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      ul {
+        list-style: none;
+      }
+
+      /* =========================================
+       2. Layout & Components (Nesting 활용)
+       ========================================= */
+      header {
+        background-color: #fff;
+        padding: 20px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        position: sticky; /* 스크롤 시 상단 고정 */
+        top: 0;
+        z-index: 100;
+      }
+
+      main {
+        /* [거시적 레이아웃]
+         이전 코드처럼 margin-bottom을 쓰지 않고, 
+         main 자체를 세로 방향 Flex 컨테이너로 만들어 
+         내부 section들 사이의 간격(gap)을 일괄 통제합니다. */
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 80px; /* 섹션과 섹션 사이의 큼직한 여백 */
+
+        /* -------------------------------------
+         Component 1: Hero Banner
+         ------------------------------------- */
+        section.hero {
+          border-radius: 16px;
+          overflow: hidden;
+          position: relative;
+          height: 450px;
+
+          /* 배너 내부 텍스트 가운데 정렬 */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            position: absolute;
+            inset: 0; /* top, left, right, bottom 0 축약형 */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            filter: brightness(0.6); /* 이미지 어둡게 처리 */
+          }
+
+          .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+
+            h2 {
+              font-size: 3rem;
+              margin-bottom: 12px;
+            }
+            p {
+              font-size: 1.2rem;
+              margin-bottom: 24px;
+              opacity: 0.9;
+            }
+
+            button {
+              padding: 14px 28px;
+              background-color: #000;
+              color: #fff;
+              border: none;
+              border-radius: 8px;
+              font-size: 1rem;
+              font-weight: bold;
+              cursor: pointer;
+              transition: background-color 0.2s;
+
+              &:hover {
+                background-color: #333;
+              }
+            }
+          }
+        }
+
+        /* -------------------------------------
+         Component 2: Product Group (상품 섹션)
+         ------------------------------------- */
+        section.product-group {
+          h2 {
+            font-size: 1.75rem;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            /* 제목 앞의 작은 장식 선을 가상 요소로 추가 */
+            &::before {
+              content: "";
+              display: inline-block;
+              width: 6px;
+              height: 24px;
+              background-color: #000;
+              border-radius: 3px;
+            }
+          }
+
+          /* [미시적 레이아웃] 상품 리스트 가로 배치 */
+          ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px; /* 카드 간격 일괄 통제 */
+
+            li {
+              /* 4단 배치 계산: 100%에서 gap 3개(72px)를 뺀 후 4로 나눔 */
+              width: calc((100% - 72px) / 4);
+
+              /* -------------------------------------
+               Component 3: Product Card (독립된 아티클)
+               ------------------------------------- */
+              article.card {
+                background: #fff;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+                transition:
+                  transform 0.2s ease,
+                  box-shadow 0.2s ease;
+                cursor: pointer;
+                height: 100%; /* 카드 높이를 균일하게 맞춤 */
+
+                &:hover {
+                  transform: translateY(-6px);
+                  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+
+                  figure img {
+                    transform: scale(
+                      1.05
+                    ); /* 마우스 호버 시 이미지 살짝 확대 */
+                  }
+                }
+
+                figure {
+                  height: 220px;
+                  overflow: hidden;
+
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: transform 0.3s ease;
+                  }
+                }
+
+                .info {
+                  padding: 20px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px; /* 정보 간의 세로 간격 */
+
+                  h3 {
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    color: #222;
+                  }
+
+                  .price {
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    color: #000;
+                  }
+                }
+              } /* // article.card */
+            } /* // li */
+          } /* // ul */
+        } /* // section.product-group */
+      } /* // main */
+
+      /* =========================================
+       3. Responsive (반응형)
+       ========================================= */
+      @media (max-width: 900px) {
+        main section.product-group ul li {
+          width: calc((100% - 24px) / 2); /* 2단 배치 */
+        }
+      }
+      @media (max-width: 500px) {
+        main {
+          gap: 40px;
+        } /* 모바일에서는 섹션 간격 축소 */
+        main section.product-group ul li {
+          width: 100%; /* 1단 배치 */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Minimal Shop</h1>
+    </header>
+
+    <main>
+      <section class="hero">
+        <img
+          src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80"
+          alt="Spring Collection"
+        />
+        <div class="content">
+          <h2>2026 Spring Collection</h2>
+          <p>미니멀리즘의 새로운 기준을 제시합니다.</p>
+          <button>컬렉션 보기</button>
+        </div>
+      </section>
+
+      <section class="product-group">
+        <h2>최신 상품</h2>
+        <ul>
+          <li>
+            <article class="card">
+              <figure>
+                <img
+                  src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80"
+                  alt="클래식 아날로그 시계"
+                />
+              </figure>
+              <div class="info">
+                <h3>클래식 아날로그 시계</h3>
+                <p class="price">125,000원</p>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="card">
+              <figure>
+                <img
+                  src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80"
+                  alt="레드 스포츠 스니커즈"
+                />
+              </figure>
+              <div class="info">
+                <h3>레드 스포츠 스니커즈</h3>
+                <p class="price">89,000원</p>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="card">
+              <figure>
+                <img
+                  src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80"
+                  alt="노이즈 캔슬링 헤드폰"
+                />
+              </figure>
+              <div class="info">
+                <h3>노이즈 캔슬링 헤드폰</h3>
+                <p class="price">210,000원</p>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="card">
+              <figure>
+                <img
+                  src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&q=80"
+                  alt="빈티지 폴라로이드"
+                />
+              </figure>
+              <div class="info">
+                <h3>빈티지 폴라로이드</h3>
+                <p class="price">150,000원</p>
+              </div>
+            </article>
+          </li>
+        </ul>
+      </section>
+
+      <section class="product-group">
+        <h2>MD 추천 상품</h2>
+        <ul>
+          <li>
+            <article class="card">
+              <figure>
+                <img
+                  src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80"
+                  alt="블랙 스퀘어 선글라스"
+                />
+              </figure>
+              <div class="info">
+                <h3>블랙 스퀘어 선글라스</h3>
+                <p class="price">45,000원</p>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="card">
+              <figure>
+                <img
+                  src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80"
+                  alt="포터블 블루투스 스피커"
+                />
+              </figure>
+              <div class="info">
+                <h3>포터블 블루투스 스피커</h3>
+                <p class="price">75,000원</p>
+              </div>
+            </article>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

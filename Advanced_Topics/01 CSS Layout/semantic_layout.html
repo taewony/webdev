@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bro Code · nested CSS 데모</title>
+    <style>
+      /* 🌐 전역 리셋 - 모든 요소에 box-sizing 적용 */
+      /* 기본적으로 CSS에서 요소의 width와 height는 컨텐츠(content) 영역만을 의미합니다.
+여기에 padding이나 border가 추가되면 요소가 실제로 차지하는 너비는 width + padding + border가 되어 레이아웃이 예상보다 커지거나 깨지는 현상이 자주 발생합니다.
+      box-sizing: border-box;를 적용하면 width와 height가 컨텐츠 + padding + border를 포함한 전체 크기로 지정됩니다. */
+      * {
+        box-sizing: border-box;
+      }
+
+      /* 📄 body 기본 여백 제거 */
+      body {
+        margin: 0;
+      }
+
+      /* 🧱 header 스타일 */
+      header {
+        background-color: hsl(0, 0%, 86%);
+        text-align: center;
+        padding: 25px;
+      }
+
+      /* ⚫ navbar (내용 없음, 높이만 지정) */
+      .navbar {
+        background-color: hsl(0, 0%, 15%);
+        height: 50px;
+      }
+
+      /* 📌 main 영역: float 기반 레이아웃을 위해 자식 요소들 너비 정의 */
+      /* ✅ nested CSS 사용:
+        aside, section, article 을 main 안에 중첩하여
+        가독성을 높이고 관련 스타일을 그룹화 */
+      main {
+        display: flex;
+        flex-wrap: wrap; /* 좁은 화면에서 줄바꿈 허용 */
+        aside {
+          flex: 1 0 20%; /* grow:1, shrink:0, basis:20% */
+          padding: 10px;
+        }
+
+        section {
+          flex: 2 0 40%; /* grow:2, shrink:0, basis:40% */
+          padding: 10px;
+        }
+
+        article {
+          flex: 2 0 40%; /* grow:2, shrink:0, basis:40% */
+          padding: 10px;
+        }
+
+        /* 📱 반응형 미디어 쿼리도 중첩 (modern nested @media) 
+               화면 폭 600px 이하에서 모든 컬럼이 세로로 쌓임 */
+        @media screen and (max-width: 600px) {
+          aside,
+          section,
+          article {
+            width: 100%;
+          }
+        }
+      }
+
+      /* 🦶 footer - float 해제 및 배경, 정렬 */
+      footer {
+        display: block; /* 불필요하나 명시적으로 작성 */
+        clear: both; /* float 해제 */
+        background-color: hsl(0, 0%, 86%);
+        text-align: center;
+        padding: 25px;
+      }
+
+      /* (선택) 네비게이션은 별도 스타일 없음 – 빈 공간으로 존재 */
+    </style>
+    <!-- 주석: style.css를 내부 <style>로 대체했으며, 
+         가능한 모든 곳에 nesting 문법을 적용했습니다.
+         main 내부에 aside, section, article, 그리고 
+         반응형 @media까지 중첩했습니다. -->
+  </head>
+  <body>
+    <!-- 🟦 header: 페이지 상단 제목 영역 -->
+    <header>
+      <h1>Header</h1>
+    </header>
+
+    <!-- ⚫ navbar: 현재 빈 내비게이션 바 (추후 메뉴 추가 가능) -->
+    <nav class="navbar"></nav>
+
+    <!-- 📦 main: 핵심 콘텐츠 (aside + section + article) 
+         이 요소에 대해 중첩 스타일을 적용했습니다. -->
+    <main>
+      <!-- 왼쪽 사이드바 (20%) -->
+      <aside>
+        <h2>This is Aside</h2>
+        <p>This is side content</p>
+        <ul>
+          <li>author information</li>
+          <li>fun facts</li>
+          <li>quotes</li>
+          <li>external links</li>
+          <li>comments</li>
+          <li>related content</li>
+        </ul>
+      </aside>
+
+      <!-- 중간 section (40%) -->
+      <section>
+        <h2>This is a Section</h2>
+        <p>This is dependent content</p>
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorum est
+          totam ducimus fugiat possimus consectetur architecto repudiandae,
+          recusandae iusto aperiam eveniet quidem enim aliquam rem. Dolore
+          voluptates nesciunt fuga quisquam?
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorum est
+          totam ducimus fugiat possimus consectetur architecto repudiandae,
+          recusandae iusto aperiam eveniet quidem enim aliquam rem. Dolore
+          voluptates nesciunt fuga quisquam?
+        </p>
+      </section>
+
+      <!-- 오른쪽 article (40%) -->
+      <article>
+        <h2>This is an Article</h2>
+        <p>This is independent content</p>
+        <ul>
+          <li>News Article</li>
+          <li>Job Post</li>
+          <li>Blog Post</li>
+        </ul>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+          quidem, repudiandae, suscipit illum animi ullam omnis at laborum eaque
+          dolorem aliquam quos iure cum deserunt asperiores facere sed totam
+          magni?
+        </p>
+      </article>
+    </main>
+
+    <!-- 🦶 footer: 하단 정보 영역 -->
+    <footer>
+      <h2>Footer</h2>
+    </footer>
+
+    <!-- 추가 설명:
+         - CSS nesting을 사용하여 main 내부의 aside, section, article,
+           그리고 반응형 미디어 쿼리까지 main 규칙 안에 중첩했습니다.
+         - 미디어 쿼리 중첩은 최신 브라우저에서 동작합니다.
+         - 나머지 선택자(header, .navbar, footer)는 별도로 작성했습니다.
+    -->
+  </body>
+</html>
