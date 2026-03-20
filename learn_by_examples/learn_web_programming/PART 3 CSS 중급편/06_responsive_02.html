@@ -1,76 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive exercise1</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Flexbox Nesting</title>
     <style>
-        #wrapper {
-            background: #ebebeb;
-            width: 960px;
-            margin: auto;
-        }
+      /* 1. 기본 초기화 및 전체 구조 제어 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        section:after {
-            content: '';
-            display: block;
-            clear: both;
-        }
+      #container {
+        display: flex;
+        flex-direction: column; /* 위에서 아래로 쌓기 */
+        min-height: 100vh; /* 화면 전체 높이 확보 */
+        background: #ebebeb;
+        max-width: 960px; /* 고정 width 대신 max-width 사용 권장 */
+        margin: auto;
 
-        aside {
-            width: 350px;
-            background: green;
-            height: 200px;
-            float: left;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-
-        article {
-            width: 550px;
-            background: green;
-            height: 200px;
-            float: right;
-            color: #fff;
-        }
-
-        /* 반응형 */
         @media screen and (max-width: 960px) {
-            #wrapper {
-                width: 100%;
-            }
-
-            aside {
-                width: 36.45%;
-            }
-
-            article {
-                width: 57.29%;
-            }
+          width: 100%;
         }
+
+        /* 공통 헤더/푸터 스타일 */
+        header,
+        footer {
+          padding: 2rem;
+          background: #333;
+          color: white;
+          text-align: center;
+        }
+
+        /* 3. 메인 레이아웃 (핵심 Flexbox) */
+        main {
+          flex: 1; /* 남는 공간을 다 채워 푸터를 바닥으로 밀어냄 */
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          padding: 20px;
+          background: #ddd; /* 중복 선언 제거 후 하나로 통일 */
+
+          /* 반응형: 모바일에서는 세로 배치 */
+          @media screen and (max-width: 768px) {
+            /* 방향을 세로(column)로 바꾸면서 순서를 뒤집음(reverse) */
+            flex-direction: column-reverse;
+            gap: 10px;
+          }
+
+          /* 본문 영역 */
+          article {
+            flex: 1; /* aside 제외 나머지 공간 모두 차지 */
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+          }
+
+          /* 사이드바 영역 */
+          aside {
+            flex: 0 0 300px; /* 고정 너비 유지 */
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+
+            @media screen and (max-width: 768px) {
+              flex: none; /* 모바일에선 고정 해제 */
+              width: 100%;
+            }
+          }
+        }
+
+        footer {
+          background: #eee;
+          color: #666;
+          font-size: 0.9rem;
+        }
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <div id="wrapper">
-        <header>
-            <h1>header</h1>
-        </header>
-        <section>
-            <h1>section</h1>
-            <aside>
-                <h1>snb</h1>
-            </aside>
-            <article>
-                <h1>article</h1>
-            </article>
-        </section>
-        <footer>
-            <h1>footer</h1>
-        </footer>
+  <body>
+    <div id="container">
+      <header><h1>taewony's blog</h1></header>
+
+      <main>
+        <aside>
+          <h2>snb</h2>
+          <p>side navigation bar</p>
+        </aside>
+
+        <article>
+          <h2>article</h2>
+          <p>main content area</p>
+        </article>
+      </main>
+
+      <footer>
+        <p>&copy; taewony footer content</p>
+      </footer>
     </div>
-</body>
-
+  </body>
 </html>

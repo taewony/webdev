@@ -1,46 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Responsive Basic</title>
     <style>
-        @media screen and (min-width:769px) {
-            #wrapper {
-                background: silver;
-            }
+      @media screen and (min-width: 769px) {
+        /* desktop 폭이 769px 이상일 때 */
+        #wrapper {
+          background: silver;
         }
+      }
 
-        @media screen and (max-width:768px) {
-            #wrapper {
-                background: blue;
-                color: #fff;
-            }
+      @media screen and (max-width: 768px) {
+        /* ipad 폭이 768px 이하일 때 */
+        #wrapper {
+          background: blue;
+          color: #fff;
         }
+      }
 
-        @media screen and (max-width:480px) {
-            #wrapper {
-                background: green;
-                color: #fff;
-            }
+      @media screen and (max-width: 480px) {
+        /* mobile 폭이 480px 이하일 때 */
+        #wrapper {
+          background: green;
+          color: #fff;
         }
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="wrapper">
-        <header>
-            <h1>header</h1>
-        </header>
-        <section>
-            <h1>section</h1>
-        </section>
-        <footer>
-            <h1>footer</h1>
-        </footer>
+      <header>
+        <h1>header</h1>
+      </header>
+      <section>
+        <h1>section</h1>
+      </section>
+      <footer>
+        <h1>footer</h1>
+      </footer>
     </div>
-</body>
-
+  </body>
 </html>
