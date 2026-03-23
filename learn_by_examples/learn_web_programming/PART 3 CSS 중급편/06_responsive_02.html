@@ -20,7 +20,8 @@
         max-width: 960px; /* 고정 width 대신 max-width 사용 권장 */
         margin: auto;
 
-        @media screen and (max-width: 960px) {
+        /* 반응형 css에 우선순위를 주기 위해서는 대상 CSS 아래 작성: 태블릿 이하에서 너비 100% */
+        @media (max-width: 960px) {
           width: 100%;
         }
 
@@ -43,7 +44,7 @@
           background: #ddd; /* 중복 선언 제거 후 하나로 통일 */
 
           /* 반응형: 모바일에서는 세로 배치 */
-          @media screen and (max-width: 768px) {
+          @media (max-width: 768px) {
             /* 방향을 세로(column)로 바꾸면서 순서를 뒤집음(reverse) */
             flex-direction: column-reverse;
             gap: 10px;
@@ -65,7 +66,7 @@
             padding: 20px;
             border-radius: 8px;
 
-            @media screen and (max-width: 768px) {
+            @media (max-width: 768px) {
               flex: none; /* 모바일에선 고정 해제 */
               width: 100%;
             }

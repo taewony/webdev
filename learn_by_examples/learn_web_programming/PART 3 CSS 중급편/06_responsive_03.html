@@ -1,104 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive exercise2</title>
-    <!-- <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/responsive.css"> -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive exercise2 - Nested</title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
+      /* 1. 기본 초기화 (Reset) */
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* 2. Float 해제를 위한 Clearfix 유틸리티 
+           (최신 표준에 맞춰 가상 요소에 :: 콜론 두 개 사용) */
+      .clearfix::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+
+      /* 3. 메인 레이아웃 컨테이너 */
+      .container {
+        width: 960px;
+        margin: 0 auto;
+
+        /* [태블릿 구간] 컨테이너 너비 유동적으로 변경 */
+        @media screen and (max-width: 960px) {
+          width: 100%;
+          padding: 0 15px;
+          box-sizing: border-box; /* 패딩 포함한 너비 계산 (scrollbar가 생기는 걸 방지한다) */
         }
+      }
 
-        .clearfix:after {
-            content: '';
-            display: block;
-            clear: both;
-        }
+      /* 4. 헤더 영역 (Nesting 적용) */
+      header {
+        background: #ebebeb;
 
+        /* 로고 영역 */
+        h1 {
+          float: left;
 
-        /* 기존 PC 구간 스타일 */
-
-        header {
-            background: #ebebeb;
-        }
-
-        .container {
-            width: 960px;
-            margin: 0 auto;
-        }
-
-        header h1 {
-            float: left;
-        }
-
-        header h1 a {
+          a {
             line-height: 60px;
             text-decoration: none;
+          }
+
+          /* [모바일 구간] 로고 가운데 정렬하기 위해 float:left를 해제 */
+          @media screen and (max-width: 640px) {
+            float: none;
+            text-align: center;
+          }
         }
 
-        header nav {
-            float: right;
-        }
+        /* 네비게이션 영역 */
+        nav {
+          float: right;
 
-        header nav ul li {
-            float: left;
-            list-style: none;
-            margin-left: 20px;
-        }
+          /* [모바일 구간] 네비게이션 가운데 정렬하기 위해 float:right를 해제 */
+          @media screen and (max-width: 640px) {
+            float: none;
+            text-align: center;
+          }
 
-        header nav ul li a {
-            text-decoration: none;
-            line-height: 60px;
-        }
-
-        /* 반응형 */
-        @media screen and (max-width:960px) {
-            .container {
-                width: 100%;
-                padding: 0 15px;
-                box-sizing: border-box;
-            }
-        }
-
-        @media screen and (max-width:640px) {
-
-            header h1,
-            header nav {
-                float: none;
-                text-align: center;
+          /* 네비게이션 리스트 */
+          ul {
+            /* [모바일 구간] 중앙 정렬을 위해 inline-block으로 전환 */
+            @media screen and (max-width: 640px) {
+              display: inline-block;
             }
 
-            header nav ul {
-                display: inline-block;
-            }
+            li {
+              float: left;
+              list-style: none;
+              margin-left: 20px;
 
-            header nav ul li {
+              /* [모바일 구간] 리스트 간격 조정 */
+              @media (max-width: 640px) {
                 margin-right: 20px;
+              }
+
+              /* 링크 스타일 */
+              a {
+                text-decoration: none;
+                line-height: 60px;
+              }
             }
+          }
         }
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <header>
-        <div class="container clearfix">
-            <h1><a href="#">Logo</a></h1>
-            <nav>
-                <ul class="clearfix">
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">Member Join</a></li>
-                    <li><a href="#">Site map</a></li>
-                    <li><a href="#">Location</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container clearfix">
+        <h1><a href="#">Logo</a></h1>
+        <nav>
+          <ul class="clearfix">
+            <li><a href="#">Login</a></li>
+            <li><a href="#">Member Join</a></li>
+            <li><a href="#">Site map</a></li>
+            <li><a href="#">Location</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
-</body>
-
+  </body>
 </html>
