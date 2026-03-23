@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flexbox vs Line-height 비교</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 50px;
+        background-color: #f0f2f5;
+      }
+
+      .container {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .box {
+        width: 250px;
+        height: 150px;
+        background-color: #ffffff;
+        border: 3px solid #333;
+        border-radius: 10px;
+        text-align: center; /* 가로 정렬 */
+        overflow: hidden;
+      }
+
+      /* 1. Flexbox 방식 (강력 추천) */
+      .flex-center {
+        display: flex;
+        justify-content: center; /* 가로 중앙 */
+        align-items: center; /* 세로 중앙 */
+      }
+
+      /* 2. Line-height 방식 (박스 높이와 동일하게) */
+      .lh-center {
+        line-height: 150px; /* height와 동일한 값 */
+      }
+
+      h2 {
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        color: #444;
+      }
+      span {
+        color: #e74c3c;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>정중앙 배치 방법 비교</h1>
+
+    <div class="container">
+      <!-- Flexbox 방식 -->
+      <div>
+        <h2>1. Flexbox 방식</h2>
+        <div class="box flex-center">가로·세로 정중앙<br />(여러 줄도 OK!)</div>
+      </div>
+
+      <!-- Line-height 방식 -->
+      <div>
+        <h2>2. Line-height 방식</h2>
+        <div class="box lh-center">한 줄일 때 정중앙</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px; max-width: 600px; line-height: 1.6">
+      <p><strong>💡 비교 포인트:</strong></p>
+      <ul>
+        <li>
+          <strong>Flexbox:</strong> 글자가 두 줄이 되어도 전체 덩어리가 정중앙을
+          유지합니다.
+        </li>
+        <li>
+          <strong>Line-height:</strong> 글자가 두 줄이 되는 순간, 줄 간격이 너무
+          넓어져서 박스 밖으로 글자가 튕겨 나갑니다.
+        </li>
+      </ul>
+      <p>
+        결론적으로, <span>실무에서는 Flexbox 방식</span>을 훨씬 더 많이
+        사용합니다!
+      </p>
+    </div>
+  </body>
+</html>

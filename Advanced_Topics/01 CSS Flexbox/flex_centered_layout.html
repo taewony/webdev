@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flexbox vs Line-height 비교 | 자체 설명형 레이아웃 데모</title>
+    <style>
+      /* ---------- RESET & BOX-SIZING ---------- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box; /* width/height에 padding/border 포함 -> 예측 가능한 레이아웃 */
+      }
+
+      /* ---------- BODY: 최상위 부모 컨테이너 ---------- */
+      /* 
+      [부모-자식 관계] 
+      - <body>는 Flex Container 역할을 합니다.
+      - 직계 자식: <h1>, div.container, 설명 영역(.explanation-wrapper)
+      - flex-direction: column → 자식들이 세로 방향(열)으로 쌓임
+      - align-items: center → 교차축(가로) 방향으로 자식들을 중앙 정렬
+      - gap: 30px → 자식 요소 간 간격
+    */
+      body {
+        font-family: "Arial", "Segoe UI", sans-serif;
+        display: flex;
+        flex-direction: column; /* 주축: 세로 */
+        align-items: center; /* 교차축(가로) 중앙 정렬 */
+        gap: 30px;
+        padding: 50px 20px;
+        background-color: #f0f2f5;
+      }
+
+      /* ---------- .container: 카드들을 감싸는 플렉스 부모 ---------- */
+      /*
+      [부모-자식 관계]
+      - .container는 Flex Container (부모)
+      - 직계 자식: .demo-card 요소들 (각각의 비교 카드)
+      - flex-wrap: wrap → 화면이 좁아지면 카드들이 여러 줄로 감싸짐
+      - justify-content: center → 카드들을 주축(가로) 중앙 정렬
+      - gap: 20px → 카드 간격
+    */
+      .container {
+        display: flex;
+        flex-wrap: wrap; /* 반응형: 줄바꿈 허용 */
+        justify-content: center; /* 카드 그룹 중앙 배치 */
+        gap: 20px;
+        width: 100%;
+        max-width: 1200px;
+      }
+
+      /* ---------- .demo-card: 각각의 방법(카드)을 감싸는 블록 ---------- */
+      /*
+      [부모-자식 관계]
+      - .demo-card는 .container의 자식 (Flex Item)
+      - 내부 구조: <h2> + .box + 설명 문단(선택)
+      - 자체적으로는 블록 레벨이며, 너비는 내용에 따라 유연하게 조정됨
+    */
+      .demo-card {
+        flex: 0 1 auto; /* 필요시 축소 가능, 확장은 하지 않음 */
+        min-width: 260px; /* 너무 좁아지지 않도록 최소 너비 */
+        text-align: center;
+        background: transparent;
+      }
+
+      /* 카드 제목 스타일 */
+      .demo-card h2 {
+        margin-bottom: 12px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        letter-spacing: -0.3px;
+      }
+
+      /* ---------- .box: 공통 비교 박스 (고정 높이/너비, 테두리, 배경) ---------- */
+      /*
+      .box는 실제 중앙 정렬이 적용되는 '대상 요소'입니다.
+      각 데모에서 .box에 추가 클래스(flex-center, lh-center, lh-multi-line)를 통해
+      다양한 중앙 정렬 기법을 적용합니다.
+    */
+      .box {
+        width: 260px; /* 고정 너비 */
+        height: 150px; /* 고정 높이 – 중앙 정렬 비교 기준 */
+        background-color: #ffffff;
+        border: 3px solid #1e2a3e;
+        border-radius: 16px;
+        text-align: center; /* 기본 가로 정렬 (inline/inline-block 콘텐츠 중앙) */
+        overflow: hidden; /* 넘치는 콘텐츠 숨김 – line-height 실패 케이스에서 시각적 효과 강조 */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s;
+      }
+
+      .box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* ========== 1. FLEXBOX 방식 (부모-자식 관계 기반 정렬) ========== */
+      /*
+      [부모-자식 관계 & 작동 원리]
+      - .flex-center는 Flex Container가 됨 (부모)
+      - 내부의 모든 직계 자식(텍스트 노드, 인라인 요소, 블록 요소 등)은 Flex Item이 됨
+      - justify-content: center → 주축(가로) 방향으로 Flex Item들을 중앙 정렬
+      - align-items: center → 교차축(세로) 방향으로 Flex Item들을 중앙 정렬
+      - 장점: 여러 줄, 혼합 콘텐츠, 블록 요소 등 어떤 자식이 와도 항상 정중앙 유지
+    */
+      .flex-center {
+        display: flex;
+        justify-content: center; /* 가로 중앙 (부모 → 자식 정렬) */
+        align-items: center; /* 세로 중앙 (부모 → 자식 정렬) */
+        /* flex-direction: row (기본값) */
+      }
+
+      /* ========== 2. LINE-HEIGHT 방식 (단일 줄 전용) ========== */
+      /*
+      [부모-자식 관계 & 작동 원리]
+      - 별도의 부모-자식 Flex 구조 없이, 동일한 요소에 height와 line-height를 동일하게 설정
+      - 내부 인라인 콘텐츠(텍스트)가 line-height에 의해 수직 중앙에 위치 (한 줄일 때 완벽)
+      - 단, 여러 줄이 될 경우 각 라인 박스가 line-height(150px)를 가지므로 전체 높이가 150px를 초과
+      - 초과된 콘텐츠는 overflow: hidden으로 잘리거나 레이아웃 붕괴 → 다중 줄에는 부적합
+    */
+      .lh-center {
+        line-height: 150px; /* .box의 height와 동일한 값 (150px) */
+        /* line-height는 자식(텍스트)의 라인 박스 높이를 결정 */
+      }
+
+      /* ========== 3. LINE-HEIGHT 다중 줄 실패 케이스 (시각적 비교) ========== */
+      /*
+      [부모-자식 관계]
+      - .lh-multi-line는 동일하게 line-height = height 를 가짐
+      - 내부에 <br>을 통해 여러 줄을 강제로 구성하면, 각 줄의 라인 높이가 150px로 적용
+      - 콘텐츠 총 높이 = 줄 수 × 150px → 부모(.box) 높이(150px)를 초과하여 잘림/튐 현상 발생
+      - 이 클래스는 line-height 방식의 한계를 명확히 보여주기 위한 확장 데모
+    */
+      .lh-multi-line {
+        line-height: 150px; /* 같은 line-height 값 */
+      }
+
+      /* 카드 하단 부가 설명 스타일 (작은 설명 텍스트) */
+      .card-caption {
+        font-size: 0.8rem;
+        margin-top: 10px;
+        color: #2c3e50;
+        background: #ecf0f1;
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 40px;
+        line-height: 1.4;
+      }
+
+      /* ---------- 하단 종합 설명 영역 (self-contained 설명 블록) ---------- */
+      .explanation-wrapper {
+        margin-top: 20px;
+        max-width: 800px;
+        width: 100%;
+        background: #ffffff;
+        padding: 24px 28px;
+        border-radius: 24px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        border-left: 5px solid #e74c3c;
+        line-height: 1.6;
+      }
+
+      .explanation-wrapper strong {
+        color: #1e466e;
+      }
+
+      .explanation-wrapper ul {
+        margin: 12px 0 12px 24px;
+      }
+
+      .explanation-wrapper li {
+        margin: 8px 0;
+      }
+
+      .highlight {
+        color: #e74c3c;
+        font-weight: 700;
+        background: #fef2f0;
+        padding: 2px 6px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+      }
+
+      code {
+        background: #f0f2f5;
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #c0392b;
+      }
+
+      hr {
+        margin: 16px 0;
+        border: none;
+        border-top: 1px solid #ddd;
+      }
+
+      /* 반응형 작은 화면에서 카드가 자연스럽게 배치되도록 */
+      @media (max-width: 720px) {
+        body {
+          padding: 30px 16px;
+        }
+        .box {
+          width: 240px;
+          height: 150px;
+        }
+        .demo-card h2 {
+          font-size: 1rem;
+        }
+        .explanation-wrapper {
+          padding: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 
+    =================================================================
+    전체 레이아웃 계층 구조 (부모-자식 관계 다이어그램)
+    =================================================================
+    body (Flex Column 부모)
+    ├── h1 (자식: 제목)
+    ├── div.container (자식: 플렉스 래퍼)
+    │      ├── div.demo-card (자식1: Flexbox 카드)
+    │      ├── div.demo-card (자식2: Line-height 단일줄 카드)
+    │      └── div.demo-card (자식3: Line-height 여러줄 실패 카드)
+    └── div.explanation-wrapper (자식: 설명 및 분석)
+    =================================================================
+    각 카드 내부 .box는 추가 클래스에 따라 중앙 정렬 부모/자식 관계가 결정됨.
+    - .flex-center: .box가 Flex 부모, 그 내부 텍스트가 Flex 자식
+    - .lh-center / .lh-multi-line: .box가 블록 부모, line-height로 인라인 자식 정렬
+    =================================================================
+  -->
+
+    <h1 style="font-weight: 700; letter-spacing: -0.5px">
+      🎯 정중앙 배치 기법 비교 · 자체 완결형 데모
+    </h1>
+
+    <div class="container">
+      <!-- 
+      [카드 1] FLEXBOX 방식 – 강력한 부모-자식 관계 기반 중앙 정렬
+      - 부모 요소(.flex-center)가 Flex Container가 되어 내부 모든 자식을 가로/세로 중앙에 배치
+      - 여러 줄, 혼합 콘텐츠, 블록 요소 모두 완벽하게 중앙 정렬 가능
+    -->
+      <div class="demo-card">
+        <h2>✅ 1. Flexbox 방식</h2>
+        <!-- .box + .flex-center: 부모 역할을 하는 Flex 컨테이너 -->
+        <div class="box flex-center">
+          가로·세로 정중앙<br />(여러 줄도 OK!)<br />✨ 유연함
+        </div>
+        <div class="card-caption">
+          📐 부모(.flex-center) = Flex Container → 자식(텍스트/요소) 중앙 정렬
+        </div>
+      </div>
+
+      <!-- 
+      [카드 2] LINE-HEIGHT 방식 (단일 줄) – 한 줄 텍스트에 한해 완벽한 중앙 정렬
+      - .box 자체에 line-height: 150px 적용 → 내부 텍스트가 수직 중앙에 위치
+      - 부모-자식 관계가 단순하지만, 여러 줄일 경우 심각한 레이아웃 깨짐 발생
+    -->
+      <div class="demo-card">
+        <h2>📏 2. Line-height 방식 (한 줄)</h2>
+        <div class="box lh-center">한 줄일 때 완벽 중앙</div>
+        <div class="card-caption">
+          📐 line-height = height (150px) → 인라인 콘텐츠 중앙 (한 줄 전용)
+        </div>
+      </div>
+
+      <!-- 
+      [카드 3] LINE-HEIGHT 방식 실패 케이스 – 여러 줄에서 발생하는 문제점 시각화
+      - 동일하게 line-height: 150px 를 적용했지만, 3줄의 텍스트로 인해 각 줄이 150px의 높이를 차지
+      - 총 높이 450px > .box 높이(150px) → overflow로 인해 텍스트가 잘리고 레이아웃 붕괴
+      - 이 예제는 line-height 방식의 한계를 명확하게 보여줌
+    -->
+      <div class="demo-card">
+        <h2>⚠️ 3. Line-height 방식 (여러 줄)</h2>
+        <div class="box lh-multi-line">
+          두 줄 이상일 때<br />줄 간격(line-height)이<br />넓어져서 박스 밖으로
+          넘침
+        </div>
+        <div class="card-caption">
+          ❌ 각 줄에 line-height 150px 적용 → 총 높이 초과 & 잘림 현상
+        </div>
+      </div>
+    </div>
+
+    <!-- 종합 설명: 부모-자식 관계와 중앙 정렬 원리를 self-contained 하게 정리 -->
+    <div class="explanation-wrapper">
+      <p style="font-size: 1.2rem; font-weight: 700; margin-bottom: 12px">
+        📚 레이아웃 부모-자식 관계 & 중앙 정렬 핵심 분석
+      </p>
+      <p>
+        <strong>🎯 전체 구조:</strong> <code>&lt;body&gt;</code>는
+        <strong>Flex 부모</strong>(세로 방향) → <code>.container</code>는
+        <strong>Flex 부모</strong>(가로 줄바꿈) → 각 <code>.demo-card</code>는
+        독립적인 카드. 각 카드 안의 <code>.box</code>는 서로 다른 중앙 정렬
+        기법을 적용받습니다.
+      </p>
+
+      <hr />
+
+      <p>
+        <strong>🔹 1. Flexbox 방식 (<code>.flex-center</code>)</strong><br />
+        👉 <strong>부모-자식 관계:</strong> <code>.flex-center</code> 요소가
+        <strong>Flex Container(부모)</strong>가 되고, 그 안의 모든 직계
+        자식(텍스트 노드, 인라인 요소, 블록)은
+        <strong>Flex Item(자식)</strong>으로 간주됩니다.<br />
+        👉 <strong>정렬 속성:</strong> <code>justify-content: center</code> →
+        주축(가로) 중앙, <code>align-items: center</code> → 교차축(세로) 중앙.
+        자식이 몇 줄이든, 어떤 콘텐츠든 항상 박스 정중앙에 위치합니다.<br />
+        👉 <strong>장점:</strong> 반응형, 다중 줄, 블록 요소, 이미지 등 모든
+        콘텐츠에 완벽 대응. 실무에서 가장 널리 사용됨.
+      </p>
+
+      <p>
+        <strong
+          >🔹 2. Line-height 방식 (<code>.lh-center</code> · 단일 줄)</strong
+        ><br />
+        👉 <strong>부모-자식 관계:</strong> 별도의 Flex 관계 없이,
+        <code>.box</code> 자체가 블록 레벨 부모이며
+        <code>line-height</code> 속성이 인라인 자식(텍스트)의 라인 박스 높이를
+        결정합니다.<br />
+        👉 <strong>작동 원리:</strong> <code>height: 150px</code>와 동일한
+        <code>line-height: 150px</code>를 부여하면, 한 줄 텍스트의 라인 박스
+        높이가 부모 높이와 같아져서 수직 중앙에 위치합니다.<br />
+        👉 <strong>한계점:</strong> 여러 줄이 되면
+        <strong>각 줄마다 line-height(150px)가 적용</strong>되어 콘텐츠 전체
+        높이가 급증합니다. 위 3번째 카드에서 명확히 확인 가능 (텍스트가 박스
+        밖으로 잘리거나 레이아웃이 깨짐).
+      </p>
+
+      <p>
+        <strong>🔹 3. Line-height 실패 케이스 (다중 줄 데모)</strong><br />
+        👉 세 번째 카드는 <strong>동일한 line-height 값</strong>을 사용하면서도
+        세 줄의 텍스트를 넣어서 발생하는 문제를 직접 보여줍니다.
+        <code>overflow: hidden</code>으로 인해 두 번째/세 번째 줄은 보이지
+        않거나 박스 영역을 벗어나 정렬이 완전히 무너집니다.<br />
+        👉 이는 <strong>line-height 방식이 ‘단일 줄’에만 적합</strong>하다는
+        사실을 시각적으로 증명합니다.
+      </p>
+
+      <hr />
+
+      <p>
+        <strong>💡 결론 & 실무 조언:</strong><br />
+        다양한 콘텐츠와 유지보수, 확장성을 고려할 때
+        <span class="highlight">Flexbox 방식</span>이 모든 면에서 우수합니다.
+        부모-자식 관계를 명시적으로 제어할 수 있고, 여러 줄/복잡한 자식 요소에도
+        안정적인 중앙 정렬을 보장합니다.<br />
+        Line-height 방식은
+        <strong>아이콘 폰트나 한 줄 버튼, 간단한 단일 텍스트</strong>에 한해
+        제한적으로 사용될 수 있지만, 일반적인 콘텐츠 박스에는
+        <strong>Flexbox(또는 Grid)를 권장</strong>합니다.
+      </p>
+
+      <p
+        style="
+          margin-top: 16px;
+          background: #fef9e6;
+          padding: 12px;
+          border-radius: 16px;
+          font-size: 0.9rem;
+        "
+      >
+        📌 <strong>Self-contained 설명:</strong> 이 페이지는 모든 스타일과
+        설명을 자체적으로 포함하고 있습니다. 부모-자식 관계와 각 정렬 기법의
+        장단점을 주석과 시각적 데모를 통해 명확히 전달합니다.
+      </p>
+    </div>
+
+    <!-- 추가 내부 주석: HTML 주석을 통해 계층 구조 재강조 -->
+    <!-- 
+    [LAYOUT HIERARCHY - 상세]
+    body (flex-direction: column)
+      ├── h1
+      ├── div.container (display: flex; flex-wrap: wrap; justify-content: center)
+      │     ├── div.demo-card (Flexbox 카드)
+      │     │     ├── h2
+      │     │     ├── div.box.flex-center (Flex 부모) 
+      │     │     │     └── 텍스트 노드 및 <br> (Flex 자식들) → 가로/세로 중앙 정렬
+      │     │     └── div.card-caption
+      │     ├── div.demo-card (Line-height 단일줄 카드)
+      │     │     ├── h2
+      │     │     ├── div.box.lh-center (line-height = height, 한 줄)
+      │     │     │     └── 텍스트 (인라인) → line-height에 의해 중앙 정렬
+      │     │     └── div.card-caption
+      │     └── div.demo-card (Line-height 여러줄 실패 카드)
+      │           ├── h2
+      │           ├── div.box.lh-multi-line (line-height = height, 여러 줄 → 깨짐)
+      │           │     └── 여러 줄 텍스트 (<br> 포함) → 각 라인 높이 150px, 총 높이 초과
+      │           └── div.card-caption
+      └── div.explanation-wrapper (설명 블록, 부가 정보)
+  --></body>
+</html>

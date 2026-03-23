@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>히어로 배너 예제</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* 히어로 배너 영역 */
+      .hero {
+        /* 배경 이미지 (예시용 무료 이미지) */
+        background-image: url("https://picsum.photos/id/104/1920/800"); /* 랜덤 이미지, 실제로는 적절한 이미지로 교체 */
+        background-size: cover; /* 이미지가 영역을 꽉 채우도록 */
+        background-position: center; /* 중앙 정렬 */
+        background-repeat: no-repeat;
+
+        /* 배경에 어두운 오버레이를 주어 텍스트 가독성 향상 */
+        position: relative;
+        min-height: 100vh; /* 뷰포트 전체 높이 (원하면 600px 등으로 조절 가능) */
+        display: flex;
+        align-items: center; /* 세로 중앙 정렬 */
+        justify-content: center; /* 가로 중앙 정렬 */
+        text-align: center; /* 텍스트 가운데 정렬 (자식에게 상속) */
+        color: white;
+        font-family: "Segoe UI", "Arial", sans-serif;
+      }
+
+      /* 어두운 오버레이 (선택사항) */
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* 반투명 검정 */
+        z-index: 1;
+      }
+
+      /* 텍스트 콘텐츠를 감싸는 컨테이너 (오버레이 위에 표시) */
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        padding: 2rem;
+      }
+
+      /* 작은 상단 표시 (BANNER TEMPLATE) */
+      .hero-badge {
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.2);
+        display: inline-block;
+        padding: 0.3rem 1rem;
+        border-radius: 30px;
+        margin-bottom: 1.5rem;
+      }
+
+      /* 메인 타이틀 (Spring) */
+      .hero h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -1px;
+      }
+
+      /* 서브 타이틀 (Spring Fashion) */
+      .hero h2 {
+        font-size: 2.5rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+      }
+
+      /* 설명 텍스트 */
+      .hero p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+
+      /* 버튼 (선택사항) */
+      .hero-btn {
+        display: inline-block;
+        background: #ff6b6b;
+        color: white;
+        padding: 0.8rem 2rem;
+        text-decoration: none;
+        border-radius: 40px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+      }
+
+      .hero-btn:hover {
+        background: #ff4757;
+      }
+
+      /* 반응형: 모바일에서 글자 크기 줄이기 */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .hero h2 {
+          font-size: 1.8rem;
+        }
+        .hero p {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">BANNER TEMPLATE</div>
+        <h1>Spring</h1>
+        <h2>Spring Fashion</h2>
+        <h2>New Collection</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod
+          turpis sed nibh ultricies, eu hendrerit nibh ultricies. Nullam id
+          risus et sapien aliquet dignissim. Cras ullamcorper massa non nisi
+          porta, nec tincidunt lectus sodales. Duis quis enim eget metus feugiat
+          accumsan.
+        </p>
+        <a href="#" class="hero-btn">컬렉션 보기</a>
+      </div>
+    </section>
+  </body>
+</html>

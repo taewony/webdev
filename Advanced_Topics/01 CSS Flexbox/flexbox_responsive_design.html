@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flexbox 반응형 디자인 핵심 개념 | Self-contained 데모</title>
+    <style>
+      /* ----- 공통 스타일 ----- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", "Arial", sans-serif;
+        background: #f5f7fb;
+        color: #1e2a3e;
+        line-height: 1.5;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* 섹션 스타일 */
+      section {
+        background: white;
+        border-radius: 24px;
+        padding: 1.8rem;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #0f2b3d;
+        border-left: 6px solid #3b82f6;
+        padding-left: 1rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin: 0 0 1rem 0;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .badge {
+        background: #e2e8f0;
+        padding: 0.2rem 0.8rem;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        font-weight: normal;
+        color: #1e293b;
+      }
+
+      .demo-box {
+        background: #f1f5f9;
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin: 1.2rem 0;
+        border: 1px solid #e2e8f0;
+      }
+
+      .code-block {
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 1rem;
+        border-radius: 16px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+
+      .note {
+        background: #fef9c3;
+        padding: 0.8rem 1.2rem;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        border-left: 4px solid #eab308;
+        margin-top: 1rem;
+      }
+
+      /* ----- 데모 1: flex-wrap: wrap (카드 그리드) ----- */
+      .grid-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        background: #fff;
+        padding: 1rem;
+        border-radius: 20px;
+        border: 2px dashed #94a3b8;
+      }
+      .card {
+        background: #3b82f6;
+        color: white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        text-align: center;
+        flex: 1 1 180px; /* 기본 180px, 늘어나고 줄어듦 */
+        min-width: 140px;
+        transition: all 0.2s;
+      }
+
+      /* ----- 데모 2: flex-basis + flex-grow ----- */
+      .grow-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+      .grow-item {
+        background: #8b5cf6;
+        color: white;
+        padding: 1rem;
+        border-radius: 16px;
+        text-align: center;
+        flex: 1 1 150px; /* 기본 150px, grow 1, shrink 1 */
+      }
+      .grow-item:nth-child(2) {
+        flex: 2 1 150px; /* 두 번째 아이템은 grow 비율 2 → 더 많이 늘어남 */
+        background: #ec489a;
+      }
+
+      /* ----- 데모 3: 미디어 쿼리로 flex-direction 변경 (모바일 vs 데스크탑) ----- */
+      .direction-demo {
+        display: flex;
+        flex-direction: column; /* 모바일 기본: 세로 */
+        gap: 1rem;
+        background: #fef3c7;
+        padding: 1rem;
+        border-radius: 20px;
+        transition: all 0.2s;
+      }
+      .direction-item {
+        background: #f97316;
+        color: white;
+        padding: 1rem;
+        border-radius: 16px;
+        text-align: center;
+        flex: 1;
+      }
+      /* 화면 너비 640px 이상 → 가로 배치 */
+      @media (min-width: 640px) {
+        .direction-demo {
+          flex-direction: row;
+        }
+      }
+
+      /* ----- 데모 4: justify-content + align-items 반응형 변화 ----- */
+      .justify-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        background: #d9f99d;
+        padding: 1.5rem;
+        border-radius: 20px;
+        min-height: 200px;
+        align-items: center; /* 교차축 중앙 (세로) */
+        justify-content: center; /* 기본 중앙 */
+        transition: all 0.2s;
+      }
+      .justify-item {
+        background: #16a34a;
+        color: white;
+        padding: 0.8rem 1.2rem;
+        border-radius: 40px;
+        width: 100px;
+        text-align: center;
+      }
+      /* 화면 800px 이상 → space-between */
+      @media (min-width: 800px) {
+        .justify-demo {
+          justify-content: space-between;
+        }
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding: 1rem;
+        color: #475569;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📦 Flexbox 반응형 디자인 핵심 개념</h1>
+      <p style="margin-bottom: 2rem; font-size: 1.1rem">
+        Flexbox로 반응형 웹을 만들 때 꼭 알아야 할 <strong>4가지 원리</strong>를
+        직접 조정하며 확인해보세요.<br />
+        브라우저 창 너비를 <strong>줄이고 늘리면서</strong> 각 데모의 변화를
+        관찰하세요.
+      </p>
+
+      <!-- 1. flex-wrap: wrap -->
+      <section>
+        <h2>① 줄바꿈 허용: <code class="badge">flex-wrap: wrap</code></h2>
+        <p>
+          공간이 부족하면 아이템이 자동으로 다음 줄로 이동합니다. 반응형 카드
+          그리드의 기본기입니다.
+        </p>
+        <div class="demo-box">
+          <div class="grid-demo">
+            <div class="card">카드 1</div>
+            <div class="card">카드 2</div>
+            <div class="card">카드 3</div>
+            <div class="card">카드 4</div>
+            <div class="card">카드 5</div>
+          </div>
+          <div class="code-block">
+            .container { <br />
+            &nbsp;&nbsp;display: flex;<br />
+            &nbsp;&nbsp;<span style="color: #facc15">flex-wrap: wrap;</span
+            ><br />
+            &nbsp;&nbsp;gap: 1rem;<br />
+            }<br />
+            .item { flex: 1 1 180px; } /* 기본 너비 180px, 늘어나고 줄어듦 */
+          </div>
+          <div class="note">
+            💡 <strong>flex-wrap: wrap</strong>이 없으면 아이템들이 부모 너비를
+            넘어서거나 밀려납니다.
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. flex-basis + flex-grow -->
+      <section>
+        <h2>
+          ② 가변 크기 제어: <code class="badge">flex-basis</code> +
+          <code class="badge">flex-grow</code>
+        </h2>
+        <p>
+          <code>flex: 1 1 150px;</code> = 기본 150px, 남은 공간을 균등하게
+          분배(grow), 부족하면 축소(shrink).
+        </p>
+        <div class="demo-box">
+          <div class="grow-demo">
+            <div class="grow-item">flex: 1 1 150px</div>
+            <div class="grow-item">flex: 2 1 150px<br />(더 많이 늘어남)</div>
+            <div class="grow-item">flex: 1 1 150px</div>
+          </div>
+          <div class="code-block">
+            .item { <span style="color: #facc15">flex: 1 1 150px;</span> } /*
+            grow, shrink, basis */<br />
+            .item.special { flex: 2 1 150px; } /* grow 비율 2 → 공간을 두 배로
+            차지 */
+          </div>
+          <div class="note">
+            🎯 <strong>flex-basis</strong>는 아이템의 기본 크기,
+            <strong>flex-grow</strong>는 남은 공간을 나누는 비율입니다.
+            반응형에서 카드 너비를 유연하게 조절할 때 핵심입니다.
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 미디어 쿼리로 flex-direction 전환 -->
+      <section>
+        <h2>
+          ③ 방향 전환: <code class="badge">flex-direction</code> + 미디어 쿼리
+        </h2>
+        <p>
+          모바일에서는 세로(column), 데스크탑에서는 가로(row)로 레이아웃을 쉽게
+          바꿀 수 있습니다.
+        </p>
+        <div class="demo-box">
+          <div class="direction-demo">
+            <div class="direction-item">항목 1</div>
+            <div class="direction-item">항목 2</div>
+            <div class="direction-item">항목 3</div>
+          </div>
+          <div class="code-block">
+            .container {<br />
+            &nbsp;&nbsp;display: flex;<br />
+            &nbsp;&nbsp;<span style="color: #facc15"
+              >flex-direction: column;</span
+            >
+            /* 모바일 기본 */<br />
+            }<br />
+            @media (min-width: 640px) {<br />
+            &nbsp;&nbsp;.container {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #facc15"
+              >flex-direction: row;</span
+            ><br />
+            &nbsp;&nbsp;}<br />
+            }
+          </div>
+          <div class="note">
+            📱 화면 너비가 640px 이상이면 가로로 배열됩니다. 창 크기를
+            조절해보세요!
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. justify-content + align-items 반응형 변화 -->
+      <section>
+        <h2>
+          ④ 정렬 방식의 동적 변화: <code class="badge">justify-content</code> &
+          <code class="badge">align-items</code>
+        </h2>
+        <p>
+          미디어 쿼리를 이용해 화면 크기에 따라 정렬 방식을 바꿀 수 있습니다.
+          아래 예시는 800px 이상에서 <code>space-between</code>으로 전환됩니다.
+        </p>
+        <div class="demo-box">
+          <div class="justify-demo">
+            <div class="justify-item">A</div>
+            <div class="justify-item">B</div>
+            <div class="justify-item">C</div>
+          </div>
+          <div class="code-block">
+            .container {<br />
+            &nbsp;&nbsp;display: flex;<br />
+            &nbsp;&nbsp;justify-content: center; /* 기본 */<br />
+            }<br />
+            @media (min-width: 800px) {<br />
+            &nbsp;&nbsp;.container {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;justify-content: space-between;<br />
+            &nbsp;&nbsp;}<br />
+            }
+          </div>
+          <div class="note">
+            ✨ 800px 미만에서는 아이템들이 중앙 정렬, 800px 이상에서는 양쪽
+            끝으로 벌어집니다. <code>align-items</code>도 같은 방식으로 반응형
+            적용 가능.
+          </div>
+        </div>
+      </section>
+
+      <!-- 종합 정리 -->
+      <div
+        style="
+          background: #e6f0ff;
+          border-radius: 24px;
+          padding: 1.5rem;
+          margin-top: 1rem;
+        "
+      >
+        <h3 style="margin-bottom: 0.5rem">
+          🎓 요약: Flexbox 반응형의 핵심 공식
+        </h3>
+        <p style="font-size: 1.05rem">
+          <strong
+            >“기본 크기(<code>flex-basis</code>) +
+            줄바꿈(<code>flex-wrap</code>) + 방향
+            전환(<code>flex-direction</code>)”</strong
+          ><br />
+          이 세 가지 속성만으로도 대부분의 반응형 패턴(카드 그리드, 내비게이션
+          바, 헤더/푸터 등)을 해결할 수 있습니다. <br />
+          미디어 쿼리는 주로 방향 전환과 정렬 방식을 바꾸는 용도로 사용하면
+          됩니다.
+        </p>
+      </div>
+
+      <footer>
+        <p>
+          🧪 브라우저 창의 너비를 조절하며 각 데모 영역의 변화를 직접
+          확인해보세요.
+        </p>
+        <p>© Flexbox 반응형 학습 자료 | self-contained HTML</p>
+      </footer>
+    </div>
+  </body>
+</html>
