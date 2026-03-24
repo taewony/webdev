@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compose2Web Playbook: Counter Example</title>
+    <style>
+      /* 전체 페이지에 대한 기본 스타일 (선택 사항) */
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        padding: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <compose-counter></compose-counter>
+
+    <script type="module">
+      // unpkg 또는 esm.sh 같은 CDN을 사용하여 Lit의 모듈을 바로 가져옵니다.
+      import { LitElement, html, css } from "https://esm.run/lit";
+
+      // 3. Compose 코드가 변환된 Lit 컴포넌트 클래스
+      class ComposeCounter extends LitElement {
+        // Compose의 Modifier와 매핑되는 CSS (Flexbox 등을 활용)
+        static styles = css`
+          .container {
+            display: flex;
+            flex-direction: column; /* Compose의 Column에 해당 */
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+          }
+          button {
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+          }
+        `;
+
+        // Compose의 remember { mutableStateOf(0) } 에 해당
+        static properties = {
+          count: { type: Number, state: true },
+        };
+
+        constructor() {
+          super();
+          this.count = 0;
+        }
+
+        // Compose의 UI 트리 빌드에 해당
+        render() {
+          return html`
+            <div class="container">
+              <h2>현재 카운트: ${this.count}</h2>
+              <button @click="${() => this.count++}">클릭하여 증가</button>
+            </div>
+          `;
+        }
+      }
+
+      // 4. 브라우저에 컴포넌트 등록
+      customElements.define("compose-counter", ComposeCounter);
+    </script>
+  </body>
+</html>

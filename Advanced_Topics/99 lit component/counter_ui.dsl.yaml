@@ -1,0 +1,38 @@
+# Semiformal DSL: Declarative UI Abstract Representation
+Component:
+  name: ComposeCounter
+  
+  # 1. 상태 (State): Compose의 remember / Lit의 @state
+  state:
+    - name: count
+      type: Int
+      initialValue: 0
+
+  # 2. UI 트리 및 레이아웃 (Tree & Layout)
+  ui:
+    type: Column # Compose의 Column (Web의 flex-direction: column)
+    layout:
+      alignItems: center
+      gap: 16px
+      padding: 24px
+      border: "1px solid #ccc"
+      borderRadius: "8px"
+    
+    # 3. 하위 노드 (Children)
+    children:
+      - type: Text
+        content: "현재 카운트: ${count}" # 상태 바인딩
+        style:
+          fontSize: 24px
+          fontWeight: bold
+          
+      - type: Button
+        content: "클릭하여 증가"
+        style:
+          padding: "8px 16px"
+          fontSize: "16px"
+        # 4. 이벤트 및 상태 변경 로직 (Actions)
+        onClick:
+          action: "increment"
+          targetState: "count"
+          expression: "count + 1"

@@ -1,0 +1,106 @@
+Component:
+  name: DrawerNavigationUI
+
+  # 1. State: 서랍이 열려있는지 여부를 추적하는 단일 상태
+  state:
+    - name: isOpen
+      type: Boolean
+      initialValue: false
+
+  # 2. Root UI Tree
+  ui:
+    type: Box
+    layout:
+      position: relative
+      width: 100%
+      height: 100vh
+      overflow: hidden # Drawer가 화면 밖으로 나갔을 때 스크롤 방지
+      fontFamily: sans-serif
+
+    children:
+      # --- [A] Main Content Area (메인 화면 및 햄버거 버튼) ---
+      - type: Column
+        layout:
+          padding: "20px"
+        children:
+          - type: IconButton
+            icon: "☰"
+            style:
+              fontSize: "24px"
+              cursor: "pointer"
+            # 햄버거 버튼 클릭 시 상태를 true로 변경
+            onClick:
+              action: "updateState"
+              targetState: "isOpen"
+              expression: "true"
+
+          - type: Heading1
+            content: "Main Dashboard"
+            style: { marginTop: "20px" }
+          - type: Paragraph
+            content: "여기는 메인 화면입니다. 햄버거 버튼을 눌러 메뉴를 여세요."
+
+      # --- [B] Backdrop Area (배경 딤처리 영역) ---
+      - type: Conditional
+        condition: "${isOpen}"
+        content:
+          type: Box
+          className: "drawer-backdrop"
+          layout:
+            position: absolute
+            inset: "0"
+            backgroundColor: "rgba(0, 0, 0, 0.5)"
+            zIndex: 40
+          # 배경을 클릭하면 Drawer가 닫히도록 상태를 false로 변경
+          onClick:
+            action: "updateState"
+            targetState: "isOpen"
+            expression: "false"
+
+      # --- [C] Drawer Panel Area (실제 슬라이딩되는 메뉴 영역) ---
+      - type: Column
+        className: "drawer-panel"
+        layout:
+          position: absolute
+          top: "0"
+          bottom: "0"
+          left: "0"
+          width: "250px"
+          backgroundColor: "#ffffff"
+          zIndex: 50
+          boxShadow: "2px 0 5px rgba(0,0,0,0.2)"
+
+          # [핵심] 상태 값에 바인딩된 CSS Transform 및 Transition
+          transform: "${isOpen ? 'translateX(0)' : 'translateX(-100%)'}"
+          transition: "transform 0.3s ease-in-out"
+
+        children:
+          # Drawer Header (닫기 버튼 포함)
+          - type: Row
+            layout:
+              justifyContent: "space-between"
+              alignItems: "center"
+              padding: "16px"
+              borderBottom: "1px solid #eee"
+            children:
+              - type: Heading3
+                content: "Navigation"
+                style: { margin: "0" }
+              - type: IconButton
+                icon: "✕"
+                style: { cursor: "pointer" }
+                onClick:
+                  action: "updateState"
+                  targetState: "isOpen"
+                  expression: "false"
+
+          # Menu Items
+          - type: Column
+            layout: { padding: "16px" }
+            children:
+              - type: MenuItem
+                content: "🏠 Home"
+              - type: MenuItem
+                content: "👤 Profile"
+              - type: MenuItem
+                content: "⚙️ Settings"

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compose2Web Playbook: Tab UI</title>
+    <style>
+      /* Playbook 화면 전체의 기본 여백 설정 */
+      body {
+        font-family: sans-serif;
+        padding: 40px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <tab-navigation-ui></tab-navigation-ui>
+
+    <script type="module">
+      import { LitElement, html, css } from "https://esm.run/lit";
+
+      class TabNavigationUI extends LitElement {
+        // [개념 매핑 1] State: Compose의 remember { mutableStateOf("BASIC") } 에 해당
+        static properties = {
+          selectedTab: { type: String, state: true },
+        };
+
+        // [개념 매핑 2] Layout: DSL의 layout 및 style 속성을 CSS로 매핑
+        static styles = css`
+          :host {
+            display: block;
+            width: 100%;
+          }
+
+          /* DSL의 Row + className: "tab-menu" */
+          .tab-menu {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+            border-bottom: 2px solid #e0e0e0;
+          }
+
+          /* 탭 아이템 기본 스타일 */
+          .tab-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px; /* border 겹침 처리 */
+            transition: all 0.2s ease-in-out;
+          }
+
+          /* 탭 아이템 선택(Selected) 상태 스타일 */
+          .tab-item.active {
+            color: #1976d2;
+            border-bottom-color: #1976d2;
+            font-weight: bold;
+          }
+
+          /* DSL의 Box (Content Area) */
+          .content-box {
+            padding: 16px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+          }
+
+          h2 {
+            margin-top: 0;
+            color: #333;
+          }
+          p {
+            color: #555;
+            line-height: 1.5;
+          }
+        `;
+
+        constructor() {
+          super();
+          // 초기 상태값 설정
+          this.selectedTab = "BASIC";
+        }
+
+        // [개념 매핑 3] UI Tree & Conditional Rendering: 상태에 따른 UI 재구성 (Recomposition)
+        render() {
+          return html`
+            <div class="container">
+              <ul class="tab-menu">
+                <li
+                  class="tab-item ${this.selectedTab === "BASIC"
+                    ? "active"
+                    : ""}"
+                  @click="${() => (this.selectedTab = "BASIC")}"
+                >
+                  BASIC
+                </li>
+                <li
+                  class="tab-item ${this.selectedTab === "ADVANCED"
+                    ? "active"
+                    : ""}"
+                  @click="${() => (this.selectedTab = "ADVANCED")}"
+                >
+                  ADVANCED
+                </li>
+                <li
+                  class="tab-item ${this.selectedTab === "EXPERT"
+                    ? "active"
+                    : ""}"
+                  @click="${() => (this.selectedTab = "EXPERT")}"
+                >
+                  EXPERT
+                </li>
+              </ul>
+
+              <div class="content-box">
+                ${this.selectedTab === "BASIC"
+                  ? html`
+                      <div class="column">
+                        <h2>Basic Level</h2>
+                        <p>
+                          이곳은 기초적인 개념과 동작 원리를 다루는 베이직
+                          콘텐츠 영역입니다.
+                        </p>
+                      </div>
+                    `
+                  : ""}
+                ${this.selectedTab === "ADVANCED"
+                  ? html`
+                      <div class="column">
+                        <h2>Advanced Level</h2>
+                        <p>
+                          이곳은 심화된 아키텍처와 패턴을 학습하는 어드밴스드
+                          콘텐츠 영역입니다.
+                        </p>
+                      </div>
+                    `
+                  : ""}
+                ${this.selectedTab === "EXPERT"
+                  ? html`
+                      <div class="column">
+                        <h2>Expert Level</h2>
+                        <p>
+                          이곳은 커널 최적화 및 로우레벨 튜닝을 다루는 엑스퍼트
+                          콘텐츠 영역입니다.
+                        </p>
+                      </div>
+                    `
+                  : ""}
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // 커스텀 엘리먼트 등록
+      customElements.define("tab-navigation-ui", TabNavigationUI);
+    </script>
+  </body>
+</html>

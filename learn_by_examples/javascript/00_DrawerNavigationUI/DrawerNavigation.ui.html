@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pure CSS Drawer UI (Checkbox Hack)</title>
+    <style>
+      /* 기본 페이지 리셋 및 폰트 설정 */
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        /* Drawer가 열릴 때 가로 스크롤바가 생기는 것을 방지 */
+        overflow-x: hidden;
+      }
+
+      /* [핵심 State 매핑] 
+      이 체크박스가 DSL의 `isOpen: Boolean` 상태를 대신합니다.
+      화면에는 보이지 않도록 숨깁니다.
+    */
+      #drawer-toggle {
+        display: none;
+      }
+
+      /* --- [A] Main Content Area --- */
+      .main-content {
+        padding: 20px;
+
+        /* 햄버거 버튼 (label 태그를 사용하여 체크박스와 연결) */
+        & .hamburger-btn {
+          display: inline-block;
+          font-size: 24px;
+          cursor: pointer;
+          padding: 8px;
+          user-select: none;
+        }
+      }
+
+      /* --- [B] Backdrop Area --- */
+      .drawer-backdrop {
+        /* [Layout Comment] position: fixed로 뷰포트 전체를 덮습니다. */
+        position: fixed;
+        inset: 0; /* top: 0; right: 0; bottom: 0; left: 0; 의 축약형 */
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+
+        /* 초기 상태 (닫힘): 투명하게 만들고 클릭 이벤트를 무시하게 설정 */
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out;
+        cursor: pointer; /* 클릭해서 닫을 수 있음을 암시 */
+      }
+
+      /* --- [C] Drawer Panel Area --- */
+      .drawer-panel {
+        /* [Layout Comment] 화면 좌측에 고정시키고, z-index를 배경(40)보다 높게(50) 설정 */
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 250px;
+        background-color: #ffffff;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        z-index: 50;
+
+        /* 초기 상태 (닫힘): X축으로 -100% 이동시켜 화면 밖으로 숨김 */
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+
+        /* 내부 레이아웃 (Header와 Menu Items 배치) */
+        display: flex;
+        flex-direction: column;
+
+        & .drawer-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px;
+          border-bottom: 1px solid #eee;
+
+          & h3 {
+            margin: 0;
+          }
+
+          & .close-btn {
+            font-size: 20px;
+            cursor: pointer;
+            user-select: none;
+          }
+        }
+
+        & .menu-items {
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px; /* 메뉴 아이템 사이의 간격 */
+
+          & .menu-item {
+            cursor: pointer;
+            color: #333;
+            text-decoration: none;
+
+            &:hover {
+              color: #1976d2;
+            }
+          }
+        }
+      }
+
+      /* ====================================================
+      [조건부 렌더링 & 애니메이션 트리거] (Declarative UI의 CSS 버전)
+      체크박스가 '체크된(checked)' 상태일 때, 형제 요소(~)들의 스타일을 변경합니다.
+      ====================================================
+    */
+
+      /* 1. Backdrop 활성화 */
+      #drawer-toggle:checked ~ .drawer-backdrop {
+        opacity: 1;
+        pointer-events: auto; /* 클릭 이벤트를 다시 받을 수 있도록 활성화 */
+      }
+
+      /* 2. Drawer Panel 슬라이드 인 */
+      #drawer-toggle:checked ~ .drawer-panel {
+        transform: translateX(0); /* 원래 위치로 이동 */
+      }
+    </style>
+  </head>
+  <body>
+    <input type="checkbox" id="drawer-toggle" />
+
+    <main class="main-content">
+      <label for="drawer-toggle" class="hamburger-btn">☰</label>
+      <h1>Main Dashboard</h1>
+      <p>여기는 메인 화면입니다. 햄버거 버튼을 눌러 메뉴를 여세요.</p>
+      <p>
+        이 화면은 JavaScript 없이 순수 CSS와 HTML Checkbox 상태만으로
+        동작합니다.
+      </p>
+    </main>
+
+    <label for="drawer-toggle" class="drawer-backdrop"></label>
+
+    <aside class="drawer-panel">
+      <div class="drawer-header">
+        <h3>Navigation</h3>
+        <label for="drawer-toggle" class="close-btn">✕</label>
+      </div>
+      <nav class="menu-items">
+        <a href="#" class="menu-item">🏠 Home</a>
+        <a href="#" class="menu-item">👤 Profile</a>
+        <a href="#" class="menu-item">⚙️ Settings</a>
+      </nav>
+    </aside>
+  </body>
+</html>

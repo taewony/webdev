@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vanilla JS Tab UI (Imperative)</title>
+    <style>
+      /* 최신 표준인 Native CSS Nesting을 사용하여 구조적으로 스타일링합니다. */
+      main {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+
+        /* 전체 탭 UI를 감싸는 컨테이너 */
+        .tab-container {
+          /* [Layout Comment] 하위 요소(메뉴, 콘텐츠)를 위아래로 배치하기 위해 기본 블록/플렉스 컨텍스트 형성 */
+          display: flex;
+          flex-direction: column;
+
+          /* --- 탭 메뉴 영역 --- */
+          .tab-menu {
+            /* [Layout Comment] Compose의 Row 역할. 탭 아이템들을 가로로 나란히 배치합니다. */
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+            border-bottom: 2px solid #e0e0e0;
+
+            .tab-item {
+              padding: 12px 24px;
+              cursor: pointer;
+              font-weight: 500;
+              color: #666;
+              border-bottom: 2px solid transparent;
+              margin-bottom: -2px; /* border-bottom을 겹치게 하여 자연스러운 탭 라인 형성 */
+              transition: all 0.2s ease-in-out;
+
+              /* 선택된(활성화된) 탭 아이템의 스타일 */
+              &.active {
+                color: #1976d2;
+                border-bottom-color: #1976d2;
+                font-weight: bold;
+              }
+            }
+          }
+
+          /* --- 탭 콘텐츠 영역 --- */
+          .tab-content {
+            /* [Layout Comment] Compose의 Box/Surface 역할. 내부 콘텐츠에 패딩과 배경색을 주어 시각적으로 분리합니다. */
+            padding: 16px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+
+            /* 개별 콘텐츠 패널 */
+            .panel {
+              /* [Layout Comment] 핵심! 바닐라 JS에서는 조건부 렌더링(Unmount)이 아닌, CSS를 통해 화면에서 단순히 숨깁니다. */
+              display: none;
+
+              /* 자바스크립트에 의해 'active' 클래스가 부여되면 화면에 블록 레벨로 렌더링됩니다. */
+              &.active {
+                display: block;
+              }
+
+              h2 {
+                margin-top: 0;
+                color: #333;
+              }
+
+              p {
+                color: #555;
+                line-height: 1.5;
+              }
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="tab-container">
+        <ul class="tab-menu">
+          <li class="tab-item active" data-target="basic">BASIC</li>
+          <li class="tab-item" data-target="advanced">ADVANCED</li>
+          <li class="tab-item" data-target="expert">EXPERT</li>
+        </ul>
+
+        <div class="tab-content">
+          <article id="basic" class="panel active">
+            <h2>Basic Level</h2>
+            <p>
+              이곳은 기초적인 개념과 동작 원리를 다루는 베이직 콘텐츠
+              영역입니다.
+            </p>
+          </article>
+
+          <article id="advanced" class="panel">
+            <h2>Advanced Level</h2>
+            <p>
+              이곳은 심화된 아키텍처와 패턴을 학습하는 어드밴스드 콘텐츠
+              영역입니다.
+            </p>
+          </article>
+
+          <article id="expert" class="panel">
+            <h2>Expert Level</h2>
+            <p>
+              이곳은 커널 최적화 및 로우레벨 튜닝을 다루는 엑스퍼트 콘텐츠
+              영역입니다.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // [명령형(Imperative) 로직]
+      // 상태(State) 변수를 변경하는 것이 아니라, "무엇을 어떻게 조작할지"를 단계별로 지시합니다.
+      document.addEventListener("DOMContentLoaded", () => {
+        const tabItems = document.querySelectorAll(".tab-item");
+        const panels = document.querySelectorAll(".panel");
+
+        tabItems.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            // 1. 상태 초기화: 모든 탭과 패널에서 'active' 클래스를 수동으로 제거합니다.
+            tabItems.forEach((t) => t.classList.remove("active"));
+            panels.forEach((p) => p.classList.remove("active"));
+
+            // 2. 탭 활성화: 클릭된 탭 요소에 'active' 클래스를 부여합니다.
+            tab.classList.add("active");
+
+            // 3. 패널 활성화: data-target 값을 읽어와 해당 ID를 가진 DOM을 찾고 클래스를 부여합니다.
+            const targetId = tab.getAttribute("data-target");
+            const targetPanel = document.getElementById(targetId);
+
+            if (targetPanel) {
+              targetPanel.classList.add("active");
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

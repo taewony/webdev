@@ -1,0 +1,91 @@
+Component:
+  name: TabNavigationUI
+
+  # 1. State: 현재 선택된 탭을 추적하는 상태 변수
+  state:
+    - name: selectedTab
+      type: String
+      initialValue: "BASIC" # "BASIC", "ADVANCED", "EXPERT" 중 하나
+
+  # 2. Root UI Tree
+  ui:
+    type: Column
+    layout:
+      width: "100%"
+      fontFamily: "sans-serif"
+
+    children:
+      # --- Tab Menu Area (<ul class="tab-menu"> 매핑) ---
+      - type: Row
+        className: "tab-menu"
+        layout:
+          display: "flex"
+          listStyle: "none"
+          padding: "0"
+          margin: "0 0 16px 0"
+          borderBottom: "2px solid #e0e0e0"
+
+        children:
+          # BASIC Tab
+          - type: TabItem
+            content: "BASIC"
+            selected: "${selectedTab == 'BASIC'}"
+            onClick:
+              action: "updateState"
+              targetState: "selectedTab"
+              expression: "'BASIC'"
+
+          # ADVANCED Tab
+          - type: TabItem
+            content: "ADVANCED"
+            selected: "${selectedTab == 'ADVANCED'}"
+            onClick:
+              action: "updateState"
+              targetState: "selectedTab"
+              expression: "'ADVANCED'"
+
+          # EXPERT Tab
+          - type: TabItem
+            content: "EXPERT"
+            selected: "${selectedTab == 'EXPERT'}"
+            onClick:
+              action: "updateState"
+              targetState: "selectedTab"
+              expression: "'EXPERT'"
+
+      # --- Tab Content Area (<h2>, <p> 매핑) ---
+      - type: Box
+        layout:
+          padding: "16px"
+
+        children:
+          # 상태 값에 따른 조건부 렌더링 (Declarative UI의 핵심)
+          - type: Conditional
+            condition: "${selectedTab == 'BASIC'}"
+            content:
+              type: Column
+              children:
+                - type: Heading2
+                  content: "Basic Level"
+                - type: Paragraph
+                  content: "이곳은 기초적인 개념과 동작 원리를 다루는 베이직 콘텐츠 영역입니다."
+
+          - type: Conditional
+            condition: "${selectedTab == 'ADVANCED'}"
+            content:
+              type: Column
+              children:
+                - type: Heading2
+                  content: "Advanced Level"
+                - type: Paragraph
+                  content: "이곳은 심화된 아키텍처와 패턴을 학습하는 어드밴스드 콘텐츠 영역입니다."
+
+          - type: Conditional
+            condition: "${selectedTab == 'EXPERT'}"
+            content:
+              type: Column
+              children:
+                - type: Heading2
+                  content: "Expert Level"
+                - type: Paragraph
+                  content: "이곳은 커널 최적화 및 로우레벨 튜닝을 다루는 엑스퍼트 콘텐츠 영역입니다."
