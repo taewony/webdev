@@ -1,0 +1,29 @@
+<!-- ================= dragon.html ================= -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>용의 귀향</title>
+<style>
+body { margin:0; color:white; font-family:Arial; background:url(https://i.namu.wiki/i/Cg9H_x7OHHxni4MMkJmIMumPam-ibyk6ced3KbOUyrHPFNXz4UloMpgeE9kmJ7h4bTL6IMmEnUbpW_Q8UACxYYK2TabJ0ja1Y-HEI4e1Ckio5HQ4bp3q5hFj4gwVYoXMCV2Y-jq3BCq-acess6cmMg.webp) center; }
+.section { height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; transform:translateY(50px); transition:1s; }
+.section.show { opacity:1; transform:translateY(0); }
+a { color:red; }
+</style>
+</head>
+<body>
+<div class="section"><h1>"···가시지요. 서쪽으로, 신성한 용의 고향으로···"</h1></div>
+<div class="section"><h2>분기 조건</h2><p>숨겨진 이벤트 모두 완료</p></div>
+<div class="section"><h2>엔딩 설명</h2><p>용의 힘을 고향으로 돌려보내는 진 엔딩</p></div>
+<div class="section"><iframe width="700" height="400" src="https://www.youtube.com/embed/DLsssDFlTXE?t=3000s"></iframe></div>
+<div class="section"><a href="index.html">← 메인으로</a></div>
+<script>
+const sections=document.querySelectorAll('.section');
+window.addEventListener('scroll',()=>{
+ sections.forEach(sec=>{
+  if(sec.getBoundingClientRect().top<window.innerHeight-100){ sec.classList.add('show'); }
+ });
+});
+</script>
+</body>
+</html>

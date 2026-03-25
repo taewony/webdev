@@ -1,0 +1,55 @@
+<!-- ================= index.html ================= -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세키로 엔딩 선택</title>
+<style>
+body { margin:0; color:white; text-align:center; font-family:Arial; overflow:hidden; }
+#bg {
+ position:fixed; width:110%; height:110%; top:-5%; left:-5%;
+ background:url('https://blog.kakaocdn.net/dna/cabOBd/btq1z5Aor4T/AAAAAAAAAAAAAAAAAAAAAIJvBKPd3og_VvzqdvDo3b1JVODX79jkPbZ6z22DuyuV/img.jpg?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1774969199&allow_ip=&allow_referer=&signature=6N8VdoxidADhelg1cDXhDX2qKj0%3D')  no-repeat center center;
+    background-size: cover;
+ transition:0.5s;
+}
+.overlay {
+ position:relative; z-index:2; height:100vh;
+ background:rgba(0,0,0,0.6);
+ display:flex; flex-direction:column; justify-content:center;
+}
+.btn {
+ margin:15px auto; padding:15px; width:250px;
+ background:#550000; color:white; text-decoration:none;
+ border-radius:10px; transition:0.3s;
+}
+.btn:hover { background:red; transform:scale(1.1); }
+.fade-in { animation:fadeIn 1s ease-in; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+.fade-out { opacity:0; transition:0.5s; }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div class="overlay fade-in" id="page">
+<h1>세키로 엔딩 선택</h1>
+<a href="shura.html" class="btn" onclick="go(event)">수라 엔딩</a>
+<a href="immortal.html" class="btn" onclick="go(event)">불사 끊기</a>
+<a href="return.html" class="btn" onclick="go(event)">인간 회귀</a>
+<a href="dragon.html" class="btn" onclick="go(event)">용의 귀향</a>
+</div>
+<script>
+function go(e){
+ e.preventDefault();
+ const link=e.currentTarget.href;
+ document.getElementById('page').classList.add('fade-out');
+ setTimeout(()=>location.href=link,500);
+}
+document.addEventListener('mousemove', e=>{
+ const x=(e.clientX/window.innerWidth -0.5)*20;
+ const y=(e.clientY/window.innerHeight -0.5)*20;
+ document.getElementById('bg').style.transform=`translate(${x}px, ${y}px)`;
+});
+</script>
+</body>
+</html>
