@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Slick Design | 매끄러운 웹 디자인 슬라이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', system-ui, sans-serif;
+            background: #f1f5f9;
+            overflow: hidden;
+            height: 100vh;
+            color: #0f172a;
+        }
+
+        /* 폰트 최적화 (Pretendard CDN) */
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+        
+        /* 슬라이드 컨테이너 */
+        .slides-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        /* 개별 슬라이드 */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0.4s;
+            background: #ffffff;
+            scroll-behavior: smooth;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* 슬라이드 내부 콘텐츠 */
+        .slide-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2.5rem;
+            width: 100%;
+        }
+
+        /* 타이포그래피 계층 */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #0f172a, #2563eb);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 1.5rem 0 1rem 0;
+            border-left: 5px solid #2563eb;
+            padding-left: 1.2rem;
+            color: #0f172a;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1.2rem 0 0.8rem 0;
+            color: #1e293b;
+        }
+
+        .subhead {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #475569;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+        }
+
+        /* 그리드 & 카드 */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 1.8rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s ease;
+            border: 1px solid #eef2ff;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.08);
+            border-color: #cbd5e1;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #eef2ff;
+            color: #2563eb;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+            margin-bottom: 1rem;
+        }
+
+        /* 코드 블록 */
+        .code-block {
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 1rem 1.3rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            border-left: 3px solid #2563eb;
+            margin: 1rem 0;
+            overflow-x: auto;
+            color: #0f172a;
+        }
+
+        /* 여백 데모 */
+        .whitespace-demo {
+            background: #f8fafc;
+            border-radius: 28px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .flex-gap-demo {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 1rem;
+        }
+
+        .demo-box {
+            background: #e0e7ff;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            color: #1e40af;
+        }
+
+        /* before & after */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .bad-example {
+            background: #fff2f0;
+            border-radius: 28px;
+            padding: 1.5rem;
+            border: 1px solid #ffd6cc;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .good-example {
+            background: #f0f9f4;
+            border-radius: 28px;
+            padding: 1.8rem;
+            border: 1px solid #c0e3d0;
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.1);
+        }
+
+        /* 버튼 인터랙션 */
+        .btn-demo {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .btn-demo:hover {
+            background: #1d4ed8;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 18px -8px rgba(37, 99, 235, 0.4);
+        }
+
+        /* 반응형 Flex 예시 */
+        .responsive-flex-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: #f8fafc;
+            border-radius: 28px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .responsive-flex-demo .item {
+            background: #cbd5e1;
+            padding: 1rem 1.2rem;
+            border-radius: 40px;
+            flex: 1 1 120px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        @media (max-width: 640px) {
+            .slide-content {
+                padding: 2rem 1.5rem;
+            }
+            h1 {
+                font-size: 2.4rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .comparison {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .grid-2 {
+                gap: 1.2rem;
+            }
+        }
+
+        /* 내비게이션 */
+        .nav-controls {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.8rem;
+            display: flex;
+            gap: 0.8rem;
+            z-index: 30;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            padding: 0.6rem 1.2rem;
+            border-radius: 60px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            border: 1px solid rgba(203,213,225,0.6);
+        }
+
+        .nav-btn {
+            background: white;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            border-radius: 60px;
+            transition: all 0.2s;
+            font-weight: 600;
+            color: #1e293b;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .nav-btn:hover {
+            background: #f1f5f9;
+            transform: scale(0.96);
+        }
+        .slide-counter {
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: #f8fafc;
+            padding: 0 0.8rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            color: #334155;
+        }
+        .dots {
+            position: fixed;
+            bottom: 1.8rem;
+            left: 1.8rem;
+            display: flex;
+            gap: 0.6rem;
+            z-index: 30;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .dot.active-dot {
+            background: #2563eb;
+            width: 28px;
+            border-radius: 10px;
+        }
+
+        /* 리스트 스타일 */
+        ul, .styled-list {
+            margin: 1rem 0 1rem 1.4rem;
+            line-height: 1.6;
+            color: #1e293b;
+        }
+        li {
+            margin: 0.5rem 0;
+        }
+        .quote {
+            font-style: italic;
+            border-left: 3px solid #94a3b8;
+            padding-left: 1.2rem;
+            margin: 1rem 0;
+            color: #334155;
+            font-weight: 400;
+        }
+        hr {
+            margin: 1.5rem 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #e2e8f0, transparent);
+        }
+        footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="slides-container">
+    <!-- 슬라이드 1: 타이틀 -->
+    <div class="slide active" id="slide1">
+        <div class="slide-content">
+            <div style="min-height: 70vh; display: flex; flex-direction: column; justify-content: center;">
+                <span class="badge">✨ SLICK WEB DESIGN</span>
+                <h1>Slick Web Design<br>세련되고 매끄러운 웹페이지 만들기</h1>
+                <p class="subhead">사용자 눈을 사로잡는 '매끄러운' 웹페이지의 비밀</p>
+                <div style="margin-top: 2rem;">
+                    <p style="font-size: 1.1rem; font-weight: 500;">작성자: 디자인 랩 · Code Studio</p>
+                    <p style="color: #475569;">Flexbox, 여백, 인터랙션으로 완성하는 차세대 UI</p>
+                </div>
+            </div>
+            <footer>← → 키보드로 슬라이드 이동 | 부드러운 인터랙션을 직접 느껴보세요</footer>
+        </div>
+    </div>
+
+    <!-- 슬라이드 2: Slick 의 의미 -->
+    <div class="slide" id="slide2">
+        <div class="slide-content">
+            <h2>🎯 'Slick(슬릭)'하다는 것은?</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>📖 사전적 의미</h3>
+                    <p>매끄러운, 윤이 나는, 솜씨 좋은</p>
+                </div>
+                <div class="card">
+                    <h3>🌐 웹 디자인에서의 의미</h3>
+                    <ul>
+                        <li><strong>시각적 (Visual):</strong> 군더더기 없이 깔끔하고 세련됨</li>
+                        <li><strong>경험적 (UX):</strong> 정보를 물 흐르듯 자연스럽게 찾을 수 있음</li>
+                        <li><strong>기술적 (Tech):</strong> 애니메이션/전환, 버벅거림 없이 부드럽게</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="quote">
+                “Apple, Toss 같은 사이트들이 대표적인 Slick 디자인의 예시입니다. 단순히 예쁜 것이 아니라 완벽한 경험.”
+            </div>
+        </div>
+    </div>
+
+    <!-- 슬라이드 3: 5가지 핵심 요소 개요 -->
+    <div class="slide" id="slide3">
+        <div class="slide-content">
+            <h2>⚡ Slick Design의 5가지 핵심 요소</h2>
+            <div class="grid-2">
+                <div class="card">1. 여백 (Whitespace) — 숨 쉴 공간</div>
+                <div class="card">2. 타이포그래피 (Typography) — 글자 자체를 디자인으로</div>
+                <div class="card">3. 시각적 계층 (Visual Hierarchy) — 한눈에 파악</div>
+                <div class="card">4. 마이크로 인터랙션 (Micro-interactions) — 부드러운 반응성</div>
+                <div class="card">5. 유동적 반응형 (Fluid Responsive) — 모든 기기에서 완벽함</div>
+            </div>
+            <div class="quote">“이 다섯 가지가 합쳐질 때 비로소 매끄러운 디자인이 완성됩니다.”</div>
+        </div>
+    </div>
+
+    <!-- 슬라이드 4: 여백 (Whitespace) -->
+    <div class="slide" id="slide4">
+        <div class="slide-content">
+            <h2>🌬️ 1. 여백 (Whitespace / Negative Space)</h2>
+            <div class="quote">“여백은 비어있는 공간이 아니라, 요소를 돋보이게 하는 투명한 액자입니다.”</div>
+            <div class="whitespace-demo">
+                <div class="flex-gap-demo">
+                    <div class="demo-box">margin + gap</div>
+                    <div class="demo-box">여백이 주는 여유</div>
+                    <div class="demo-box">정보 과부하 방지</div>
+                </div>
+                <div class="code-block">
+                    .container { display: flex; gap: 20px; }<br>
+                    p { line-height: 1.6; padding: 0 1rem; }
+                </div>
+                <p><strong>CSS 팁:</strong> Flexbox의 <code>gap</code> 속성으로 일정한 여백 유지, <code>line-height: 1.5</code> 이상으로 가독성 향상</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 슬라이드 5: 타이포그래피 -->
+    <div class="slide" id="slide5">
+        <div class="slide-content">
+            <h2>✍️ 2. 타이포그래피 (Typography)</h2>
+            <div class="quote">“좋은 폰트 하나가 열 이미지 부럽지 않다.”</div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>✨ 특징</h3>
+                    <ul>
+                        <li>Pretendard, Inter, Noto Sans 등 가독성 우수 폰트</li>
+                        <li>제목(H1) 700 vs 본문 400 명확한 대비</li>
+                        <li>글자 색상: #222 (짙은 회색) 부드럽게</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🎨 CSS 적용 팁</h3>
+                    <div class="code-block">
+                        h1 { font-weight: 700; }<br>
+                        p { font-weight: 400; color: #2c3e50; }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 슬라이드 6: 시각적 계층 (Visual Hierarchy) -->
+    <div class="slide" id="slide6">
+        <div class="slide-content">
+            <h2>👁️ 3. 시각적 계층 (Visual Hierarchy)</h2>
+            <p>사용자의 시선을 원하는 곳으로 이끄는 기술</p>
+            <div class="grid-2" style="margin: 1.5rem 0;">
+                <div class="card" style="flex: 2; background: #eff6ff;">
+                    <strong>📌 메인 콘텐츠</strong><br>
+                    크게, 밝게, 강조된 영역 (flex: 1)
+                </div>
+                <div class="card" style="flex: 1; background: #f9fafb;">
+                    <strong>🗂️ 사이드바 / 부가 정보</strong><br>
+                    작게, 흐리게, 덜 강조
+                </div>
+            </div>
+            <div class="code-block">
+                .main { flex: 2; } .sidebar { flex: 1; }<br>
+                /* 그림자 효과로 입체감 */ box-shadow: 0 12px 28px -8px rgba(0,0,0,0.1);
+            </div>
+            <p>⭐ Flexbox 배치와 크기 비율로 계층을 명확히!</p>
+        </div>
+    </div>
+
+    <!-- 슬라이드 7: 마이크로 인터랙션 + 애니메이션 -->
+    <div class="slide" id="slide7">
+        <div class="slide-content">
+            <h2>✨ 4. 마이크로 인터랙션 & 애니메이션</h2>
+            <div class="quote">“딱딱한 웹페이지에 생명력을 불어넣기”</div>
+            <div class="card" style="text-align: center;">
+                <button class="btn-demo" id="hoverDemoBtn">✨ Hover me! 부드러운 전환</button>
+                <p style="margin-top: 1rem;">transition + transform: 마우스 오버 시 살짝 떠오르는 버튼</p>
+                <div class="code-block">
+                    .btn { transition: all 0.3s ease; }<br>
+                    .btn:hover { transform: translateY(-5px); background: #1e40af; }
+                </div>
+            </div>
+            <p>⚠️ 과도한 애니메이션은 피하고, 0.2~0.3초 내 짧고 부드럽게</p>
+        </div>
+    </div>
+
+    <!-- 슬라이드 8: 완벽한 반응형 (Fluid Responsive) -->
+    <div class="slide" id="slide8">
+        <div class="slide-content">
+            <h2>📱 5. 완벽한 반응형 (Fluid Responsive)</h2>
+            <p>PC에서도, 스마트폰에서도 깨짐 없는 완벽함 — Flexbox + @media</p>
+            <div class="responsive-flex-demo">
+                <div class="item">반응형 1</div>
+                <div class="item">유동적 Flex-wrap</div>
+                <div class="item">자연스러운 재배치</div>
+                <div class="item">Slick!</div>
+            </div>
+            <div class="code-block">
+                display: flex; flex-wrap: wrap; gap: 1rem;<br>
+                @media (max-width: 640px) { .container { flex-direction: column; } }
+            </div>
+            <p><strong>🎯 우리의 무기:</strong> Flexbox와 미디어쿼리 조합으로 모바일에서 본문 우선 배치까지!</p>
+            <div class="badge">창 크기를 조절해보세요 → 위 박스들이 유연하게 움직입니다</div>
+        </div>
+    </div>
+
+    <!-- 슬라이드 9: Before & After 비교 -->
+    <div class="slide" id="slide9">
+        <div class="slide-content">
+            <h2>🔁 Before & After — Slick의 힘</h2>
+            <div class="comparison">
+                <div class="bad-example">
+                    <h3 style="color:#b91c1c;">❌ Bad: Cluttered (복잡한 디자인)</h3>
+                    <ul style="font-size: 0.9rem;">
+                        <li>❌ 여백 없음, 폰트 4~5가지</li>
+                        <li>❌ 원색(빨강, 파랑) 남발</li>
+                        <li>❌ 모바일에서 글씨가 깨짐</li>
+                    </ul>
+                    <div style="background:#ffe4e2; padding: 1rem; margin-top: 1rem; border-radius: 16px; font-size:0.85rem;">
+                        📦 요소 사이 간격 0px, 그림자 과도, 정신없음
+                    </div>
+                </div>
+                <div class="good-example">
+                    <h3 style="color:#15803d;">✅ Good: Slick (세련된 디자인)</h3>
+                    <ul style="font-size: 0.9rem;">
+                        <li>✅ 넉넉한 여백(gap, padding)</li>
+                        <li>✅ 1~2개의 통일된 폰트</li>
+                        <li>✅ 무채색 베이스 + 포인트 블루 1개</li>
+                        <li>✅ 모바일 최적화 레이아웃</li>
+                    </ul>
+                    <div style="background:#dcfce7; padding: 1rem; margin-top: 1rem; border-radius: 20px;">
+                        💎 깔끔한 카드, 일관된 간격, 부드러운 호버 효과
+                    </div>
+                </div>
+            </div>
+            <div class="quote">“작은 여백과 통일성이 고급스러움을 만듭니다.”</div>
+        </div>
+    </div>
+
+    <!-- 슬라이드 10: 결론 & Q&A -->
+    <div class="slide" id="slide10">
+        <div class="slide-content">
+            <h2>🎯 결론 & Q&A</h2>
+            <div class="card" style="background:#fefce8;">
+                <p><strong>💡 코딩 스킬(Flexbox)은 Slick 디자인을 실현하기 위한 도구입니다.</strong></p>
+                <hr>
+                <ul>
+                    <li>✅ 비우기 — 여백으로 숨 쉬는 레이아웃</li>
+                    <li>✅ 강조하기 — 타이포그래피 & 시각적 계층</li>
+                    <li>✅ 부드럽게 연결하기 — 인터랙션과 반응형</li>
+                </ul>
+                <p style="margin-top: 1.5rem;">✨ 다음 시간: 디자인 원칙을 직접 CSS로 입히는 고급 실습!<br>
+                질문이 있다면 지금 자유롭게~</p>
+            </div>
+            <footer>© Slick Design Masterclass — Flexbox, 여백, 그리고 미세한 인터랙션의 힘</footer>
+        </div>
+    </div>
+</div>
+
+<!-- 네비게이션 컨트롤 -->
+<div class="nav-controls">
+    <button class="nav-btn" id="prevSlideBtn">←</button>
+    <div class="slide-counter" id="slideCounter">1 / 10</div>
+    <button class="nav-btn" id="nextSlideBtn">→</button>
+</div>
+<div class="dots" id="dotsContainer"></div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    let currentIdx = 0;
+    const totalSlides = slides.length;
+    const counterSpan = document.getElementById('slideCounter');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function updateSlides() {
+        slides.forEach((slide, idx) => {
+            if (idx === currentIdx) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+        counterSpan.innerText = `${currentIdx+1} / ${totalSlides}`;
+        updateDots();
+    }
+
+    function updateDots() {
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, i) => {
+            if (i === currentIdx) {
+                dot.classList.add('active-dot');
+            } else {
+                dot.classList.remove('active-dot');
+            }
+        });
+    }
+
+    function createDots() {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === currentIdx) dot.classList.add('active-dot');
+            dot.addEventListener('click', () => {
+                currentIdx = i;
+                updateSlides();
+            });
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function nextSlide() {
+        if (currentIdx < totalSlides - 1) {
+            currentIdx++;
+            updateSlides();
+        } else {
+            // optional: loop or just vibrate
+            currentIdx = 0;
+            updateSlides();
+        }
+    }
+
+    function prevSlide() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            updateSlides();
+        } else {
+            currentIdx = totalSlides - 1;
+            updateSlides();
+        }
+    }
+
+    document.getElementById('nextSlideBtn').addEventListener('click', nextSlide);
+    document.getElementById('prevSlideBtn').addEventListener('click', prevSlide);
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            nextSlide();
+            e.preventDefault();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+            e.preventDefault();
+        }
+    });
+
+    // 터치 스와이프 모바일 대응
+    let touchStartX = 0;
+    let touchEndX = 0;
+    document.querySelector('.slides-container').addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    document.querySelector('.slides-container').addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) nextSlide();
+        if (touchEndX > touchStartX + 50) prevSlide();
+    });
+
+    createDots();
+    updateSlides();
+
+    // 추가로 마이크로 인터랙션 데모용 버튼 스타일 예시
+    const demoBtn = document.getElementById('hoverDemoBtn');
+    if (demoBtn) {
+        demoBtn.style.transition = 'all 0.25s ease';
+        demoBtn.addEventListener('mouseenter', () => {
+            demoBtn.style.transform = 'translateY(-4px)';
+            demoBtn.style.boxShadow = '0 14px 22px -8px rgba(37,99,235,0.4)';
+        });
+        demoBtn.addEventListener('mouseleave', () => {
+            demoBtn.style.transform = 'translateY(0)';
+            demoBtn.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
+        });
+    }
+
+    // 반응형 데모에 동적 메시지 (추가 리소스)
+    const flexDemo = document.querySelector('.responsive-flex-demo');
+    if (flexDemo) {
+        const items = flexDemo.querySelectorAll('.item');
+        items.forEach(item => {
+            item.style.transition = 'all 0.2s';
+            item.addEventListener('mouseenter', () => {
+                item.style.backgroundColor = '#a5b4fc';
+                item.style.transform = 'scale(1.02)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.backgroundColor = '#cbd5e1';
+                item.style.transform = 'scale(1)';
+            });
+        });
+    }
+</script>
+</body>
+</html>
