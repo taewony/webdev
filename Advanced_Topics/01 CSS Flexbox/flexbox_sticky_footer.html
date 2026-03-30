@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flexbox with Sticky Footer</title>
+    <style>
+      /* ----- 기본 초기화 ----- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* 
+      [Sticky Footer 구현 + CSS Nesting]
+      - body를 Flex 컨테이너로 만들고, 세로 방향 정렬
+      - min-height: 100vh → 뷰포트 높이 최소 보장
+      - main에 flex: 1을 주어 footer를 하단으로 밀어냄
+    */
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh; /* for sticky footer */
+        font-family: "Segoe UI", "Arial", sans-serif;
+        background-color: hsl(0, 0%, 95%);
+      }
+      /* header 스타일을 body 안에 중첩 */
+      header {
+        background-color: hsl(0, 0%, 30%);
+        color: white;
+        padding: 1.2rem;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        /* h1을 header 안에 중첩 */
+        h1 {
+          font-size: 1.8rem;
+          letter-spacing: -0.5px;
+        }
+      }
+
+      /* footer 스타일 */
+      footer {
+        background-color: hsl(0, 0%, 30%);
+        color: hsl(0, 0%, 90%);
+        text-align: center;
+        padding: 1.2rem;
+        font-size: 0.9rem;
+      }
+
+      /* main 영역: flex: 1 → 남은 공간을 모두 차지, 내부 중앙 정렬 */
+      main {
+        flex: 1;
+        display: flex;
+        /* flex direction: row (기본값)가 생략되어 있다 */
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+
+        /* 미디어 쿼리 중첩: main에만 영향을 주는 반응형 패딩 */
+        @media (max-width: 700px) {
+          padding: 1.5rem;
+        }
+
+        /* .center-wrapper: 박스들을 감싸는 컨테이너, max-width로 너비 제한 */
+        .center-wrapper {
+          max-width: 1200px;
+          width: 100%;
+          background: transparent;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1.5rem;
+
+          /* .box 스타일을 .center-wrapper 안에 중첩 */
+          .box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            width: 280px;
+            text-align: center;
+            transition: transform 0.2s ease;
+            border: 1px solid #e0e0e0;
+
+            /* BOX 호버 효과 중첩 */
+            &:hover {
+              transform: translateY(-5px);
+            }
+
+            /* BOX 제목과 문단 스타일 중첩 */
+            h2 {
+              color: hsl(210, 29%, 24%); /* blue, dark */
+              margin-bottom: 1rem;
+            }
+
+            p {
+              color: hsl(0, 0%, 40%);
+              line-height: 1.5;
+            }
+
+            /* 미디어 쿼리 중첩: 작은 화면에서 박스 너비 조정 */
+            @media (max-width: 700px) {
+              width: 70%;
+              max-width: 320px;
+            }
+          }
+        }
+      }
+
+      /* 추가 반응형: 작은 화면에서 전체적인 여백 조정은 이미 main과 .box에 중첩된 미디어 쿼리로 처리됨 */
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Sticky Footer + 중앙 정렬 (CSS Nesting)</h1>
+    </header>
+
+    <main>
+      <div class="center-wrapper">
+        <div class="box">
+          <h2>📦 박스 1</h2>
+          <p>
+            이 박스들은 main 영역 내에서<br />가로·세로 정중앙에 위치합니다.
+          </p>
+        </div>
+        <div class="box">
+          <h2>✨ 박스 2</h2>
+          <p>max-width를 사용해<br />컨테이너 너비를 제한했습니다.</p>
+        </div>
+        <div class="box">
+          <h2>🎯 박스 3</h2>
+          <p>반응형으로 줄바꿈되며<br />항상 중앙 정렬을 유지합니다.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>
+        © 2026 taewony 레이아웃 데모 | Footer는 항상 화면 하단에 위치 (Sticky
+        Footer + CSS Nesting)
+      </p>
+    </footer>
+
+    <!-- 
+    ============================================================
+    📌 CSS Nesting 적용 설명
+    ============================================================
+    1. body 내부에 header, main, footer를 중첩하여 계층 구조를 시각화했습니다.
+    2. header 안에 h1을, main 안에 .center-wrapper와 .box를 중첩했습니다.
+    3. 미디어 쿼리는 각각 main과 .box 규칙 내부에 중첩하여, 
+       해당 요소에만 조건부 스타일이 적용되도록 했습니다.
+    4. & 기호를 사용하여 hover와 같은 의사 클래스를 중첩했습니다.
+    ============================================================
+  --></body>
+</html>

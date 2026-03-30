@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flexbox Layout Principles</title>
+    <style>
+      /* 1. 기본 초기화 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* 2. 전체 페이지 컨테이너 및 Nesting 시작 */
+      #container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: hsl(0, 0%, 92%); /* #ebebeb */
+        max-width: 960px;
+        margin: auto;
+        font-family: sans-serif;
+        line-height: 1.6;
+
+        @media screen and (max-width: 960px) {
+          width: 100%;
+        }
+
+        /* 공통 헤더/푸터 스타일 */
+        header,
+        footer {
+          padding: 2rem;
+          background: hsl(0, 0%, 20%); /* #333 */
+          color: hsl(0, 0%, 100%); /* white */
+          text-align: center;
+        }
+
+        /* 3. 메인 레이아웃 */
+        main {
+          flex: 1; /* 남는 세로 공간을 모두 흡수하여 푸터를 밀어냄 */
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          padding: 20px;
+          background: hsl(0, 0%, 87%); /* #ddd */
+
+          /* 모바일 반응형 */
+          @media screen and (max-width: 768px) {
+            flex-direction: column-reverse;
+            gap: 15px;
+          }
+
+          /* 본문 영역 */
+          article {
+            flex: 1; /* 사이드바를 제외한 나머지 가로 공간 흡수 */
+            background: hsl(0, 0%, 100%); /* #fff */
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid hsl(0, 0%, 80%); /* #ccc */
+          }
+
+          /* 사이드바 영역 */
+          aside {
+            flex: 0 0 300px; /* 너비를 300px로 절대 고정 */
+            background: hsl(0, 0%, 94%); /* #f0f0f0 */
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid hsl(0, 0%, 80%); /* #ccc */
+
+            @media screen and (max-width: 768px) {
+              flex: none;
+              width: 100%;
+            }
+
+            /* 기존 인라인 스타일을 CSS Nesting으로 분리 */
+            .mobile-desc {
+              margin-top: 10px;
+              font-size: 0.9em;
+              color: hsl(0, 0%, 40%); /* #666 */
+            }
+          }
+        }
+
+        /* 내부 타이포그래피 및 요소 스타일 (Container 하위로 Nesting) */
+        h2 {
+          margin-bottom: 10px;
+          color: hsl(0, 0%, 20%); /* #333 */
+        }
+
+        h3 {
+          margin-top: 20px;
+          margin-bottom: 8px;
+          color: hsl(0, 0%, 27%); /* #444 */
+          border-bottom: 2px solid hsl(0, 0%, 87%); /* #ddd */
+          padding-bottom: 4px;
+        }
+
+        ul {
+          margin-left: 20px;
+          margin-bottom: 15px;
+
+          li {
+            margin-bottom: 8px;
+          }
+        }
+
+        code {
+          background: hsl(0, 0%, 93%); /* #eee */
+          padding: 2px 5px;
+          border-radius: 4px;
+          color: hsl(330, 67%, 52%); /* #d63384 */
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="container">
+      <header><h1>Flexbox Layout Study</h1></header>
+
+      <main>
+        <aside>
+          <h2>snb</h2>
+          <p>사이드 내비게이션 바 영역입니다.</p>
+          <p class="mobile-desc">
+            데스크탑에서는 300px 크기로 고정되어 있으며, 모바일 화면에서는 본문
+            아래로 이동합니다.
+          </p>
+        </aside>
+
+        <article>
+          <h2>Flexbox 레이아웃의 마법 🪄</h2>
+          <p>
+            이 페이지는 CSS Flexbox의 두 가지 중요한 원리를 적용하여
+            만들어졌습니다.
+          </p>
+
+          <h3>1. 푸터(Footer)가 항상 바닥에 있는 원리</h3>
+          <p>
+            본문의 내용이 적어도 푸터가 화면 중간에 떠 있지 않고 바닥에 붙어있는
+            이유는 전체를 감싸는 <code>#container</code>에 있습니다.
+          </p>
+          <ul>
+            <li>
+              <code>min-height: 100vh;</code>로 컨테이너의 최소 높이를 화면 가득
+              채웁니다.
+            </li>
+            <li>
+              <code>flex-direction: column;</code>으로 요소들을 위에서 아래로
+              쌓습니다.
+            </li>
+            <li>
+              가운데 있는 <code>main { flex: 1; }</code>이 남는 빈 공간을
+              <strong>고무줄처럼 모두 흡수하여 팽창</strong>하므로, 그 밑에 있는
+              푸터를 바닥으로 밀어냅니다.
+            </li>
+          </ul>
+
+          <h3>2. 본문과 사이드바가 나란히 배치되는 원리</h3>
+          <p>
+            <code>main</code> 요소 역시 자식들을 통제하는 Flex 컨테이너입니다.
+          </p>
+          <ul>
+            <li>
+              사이드바(snb)에 <code>flex: 0 0 300px;</code>을 주어 넓어지지도,
+              좁아지지도 않게 <strong>300px로 크기를 고정</strong>합니다.
+            </li>
+            <li>
+              본문(article)에 <code>flex: 1;</code>을 주어 전체 너비에서
+              사이드바 300px을 빼고
+              <strong>남은 나머지 가로 공간을 모두 차지</strong>하게 만듭니다.
+            </li>
+            <li>
+              모바일 화면에서는 <code>flex-direction: column-reverse;</code>를
+              사용하여 <strong>HTML 코드를 수정하지 않고도</strong> 본문이 위로,
+              사이드바가 아래로 가도록 시각적 순서를 뒤집습니다.
+            </li>
+          </ul>
+        </article>
+      </main>
+
+      <footer>
+        <p>&copy; Flexbox Layout Principles for Study</p>
+      </footer>
+    </div>
+  </body>
+</html>

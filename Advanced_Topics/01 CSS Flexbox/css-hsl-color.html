@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HSL Color Explanation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: hsl(0, 0%, 95%);
+      }
+
+      h1 {
+        margin-bottom: 10px;
+      }
+
+      section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .box {
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+        margin: 10px;
+        display: inline-block;
+        color: white;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>HSL 색상 모델 이해</h1>
+
+    <section>
+      <h2>1. HSL이란?</h2>
+      <p>
+        HSL은 색상을 <b>Hue(색상), Saturation(채도), Lightness(명도)</b>로
+        표현하는 방식입니다.
+      </p>
+      <div class="box" style="background: hsl(0, 0%, 30%)">hsl(0,0%,30%)</div>
+    </div>
+
+    <section>
+      <h2>2. HSL의 장점</h2>
+      <ul>
+        <li>색상(Hue)만 따로 조절 가능 → 직관적</li>
+        <li>밝기(Lightness) 조절이 쉬움 → UI 디자인에 유리</li>
+        <li>색상 변형(hover, theme) 만들기 쉬움</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Hue (색상: 0~360)</h2>
+      <p>색상의 종류를 의미 (색상환 기준)</p>
+      <div class="row">
+        <div class="box" style="background: hsl(0, 100%, 50%)">0° (Red)</div>
+        <div class="box" style="background: hsl(120, 100%, 50%)">
+          120° (Green)
+        </div>
+        <div class="box" style="background: hsl(240, 100%, 50%)">
+          240° (Blue)
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Saturation (채도: 0~100%)</h2>
+      <p>색의 선명도 (0% = 회색, 100% = 진한 색)</p>
+      <div class="row">
+        <div class="box" style="background: hsl(200, 0%, 50%)">0%</div>
+        <div class="box" style="background: hsl(200, 50%, 50%)">50%</div>
+        <div class="box" style="background: hsl(200, 100%, 50%)">100%</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Lightness (명도: 0~100%)</h2>
+      <p>밝기 (0% = 검정, 50% = 기본색, 100% = 흰색)</p>
+      <div class="row">
+        <div class="box" style="background: hsl(200, 100%, 10%)">10%</div>
+        <div class="box" style="background: hsl(200, 100%, 50%)">50%</div>
+        <div class="box" style="background: hsl(200, 100%, 90%)">90%</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>6. 요약</h2>
+      <ul>
+        <li><b>Hue</b> → 색상 종류 (빨강, 파랑 등)</li>
+        <li><b>Saturation</b> → 색의 진함</li>
+        <li><b>Lightness</b> → 밝기</li>
+      </ul>
+    </section>
+  </body>
+</html>
