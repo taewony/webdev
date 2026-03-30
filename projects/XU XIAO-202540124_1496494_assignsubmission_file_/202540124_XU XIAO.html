@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>오버워치 페이지</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background-color: #111827;
+  color: white;
+  text-align: center;
+}
+
+/* 상단 */
+.header {
+  padding: 40px;
+  background-color: #1f2937;
+}
+
+.logo {
+  width: 150px;
+}
+
+/* 버튼 */
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #f59e0b;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #fbbf24;
+}
+
+/* 게임 소개 */
+.intro {
+  padding: 20px;
+}
+
+.intro img {
+  width: 500px;
+  max-width: 90%;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+/* 섹션 */
+.section {
+  padding: 40px;
+}
+
+/* 카드 컨테이너 */
+.cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* 카드 */
+.card {
+  background-color: #1f2937;
+  margin: 20px;
+  padding: 20px;
+  width: 280px;
+  border-radius: 15px;
+}
+
+/* 이미지 */
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* 설명 */
+.story {
+  display: none;
+  margin-top: 15px;
+  font-size: 15px;
+  line-height: 1.8;
+  text-align: center;
+  white-space: pre-line;
+}
+
+/* hover */
+.card:hover {
+  transform: scale(1.05);
+  transition: 0.3s;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- 상단 -->
+<div class="header">
+  <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/5/55/Overwatch_circle_logo.svg">
+  <h1>오버워치</h1>
+  <p>내가 좋아하는 게임 소개 페이지</p>
+
+  <button onclick="toggleIntro()">게임 소개 보기</button>
+
+  <div class="intro">
+    <img src="https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/blte3aadf7914f4a2ab/69863ff7e7959c2a65bb36a7/play_both_sides.png?imwidth=1088&imdensity=1">
+
+    <p id="introText" class="story">
+오버워치는 블리자드에서 개발한 팀 기반 FPS 게임이다.
+다양한 개성과 능력을 가진 영웅들을 선택하여 팀과 협력하는 것이 중요하다.
+
+각 영웅은 공격, 돌격, 지원 역할을 가지고 있으며
+상황에 따라 전략적으로 선택해야 한다.
+
+빠른 전투와 화려한 스킬 효과가 특징이며
+팀워크와 전략이 승패를 결정짓는 중요한 요소이다.
+    </p>
+  </div>
+</div>
+
+<!-- 영웅 -->
+<div class="section">
+  <h2>내가 좋아하는 영웅</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <img src="https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt8626841dd0a4756e/637da2238b3bbe1129cea43e/wreckingball-00.jpg">
+      <h3>레킹볼</h3>
+      <button onclick="toggleStory('s1')">배경 이야기</button>
+
+      <p id="s1" class="story">
+레킹볼은 달 기지에서 탈출한 햄스터 해먼드이다.
+높은 지능으로 메카를 제작하고 전투에 참여한다.
+
+빠르게 이동하며 적을 밀어내고
+높은 생존력을 가진 돌격 영웅이다.
+      </p>
+    </div>
+
+    <div class="card">
+      <img src="https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltc8039f1e9d655c9a/637da1c55148880e83ab6fc7/reaper-00.jpg">
+      <h3>리퍼</h3>
+      <button onclick="toggleStory('s2')">배경 이야기</button>
+
+      <p id="s2" class="story">
+리퍼는 과거 오버워치 요원이었지만
+현재는 어둠 속에서 활동하는 존재이다.
+
+그림자 이동 능력을 사용하며
+근거리 전투에서 매우 강력하다.
+      </p>
+    </div>
+
+    <div class="card">
+      <img src="https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltb983c9c07c5e404e/637da16446a48b0e063e4a95/genji-00.jpg">
+      <h3>겐지</h3>
+      <button onclick="toggleStory('s3')">배경 이야기</button>
+
+      <p id="s3" class="story">
+겐지는 시마다 가문의 닌자였다.
+사이보그로 다시 태어나 새로운 삶을 살고 있다.
+
+빠른 이동과 검 공격을 사용하는
+기술적인 영웅이다.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function toggleIntro() {
+  var x = document.getElementById("introText");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+
+function toggleStory(id) {
+  var x = document.getElementById(id);
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+
+</body>
+</html>
