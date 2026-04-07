@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Expression Quiz</title>
+    <style>
+        /* Minimalist Design */
+        :root {
+            --primary-color: #3b82f6;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        main {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        article.quiz-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .quiz-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        code {
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #d946ef;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            padding: 0.75rem 1.2rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #2563eb;
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .result-msg {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .result-msg.success { color: var(--success-color); }
+        .result-msg.error { color: var(--error-color); }
+
+        .btn-answer {
+            background-color: var(--text-muted);
+            display: none; /* Initially hidden */
+        }
+
+        .btn-answer:hover {
+            background-color: #4b5563;
+        }
+
+        section.explanation-box {
+            display: none; /* Initially hidden */
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--success-color);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .explanation-box h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+            color: var(--success-color);
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <header>
+            <h1>JavaScript Expression Quiz</h1>
+            <p>문제를 읽고 올바른 JS 표현식(Expression)을 입력하세요.</p>
+        </header>
+
+        <section id="quiz-container"></section>
+    </main>
+
+    <script>
+        // 1. Data-driven 방식: 문제 데이터 배열
+        const quizData = [
+            {
+                id: 1,
+                title: "문제 1. 배열 필터링",
+                description: "주어진 배열 <code>const arr = [1, 2, 3, 4, 5];</code>에서 짝수만 추출하는 JS 표현식을 작성하세요.<br>(단, <code>arr</code> 변수가 선언되어 있다고 가정합니다.)",
+                context: "const arr = [1, 2, 3, 4, 5];", // 평가 시 필요한 사전 맥락
+                expectedExpression: "arr.filter(n => n % 2 === 0)",
+                explanation: "<code>filter()</code> 메서드를 사용하면 조건(짝수: n % 2 === 0)에 맞는 요소만 모아 새로운 배열을 반환합니다."
+            },
+            {
+                id: 2,
+                title: "문제 2. 문자열 변환",
+                description: "문자열 <code>'javascript'</code>를 모두 대문자로 변환하는 표현식을 작성하세요.",
+                context: "",
+                expectedExpression: "'javascript'.toUpperCase()",
+                explanation: "문자열의 <code>toUpperCase()</code> 메서드는 호출된 문자열을 대문자로 변환하여 반환합니다."
+            },
+            {
+                id: 3,
+                title: "문제 3. 수학 연산",
+                description: "<code>Math</code> 객체 또는 연산자를 사용하여 숫자 <code>4.7</code>을 내림(버림)하는 표현식을 작성하세요.",
+                context: "",
+                expectedExpression: "Math.floor(4.7)",
+                explanation: "<code>Math.floor()</code> 함수는 주어진 숫자와 같거나 작은 정수 중에서 가장 큰 수를 반환(내림)합니다."
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-container');
+
+        // 2. 화면 렌더링 함수
+        function renderQuizzes() {
+            quizData.forEach(quiz => {
+                const article = document.createElement('article');
+                article.className = 'quiz-card';
+
+                article.innerHTML = `
+                    <h3 class="quiz-title">${quiz.title}</h3>
+                    <p>${quiz.description}</p>
+                    <div class="input-group">
+                        <input type="text" id="input-${quiz.id}" placeholder="예: 1 + 1" autocomplete="off">
+                        <button onclick="gradeQuiz(${quiz.id})">채점하기</button>
+                    </div>
+                    <div class="action-group">
+                        <span id="result-${quiz.id}" class="result-msg"></span>
+                        <button id="btn-answer-${quiz.id}" class="btn-answer" onclick="toggleAnswer(${quiz.id})">정답 및 해설 보기</button>
+                    </div>
+                    <section id="explanation-${quiz.id}" class="explanation-box">
+                        <h4>정답: <code>${quiz.expectedExpression}</code></h4>
+                        <p>${quiz.explanation}</p>
+                    </section>
+                `;
+                quizContainer.appendChild(article);
+            });
+        }
+
+        // 3. 자동 채점 기능
+        function gradeQuiz(id) {
+            const quiz = quizData.find(q => q.id === id);
+            const inputEl = document.getElementById(`input-${id}`);
+            const resultEl = document.getElementById(`result-${id}`);
+            const answerBtn = document.getElementById(`btn-answer-${id}`);
+            
+            const userInput = inputEl.value.trim();
+
+            if (!userInput) {
+                resultEl.textContent = "표현식을 입력해주세요.";
+                resultEl.className = "result-msg error";
+                return;
+            }
+
+            try {
+                // 보안 및 스코프 격리를 위해 Function 객체 사용
+                // context 코드를 먼저 실행하고, 사용자 입력 값을 return 하도록 래핑합니다.
+                const userEval = new Function(`${quiz.context}\nreturn ${userInput};`)();
+                const expectedEval = new Function(`${quiz.context}\nreturn ${quiz.expectedExpression};`)();
+
+                // 배열이나 객체일 수 있으므로 JSON.stringify를 통해 값 비교
+                if (JSON.stringify(userEval) === JSON.stringify(expectedEval)) {
+                    resultEl.textContent = "✅ 정답입니다!";
+                    resultEl.className = "result-msg success";
+                } else {
+                    const outputStr = userEval !== undefined ? JSON.stringify(userEval) : "undefined";
+                    resultEl.textContent = `❌ 오답입니다. (결과값: ${outputStr})`;
+                    resultEl.className = "result-msg error";
+                }
+            } catch (error) {
+                resultEl.textContent = `⚠️ 문법 오류: ${error.message}`;
+                resultEl.className = "result-msg error";
+            }
+
+            // 채점 후 정답 보기 버튼 표시
+            answerBtn.style.display = "inline-block";
+        }
+
+        // 4. 정답 및 해설 토글 기능
+        function toggleAnswer(id) {
+            const explanationBox = document.getElementById(`explanation-${id}`);
+            const answerBtn = document.getElementById(`btn-answer-${id}`);
+
+            if (explanationBox.style.display === "block") {
+                explanationBox.style.display = "none";
+                answerBtn.textContent = "정답 및 해설 보기";
+            } else {
+                explanationBox.style.display = "block";
+                answerBtn.textContent = "정답 및 해설 숨기기";
+            }
+        }
+
+        // 초기 렌더링 실행
+        renderQuizzes();
+    </script>
+</body>
+</html>
