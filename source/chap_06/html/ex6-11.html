@@ -14,6 +14,30 @@
       }
       document.write("<hr>");
     }
+
+    // ===== 입력 (Input) =====
+let startDan = 2, endDan = 9;
+let startNum = 1, endNum = 9;
+
+// ===== 처리 (Processing) =====
+let output = "";
+
+for (let dan = startDan; dan <= endDan; dan++) {
+  // 단 제목 추가
+  output += dan + "단: ";
+
+  // 구구셈 계산식 추가
+  for (let num = startNum; num <= endNum; num++) {
+    output += dan + "X" + num + "=" + (dan * num) + " ";
+  }
+
+  // 단 구분선 추가
+  output += "<hr>";
+}
+
+// ===== 출력 (Output) =====
+document.write(output);
+
   </script>
 </body>
 </html>

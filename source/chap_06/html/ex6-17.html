@@ -1,17 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>클릭으로 함수 호출하기</title>
-  <link rel="stylesheet" href="style_js.css">
-</head>
-<body>
-  <h1 id="alter" onclick="change()">Change Colors</h1>
-  <script>
-    function change() {
-      const alter = document.getElementById("alter");
-      alter.style.background = "aqua";
-    }
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>클릭으로 함수 호출하기</title>
+    <link rel="stylesheet" href="style_js.css" />
+  </head>
+  <body>
+    <h1 id="alter" onclick="change()">Change Colors</h1>
+    <script>
+      function change() {
+        const alter = document.getElementById("alter");
+        const currentColor = window.getComputedStyle(alter).backgroundColor;
+        // getComputedStyle은 rgb() 형식으로 반환하므로 비교를 위해 변환 필요
+        if (currentColor === "rgb(0, 255, 255)" || currentColor === "aqua") {
+          alter.style.background = "skyblue";
+        } else {
+          alter.style.background = "aqua";
+        }
+      }
+    </script>
+  </body>
 </html>

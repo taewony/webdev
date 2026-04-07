@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>querySelectorAll + for...of 예제</title>
+    <style>
+      .item {
+        padding: 12px 20px;
+        margin: 8px;
+        background: #f0f2f5;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: 0.2s;
+        display: inline-block;
+        font-family: sans-serif;
+      }
+      .item.active {
+        background: #4c9aff;
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      button {
+        margin-top: 20px;
+        padding: 8px 16px;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h3 id="title">📌 좋아하는 과일을 클릭하세요</h3>
+    <div class="item">🍎 사과</div>
+    <div class="item">🍌 바나나</div>
+    <div class="item">🍒 체리</div>
+    <div class="item">🍇 포도</div>
+    <br />
+    <button id="resetBtn">초기화</button>
+
+    <script>
+      // 1. 모든 .item 요소를 선택
+      const items = document.querySelectorAll(".item");
+
+      // 2. for...of 를 사용해 각 요소에 클릭 이벤트 추가
+      for (const item of items) {
+        item.addEventListener("click", function () {
+          // 현재 클릭된 항목의 텍스트 출력
+          alert(`선택한 과일: ${this.textContent}`);
+          // active 클래스 토글 (기존 active 제거 후 현재에 추가)
+          // (간단히: 다른 항목들의 active 제거, 현재 항목에 active 추가)
+          for (const other of items) {
+            other.classList.remove("active");
+          }
+          this.classList.add("active");
+        });
+      }
+
+      // 3. 초기화 버튼: 모든 active 제거
+      const resetBtn = document.querySelector("#resetBtn");
+      resetBtn.addEventListener("click", () => {
+        for (const item of items) {
+          item.classList.remove("active");
+        }
+      });
+    </script>
+  </body>
+</html>

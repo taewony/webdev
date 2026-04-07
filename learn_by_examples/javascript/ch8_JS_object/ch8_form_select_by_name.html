@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>과일 선택기 - name 속성 활용</title>
+    <style>
+      .item {
+        padding: 12px 20px;
+        margin: 8px;
+        background: #f0f2f5;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: 0.2s;
+        display: inline-block;
+        font-family: sans-serif;
+      }
+      .item.active {
+        background: #4c9aff;
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      button,
+      input {
+        margin-top: 20px;
+        padding: 8px 16px;
+        font-size: 1rem;
+      }
+      form {
+        margin-top: 20px;
+      }
+      .feedback {
+        margin-top: 10px;
+        color: #e67e22;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>📌 좋아하는 과일을 클릭하거나 이름을 입력하세요</h3>
+
+    <div class="item" name="사과">🍎 사과</div>
+    <div class="item" name="바나나">🍌 바나나</div>
+    <div class="item" name="체리">🍒 체리</div>
+    <div class="item" name="포도">🍇 포도</div>
+    <br />
+
+    <form name="fruitForm">
+      <input
+        type="text"
+        name="fruitName"
+        placeholder="과일 이름 입력 (예: 사과, 바나나)"
+        autocomplete="off"
+      />
+      <button type="submit">선택하기</button>
+      <button type="button" id="resetBtn">초기화</button>
+    </form>
+
+    <div id="feedback" class="feedback"></div>
+
+    <script>
+      // 화면에 있는 모든 과일 항목(div)과 메시지 출력 공간을 가져옵니다.
+      const items = document.querySelectorAll(".item");
+      const feedbackDiv = document.getElementById("feedback");
+
+      // 특정 과일에 색상을 칠해주는(활성화) 함수
+      function setActiveItem(targetItem) {
+        // 1. 먼저 모든 과일의 색상을 원래대로 되돌립니다.
+        for (const item of items) {
+          item.classList.remove("active");
+        }
+
+        // 2. 선택된 과일이 있다면 색상을 칠해주고 메시지를 보여줍니다.
+        if (targetItem) {
+          targetItem.classList.add("active");
+          // getAttribute('name')을 쓰면 '사과', '바나나' 같은 깔끔한 이름을 가져올 수 있습니다.
+          const name = targetItem.getAttribute("name");
+          feedbackDiv.textContent = `✅ "${name}" 항목이 선택되었습니다.`;
+        } else {
+          feedbackDiv.textContent = "❌ 일치하는 과일이 없습니다.";
+        }
+      }
+
+      // 폼에서 '선택하기' 버튼을 눌렀을 때 실행되는 코드
+      // 3️⃣ 폼의 name(fruitForm)으로 폼 전체에 직접 접근할 수 있습니다.
+      const form = document.fruitForm;
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault(); // 페이지가 새로고침 되는 것을 막아줍니다.
+
+        // 4️⃣ 폼 이름과 입력창 이름으로 값을 아주 쉽게 가져옵니다!
+        const userValue = document.fruitForm.fruitName.value.trim();
+        if (userValue === "") return;
+
+        // 5️⃣ 입력한 이름과 똑같은 name 속성을 가진 요소를 문서 전체에서 찾습니다.
+        const matchedElements = document.getElementsByName(userValue);
+
+        // 찾은 요소가 있다면 첫 번째 요소를 활성화하고, 없으면 null(없음)을 넘깁니다.
+        if (matchedElements.length > 0) {
+          setActiveItem(matchedElements[0]);
+        } else {
+          setActiveItem(null);
+        }
+
+        // 다음 입력을 위해 입력창을 비워줍니다.
+        document.fruitForm.fruitName.value = "";
+      });
+
+      // '초기화' 버튼을 눌렀을 때 실행되는 코드
+      const resetBtn = document.getElementById("resetBtn");
+      resetBtn.addEventListener("click", () => {
+        setActiveItem(null); // 활성화된 항목 지우기
+        feedbackDiv.textContent = ""; // 메시지도 지우기
+        document.fruitForm.fruitName.value = ""; // 입력창 지우기
+      });
+
+      // 과일 항목을 마우스로 직접 클릭했을 때 실행되는 코드
+      for (const item of items) {
+        item.addEventListener("click", () => {
+          setActiveItem(item);
+          // 클릭한 과일의 name을 입력창에도 쏙 넣어줍니다.
+          document.fruitForm.fruitName.value = item.getAttribute("name");
+        });
+      }
+    </script>
+  </body>
+</html>

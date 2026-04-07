@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>랜덤 색상 + 라운딩 애니메이션</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background: #f5f5f5;
+      }
+      #box {
+        width: 300px;
+        height: 300px;
+        margin: auto;
+        transition:
+          background-color 0.2s ease,
+          border-radius 0.2s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box"></div>
+    <script>
+      // DOM 요소 캐싱 (반복 검색 제거)
+      const box = document.getElementById("box");
+
+      // 랜덤 16진수 색상 생성 함수
+      function getRandomHexColor() {
+        // 0x1000000 = 16777216 (16^6), toString(16)으로 6자리 16진수 생성
+        return (
+          "#" +
+          Math.floor(Math.random() * 0x1000000)
+            .toString(16)
+            .padStart(6, "0")
+        );
+      }
+
+      let animationCount = 1; // 현재 반복 횟수
+      const MAX_COUNT = 50; // 최대 반복 횟수 (의미 있는 상수)
+      const INTERVAL_MS = 250; // 간격 (밀리초)
+
+      const intervalId = setInterval(() => {
+        // 1. 랜덤 색상 생성 및 배경색 적용
+        const newColor = getRandomHexColor();
+        box.style.backgroundColor = newColor;
+
+        // 2. borderRadius 증가 (1% → 50%)
+        box.style.borderRadius = `${animationCount}%`;
+
+        // 3. 반복 횟수 증가 및 종료 조건 검사
+        animationCount++;
+        if (animationCount > MAX_COUNT) {
+          clearInterval(intervalId);
+          console.log(`애니메이션 종료 (${MAX_COUNT}회 실행됨)`);
+        }
+      }, INTERVAL_MS);
+    </script>
+  </body>
+</html>

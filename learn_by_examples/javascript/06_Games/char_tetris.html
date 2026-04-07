@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>❤️ 러브레터 테트리스 - i love you~ 완성 게임</title>
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Courier New', 'Monaco', monospace;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 56px;
+            padding: 24px 28px 32px 28px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 0 0 2px rgba(255,255,240,0.15);
+            cursor: pointer;
+            background: #1a1f2f;
+        }
+
+        .info-panel {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: #0f1322cc;
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 12px 24px;
+            border: 1px solid #ffb7c5;
+        }
+
+        .target-area {
+            background: #2a1e2c;
+            padding: 8px 20px;
+            border-radius: 48px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            box-shadow: inset 0 1px 3px #00000044, 0 2px 4px #ffb7c522;
+        }
+
+        .target-label {
+            font-weight: bold;
+            color: #ffccdd;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            text-shadow: 0 0 3px #ff3b6f;
+        }
+
+        .target-char {
+            background: #ffecf0;
+            padding: 5px 16px;
+            border-radius: 50px;
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            color: #b13e5c;
+            min-width: 80px;
+            text-align: center;
+            letter-spacing: 2px;
+            box-shadow: inset 0 0 0 2px white, 0 2px 8px #ff99aa;
+        }
+
+        .progress-text {
+            background: #00000066;
+            border-radius: 32px;
+            padding: 6px 18px;
+            font-size: 1rem;
+            color: #fbc2d5;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        button {
+            background: #ff8da1;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 8px 28px;
+            border-radius: 60px;
+            font-family: inherit;
+            color: #2d0f18;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #922b46;
+            letter-spacing: 1px;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #922b46;
+        }
+
+        .message-box {
+            background: #000000aa;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #ffe5b4;
+            font-family: monospace;
+        }
+
+        .controls-hint {
+            font-size: 0.8rem;
+            color: #bbb4df;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 0 #ff88aa; }
+            100% { text-shadow: 0 0 8px #ff5f8f; }
+        }
+
+        .win-glow {
+            animation: pulse 0.6s infinite alternate;
+        }
+
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 12px;
+            color: #6c6f8c;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+        <div class="info-panel">
+            <div class="target-area">
+                <span class="target-label">🎯 다음 글자</span>
+                <span id="nextCharDisplay" class="target-char">i</span>
+            </div>
+            <div class="progress-text">
+                📜 진행도: <span id="progressCount">0</span> / <span id="totalLength">11</span>
+            </div>
+            <button id="resetButton">✨ 다시 시작</button>
+            <div class="message-box" id="statusMessage">
+                🎮 ← → 로 받아라!
+            </div>
+        </div>
+        <div class="controls-hint">
+            <span>⬅️  ➡️  방향키로 수집기 이동</span>
+            <span>💖 정확한 순서로 글자를 잡아야 함</span>
+            <span>❌ 틀린 글자도 사라지지만 진행X</span>
+        </div>
+        <footer>❤️ "i love you~" 완성하는 감성 낙하 게임</footer>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // ----------------------------- 설정 ---------------------------------
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 목표 문장 (정확한 순서)
+        const SENTENCE = "i love you~";
+        const TARGET_CHARS = [...SENTENCE];   // 배열 ['i',' ','l','o','v','e',' ','y','o','u','~']
+        const TOTAL_LEN = TARGET_CHARS.length;
+        
+        // 게임 상태
+        let currentIndex = 0;           // 다음에 맞춰야 할 문자의 인덱스
+        let gameActive = true;           // 게임 활성화 (승리시 false)
+        let winFlag = false;
+        
+        // 낙하 문자 배열
+        let fallingLetters = [];
+        
+        // 플레이어 (수집기)
+        const PLAYER_WIDTH = 90;
+        const PLAYER_HEIGHT = 22;
+        let playerX = canvas.width/2 - PLAYER_WIDTH/2;
+        const playerY = canvas.height - 52;   // 바닥에서 약간 위
+        let moveLeft = false;
+        let moveRight = false;
+        
+        // 스폰 타이머 ID
+        let spawnInterval = null;
+        
+        // 임시 메시지 (팝업형)
+        let toastMessage = { text: "", timer: 0 };
+        
+        // 랜덤 문자 풀 (영소문자 + 공백 + '~' , 필요한 모든 문자 포함 + 도전요소)
+        const BASE_CHARS = "abcdefghijklmnopqrstuvwxyz ~";
+        // 공백 표시용 특수 심볼 (시각적 표현만 다름, 실제 비교는 ' ' 공백)
+        
+        // 성공 여부
+        let gameWinFlag = false;
+        
+        // 속도 관련
+        const BASE_SPEED = 1.2;
+        const VARIANT_SPEED = 1.4;
+        
+        // ----------------------------- helper functions --------------------
+        function getRandomChar(){
+            // 40% 확률로 현재 필요한 문자를 드랍 (플레이가 너무 지루하지 않게)
+            // 하지만 너무 쉽지 않도록 40% + 나머지 60%는 랜덤풀에서
+            if(gameActive && !winFlag && Math.random() < 0.42 && currentIndex < TOTAL_LEN){
+                // 필요한 문자를 반환 (단 공백은 시각적으로 표시할때 구분)
+                return TARGET_CHARS[currentIndex];
+            } else {
+                // 랜덤 풀에서 선택
+                const randomPool = BASE_CHARS;
+                return randomPool[Math.floor(Math.random() * randomPool.length)];
+            }
+        }
+        
+        // 문자 시각적 표현 (공백은 '_' 로, 일반 문자는 그대로, 틸드는 그대로)
+        function getDisplayChar(ch){
+            if(ch === ' ') return '␣';   // 공백을 눈에 띄게 표시
+            if(ch === '~') return '~';
+            return ch;
+        }
+        
+        // 다음 필요 문자 표시 (공백 시각처리)
+        function updateNextCharUI(){
+            const nextSpan = document.getElementById('nextCharDisplay');
+            if(currentIndex >= TOTAL_LEN){
+                nextSpan.innerText = '✨완성✨';
+                nextSpan.style.background = "#ffd966";
+                nextSpan.style.color = "#a13350";
+                return;
+            }
+            let needChar = TARGET_CHARS[currentIndex];
+            let displayNeed = (needChar === ' ') ? '␣ (space)' : needChar;
+            nextSpan.innerText = displayNeed;
+            nextSpan.style.background = "#ffecf0";
+            nextSpan.style.color = "#b13e5c";
+        }
+        
+        function updateProgressUI(){
+            document.getElementById('progressCount').innerText = currentIndex;
+            document.getElementById('totalLength').innerText = TOTAL_LEN;
+        }
+        
+        // 토스트 메시지 (짧은 피드백)
+        function showMessage(msg, isError = false){
+            const msgBox = document.getElementById('statusMessage');
+            msgBox.innerText = msg;
+            msgBox.style.color = isError ? "#ffb3a3" : "#c6ffb7";
+            msgBox.style.textShadow = isError ? "0 0 3px #ff5555" : "0 0 3px #66ff66";
+            setTimeout(() => {
+                if(document.getElementById('statusMessage') && !winFlag){
+                    document.getElementById('statusMessage').style.color = "#ffe5b4";
+                    document.getElementById('statusMessage').innerText = "🎮 ← → 로 받아라!";
+                } else if(winFlag){
+                    // 승리 메세지는 유지
+                }
+            }, 1300);
+        }
+        
+        // 게임 승리 처리
+        function winGame(){
+            if(winFlag) return;
+            winFlag = true;
+            gameActive = false;
+            gameWinFlag = true;
+            if(spawnInterval){
+                clearInterval(spawnInterval);
+                spawnInterval = null;
+            }
+            showMessage("💖 축하합니다! 'i love you~' 문장 완성! 💖", false);
+            const msgBox = document.getElementById('statusMessage');
+            msgBox.innerText = "✨★ PERFECT! I LOVE YOU TOO! ★✨";
+            msgBox.style.color = "#ffec99";
+            msgBox.style.fontSize = "1.1rem";
+            msgBox.style.animation = "pulse 0.8s infinite";
+            // UI 다음 문자 표시 완료
+            document.getElementById('nextCharDisplay').innerText = "❤️ SUCCESS ❤️";
+            // 추가 효과: 캔버스 배경 흐릿하게 할 필요 없음
+        }
+        
+        // 글자 획득 (정답/오답)
+        function catchLetter(letterObj){
+            if(!gameActive || winFlag) return false;
+            const caughtChar = letterObj.char;
+            const neededChar = TARGET_CHARS[currentIndex];
+            
+            // 정답 체크
+            if(caughtChar === neededChar){
+                // 정답!
+                currentIndex++;
+                updateProgressUI();
+                updateNextCharUI();
+                showMessage(`✔️ 정답! ${getDisplayChar(caughtChar)} → 다음 단계!`, false);
+                
+                // 게임 완료 조건
+                if(currentIndex === TOTAL_LEN){
+                    winGame();
+                }
+                return true; // 획득 성공
+            } else {
+                // 오답 처리
+                showMessage(`❌ 틀렸어요! "${getDisplayChar(caughtChar)}" 은(는) 순서에 맞지 않아요. 현재 필요: ${getDisplayChar(neededChar)}`, true);
+                return false; // 획득 실패, 문자만 제거
+            }
+        }
+        
+        // ----------------------------- 낙하 문자 생성 -----------------------
+        function spawnLetter(){
+            if(!gameActive || winFlag) return;
+            // 너무 많은 낙하 방지 (최대 25개)
+            if(fallingLetters.length > 35) return;
+            
+            const charValue = getRandomChar();
+            const letterWidth = 38;
+            const letterHeight = 38;
+            const randX = 10 + Math.random() * (canvas.width - letterWidth - 10);
+            const speed = BASE_SPEED + Math.random() * VARIANT_SPEED;
+            fallingLetters.push({
+                x: randX,
+                y: 5,
+                char: charValue,
+                width: letterWidth,
+                height: letterHeight,
+                speed: speed,
+                active: true
+            });
+        }
+        
+        // ----------------------------- 충돌 & 업데이트 -----------------------
+        function updateLetters(){
+            if(!gameActive && !winFlag) return;  // 아직 승리 전 active false는 리셋때문에 잠시, 리셋 로직에서 처리
+            if(winFlag) return; // 승리하면 더이상 움직이지 않음 (정적)
+            
+            // 1. 위치 이동
+            for(let i=0; i<fallingLetters.length; i++){
+                const l = fallingLetters[i];
+                l.y += l.speed;
+            }
+            
+            // 2. 충돌 체크 (플레이어 & 문자)
+            for(let i=fallingLetters.length-1; i>=0; i--){
+                const l = fallingLetters[i];
+                // 바닥 이탈 제거
+                if(l.y + l.height > canvas.height){
+                    fallingLetters.splice(i,1);
+                    continue;
+                }
+                // 플레이어와 충돌 검사 (AABB)
+                if(l.y + l.height >= playerY && l.y <= playerY + PLAYER_HEIGHT &&
+                   l.x + l.width >= playerX && l.x <= playerX + PLAYER_WIDTH){
+                    // 충돌! 잡음
+                    const isCorrect = catchLetter(l);
+                    // 무조건 제거 (잡혔으니)
+                    fallingLetters.splice(i,1);
+                    // isCorrect 여부는 UI에서 처리됨
+                }
+            }
+        }
+        
+        // ----------------------------- 플레이어 이동 -------------------------
+        function updatePlayer(){
+            if(!gameActive || winFlag) return;
+            const MOVE_STEP = 8;
+            if(moveLeft && playerX > 0){
+                playerX = Math.max(0, playerX - MOVE_STEP);
+            }
+            if(moveRight && playerX + PLAYER_WIDTH < canvas.width){
+                playerX = Math.min(canvas.width - PLAYER_WIDTH, playerX + MOVE_STEP);
+            }
+        }
+        
+        // ----------------------------- 렌더링 (canvas 그림) ------------------
+        function draw(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 그라데이션 배경
+            const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            grad.addColorStop(0, "#1e243f");
+            grad.addColorStop(1, "#12172b");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 별빛 효과
+            ctx.fillStyle = "#fff9dd";
+            for(let i=0;i<80;i++){
+                if(i%2 === 0) continue;
+                ctx.globalAlpha = 0.4 + Math.sin(Date.now()*0.001 + i)*0.1;
+                ctx.fillRect( (i*131)%canvas.width, (i*57)%canvas.height, 2,2);
+            }
+            ctx.globalAlpha = 1;
+            
+            // ----- 낙하 문자들 그리기 (러블리 테트리스 스타일) -----
+            for(const l of fallingLetters){
+                const ch = l.char;
+                const display = getDisplayChar(ch);
+                // 상자 그림자
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = "rgba(0,0,0,0.5)";
+                ctx.fillStyle = "#ffddee";
+                ctx.roundRect(l.x, l.y, l.width, l.height, 12);
+                ctx.fill();
+                // 테두리
+                ctx.strokeStyle = "#ff98b9";
+                ctx.lineWidth = 2;
+                ctx.roundRect(l.x, l.y, l.width, l.height, 12);
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+                // 글자 스타일
+                ctx.font = `bold ${l.height-10}px "Courier New", "Segoe UI Emoji"`;
+                ctx.fillStyle = "#b13e64";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(display, l.x + l.width/2, l.y + l.height/2);
+                // 공백 특별 이모지 느낌
+                if(ch === ' '){
+                    ctx.fillStyle = "#886e9e";
+                    ctx.font = `18px monospace`;
+                    ctx.fillText("␣", l.x + l.width/2, l.y + l.height/2);
+                }
+            }
+            
+            // 플레이어 (수집기) - 하트 감성
+            ctx.shadowBlur = 5;
+            ctx.fillStyle = "#ff88aa";
+            ctx.roundRect(playerX, playerY, PLAYER_WIDTH, PLAYER_HEIGHT, 20);
+            ctx.fill();
+            ctx.fillStyle = "#ffffffcc";
+            ctx.roundRect(playerX+4, playerY-3, PLAYER_WIDTH-8, 6, 10);
+            ctx.fill();
+            ctx.fillStyle = "#ff4d6d";
+            ctx.font = "bold 19px 'Segoe UI'";
+            ctx.fillText("❤️", playerX+PLAYER_WIDTH/2-8, playerY+17);
+            ctx.fillStyle = "#fff0f3";
+            ctx.font = "bold 14px monospace";
+            ctx.fillText("CATCH", playerX+PLAYER_WIDTH/2-19, playerY+18);
+            ctx.shadowBlur = 0;
+            
+            // 바닥 라인 장식
+            ctx.beginPath();
+            ctx.strokeStyle = "#ffb3c6";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([8,12]);
+            ctx.moveTo(0, playerY+PLAYER_HEIGHT+2);
+            ctx.lineTo(canvas.width, playerY+PLAYER_HEIGHT+2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // 만약 승리시 오버레이 효과
+            if(winFlag){
+                ctx.globalAlpha = 0.7;
+                ctx.fillStyle = "#f9c7d1";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.globalAlpha = 1;
+                ctx.font = "bold 36px 'Courier New'";
+                ctx.fillStyle = "#c72a4f";
+                ctx.shadowBlur = 0;
+                ctx.fillText("✨ YOU WIN ✨", canvas.width/2-130, canvas.height/2);
+                ctx.font = "20px monospace";
+                ctx.fillStyle = "#641e36";
+                ctx.fillText("i love you~", canvas.width/2-70, canvas.height/2+50);
+            }
+            
+            // 필요 표시 작은 안내
+            if(!winFlag && gameActive){
+                ctx.font = "14px monospace";
+                ctx.fillStyle = "#ffe2eb";
+                ctx.shadowBlur = 0;
+                ctx.fillText("▼ 맞는 글자를 순서대로 받으세요 ▼", playerX+5, playerY-6);
+            }
+        }
+        
+        // roundRect 유틸리티
+        if(!CanvasRenderingContext2D.prototype.roundRect){
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r){
+                if(w < 2 * r) r = w / 2;
+                if(h < 2 * r) r = h / 2;
+                this.moveTo(x+r, y);
+                this.lineTo(x+w-r, y);
+                this.quadraticCurveTo(x+w, y, x+w, y+r);
+                this.lineTo(x+w, y+h-r);
+                this.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+                this.lineTo(x+r, y+h);
+                this.quadraticCurveTo(x, y+h, x, y+h-r);
+                this.lineTo(x, y+r);
+                this.quadraticCurveTo(x, y, x+r, y);
+                return this;
+            };
+        }
+        
+        // ----------------------------- 애니메이션 루프 -----------------------
+        let animationId = null;
+        function gameLoop(){
+            if(!winFlag){
+                updatePlayer();
+                updateLetters();
+            }
+            draw();
+            animationId = requestAnimationFrame(gameLoop);
+        }
+        
+        // ----------------------------- 초기화 / 리셋 -------------------------
+        function resetGame(){
+            // 기존 스폰 정지
+            if(spawnInterval){
+                clearInterval(spawnInterval);
+                spawnInterval = null;
+            }
+            // 상태 초기화
+            gameActive = true;
+            winFlag = false;
+            gameWinFlag = false;
+            currentIndex = 0;
+            fallingLetters = [];
+            playerX = canvas.width/2 - PLAYER_WIDTH/2;
+            moveLeft = false;
+            moveRight = false;
+            toastMessage = { text:"", timer:0 };
+            updateProgressUI();
+            updateNextCharUI();
+            // 메시지 박스 리셋
+            const msgBox = document.getElementById('statusMessage');
+            msgBox.style.animation = "none";
+            msgBox.style.color = "#ffe5b4";
+            msgBox.innerText = "🎮 다시 시작! 순서에 맞게 받아요 💕";
+            setTimeout(()=>{
+                if(!winFlag && document.getElementById('statusMessage'))
+                    document.getElementById('statusMessage').innerText = "🎮 ← → 로 받아라!";
+            }, 1500);
+            
+            // 스폰 재시작 (랜덤 간격 0.9~1.5초)
+            spawnInterval = setInterval(() => {
+                if(gameActive && !winFlag){
+                    spawnLetter();
+                } else if(winFlag){
+                    // 승리시 추가 스폰 안함
+                    if(spawnInterval) clearInterval(spawnInterval);
+                }
+            }, 900 + Math.random() * 600);
+            
+            // 처음에 2~3개 미리 생성 (재미)
+            setTimeout(() => {
+                if(gameActive && !winFlag){
+                    for(let i=0;i<2;i++) spawnLetter();
+                }
+            }, 100);
+        }
+        
+        // ----------------------------- 키보드 이벤트 -------------------------
+        function handleKeyDown(e){
+            if(!gameActive && !winFlag) return; // 아직 리셋 전? 하지만 리셋하면 active true
+            if(winFlag) return;
+            const key = e.key;
+            if(key === 'ArrowLeft'){
+                moveLeft = true;
+                e.preventDefault();
+            } else if(key === 'ArrowRight'){
+                moveRight = true;
+                e.preventDefault();
+            }
+        }
+        
+        function handleKeyUp(e){
+            const key = e.key;
+            if(key === 'ArrowLeft'){
+                moveLeft = false;
+                e.preventDefault();
+            } else if(key === 'ArrowRight'){
+                moveRight = false;
+                e.preventDefault();
+            }
+        }
+        
+        // 윈도우 리스너
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        
+        // 리셋 버튼
+        const resetBtn = document.getElementById('resetButton');
+        resetBtn.addEventListener('click', () => {
+            resetGame();
+        });
+        
+        // 모바일 터치 대비? 간단히 캔버스 터치 이동 (추가 편의)
+        let touchActive = false;
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            let touchX = (e.touches[0].clientX - rect.left) * scaleX;
+            if(!gameActive || winFlag) return;
+            let newX = touchX - PLAYER_WIDTH/2;
+            newX = Math.min(Math.max(0, newX), canvas.width - PLAYER_WIDTH);
+            playerX = newX;
+        });
+        canvas.addEventListener('touchstart', (e) => e.preventDefault());
+        
+        // 마우스 이동 (옵션)
+        canvas.addEventListener('mousemove', (e) => {
+            if(!gameActive || winFlag) return;
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = (e.clientX - rect.left) * (canvas.width/rect.width);
+            let newX = mouseX - PLAYER_WIDTH/2;
+            newX = Math.min(Math.max(0, newX), canvas.width - PLAYER_WIDTH);
+            playerX = newX;
+        });
+        
+        // 게임 시작!
+        resetGame();    // 초기 스폰 및 세팅
+        gameLoop();     // 애니메이션 시작
+        
+        // 페이지 이탈시 interval 정리 (선택)
+        window.addEventListener('beforeunload', ()=>{
+            if(spawnInterval) clearInterval(spawnInterval);
+            if(animationId) cancelAnimationFrame(animationId);
+        });
+        
+        // 공백 표시 이슈 완벽 대응: 실제 문자 비교는 ' ' 공백으로 함
+        // 추가로 '~' 비교 정상
+        console.log("💖 게임 시작! 'i love you~' 를 완성하세요!");
+    })();
+</script>
+</body>
+</html>

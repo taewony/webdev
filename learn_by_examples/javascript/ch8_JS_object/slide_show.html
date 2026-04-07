@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>표준 슬라이드 프레젠테이션 | 시맨틱 태그 & CSS 중첩 학습</title>
+    <style>
+        /* ------------------------------
+            GLOBAL STYLES & RESET
+            CSS Nesting을 사용한 스타일링
+        -------------------------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #eef2f7 0%, #d9e2ec 100%);
+            font-family: 'Pretendard', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            /* Flexbox로 전체 콘텐츠 중앙 정렬 (수직 + 수평) */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 메인 프레젠테이션 컨테이너: 시맨틱 태그 <main> 활용 */
+        .presentation-container {
+            width: 100%;
+            max-width: 880px;
+            margin: 0 auto;
+            /* CSS 중첩 예시: 내부 요소들에 대한 스타일을 그룹화 */
+            & .slide-card-wrapper {
+                width: 100%;
+                perspective: 1000px;
+            }
+
+            & .slide {
+                background: #ffffff;
+                border-radius: 2rem;
+                box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                overflow: hidden;
+                
+                &:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 32px 55px -15px rgba(0, 0, 0, 0.3);
+                }
+            }
+
+            & .nav-controls {
+                margin-top: 2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1.2rem;
+                flex-wrap: wrap;
+                
+                & button {
+                    background: #1e2f41;
+                    border: none;
+                    color: white;
+                    font-size: 1.1rem;
+                    font-weight: 500;
+                    padding: 0.7rem 1.8rem;
+                    border-radius: 3rem;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    font-family: inherit;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    
+                    &:hover {
+                        background: #0f2b3b;
+                        transform: scale(1.02);
+                    }
+                    
+                    &:active {
+                        transform: scale(0.98);
+                    }
+                    
+                    &:focus-visible {
+                        outline: 3px solid #ffb347;
+                        outline-offset: 2px;
+                    }
+                }
+                
+                & .slide-counter {
+                    background: rgba(30, 47, 65, 0.1);
+                    backdrop-filter: blur(4px);
+                    padding: 0.5rem 1.2rem;
+                    border-radius: 3rem;
+                    font-weight: 600;
+                    color: #1e2f41;
+                    font-size: 0.95rem;
+                }
+            }
+            
+            & .indicators {
+                display: flex;
+                justify-content: center;
+                gap: 0.75rem;
+                margin-top: 1.8rem;
+                margin-bottom: 0.5rem;
+                
+                & .dot {
+                    width: 12px;
+                    height: 12px;
+                    background: #bac8d9;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    border: none;
+                    padding: 0;
+                    
+                    &:hover {
+                        background: #6c86a3;
+                        transform: scale(1.2);
+                    }
+                    
+                    &.active {
+                        background: #1e2f41;
+                        width: 28px;
+                        border-radius: 20px;
+                    }
+                }
+            }
+        }
+
+        /* slide 카드 내부 스타일 (시맨틱 태그 기반) */
+        .slide {
+            padding: 2.2rem 2rem 2.5rem 2rem;
+            
+            & header {
+                margin-bottom: 1.5rem;
+                border-left: 6px solid #2c7da0;
+                padding-left: 1.2rem;
+                
+                & h2 {
+                    font-size: 1.9rem;
+                    font-weight: 700;
+                    color: #1f3b4c;
+                    letter-spacing: -0.01em;
+                    margin: 0;
+                    line-height: 1.2;
+                }
+            }
+            
+            & .description {
+                font-size: 1.1rem;
+                color: #2c3e4e;
+                background: #f8fafd;
+                padding: 1rem 1.3rem;
+                border-radius: 1.2rem;
+                margin-bottom: 1.8rem;
+                border: 1px solid #e9edf2;
+            }
+            
+            & .feature-list {
+                margin-top: 0.8rem;
+                
+                & h3 {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    color: #1e2f41;
+                    margin-bottom: 0.8rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    
+                    &::before {
+                        content: "📌";
+                        font-size: 1.2rem;
+                    }
+                }
+                
+                & ul {
+                    list-style: none;
+                    padding: 0;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.7rem;
+                    
+                    & li {
+                        background: #ffffff;
+                        padding: 0.7rem 1rem 0.7rem 1.8rem;
+                        border-radius: 1rem;
+                        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+                        border: 1px solid #eef2f8;
+                        font-size: 1rem;
+                        color: #1f3b4c;
+                        position: relative;
+                        transition: background 0.15s;
+                        
+                        &::before {
+                            content: "✓";
+                            color: #2c7da0;
+                            font-weight: bold;
+                            position: absolute;
+                            left: 0.6rem;
+                            top: 0.7rem;
+                        }
+                        
+                        &:hover {
+                            background: #fef9e6;
+                            border-color: #ffda9e;
+                        }
+                    }
+                }
+            }
+        }
+
+        /* 반응형: 모바일에서 적절한 패딩 */
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+            .slide {
+                padding: 1.5rem;
+            }
+            .slide header h2 {
+                font-size: 1.5rem;
+            }
+            .nav-controls button {
+                padding: 0.5rem 1.2rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* 푸터 정보: 부가 설명 & 시맨틱 가이드 */
+        .info-footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #3e5a6b;
+            background: rgba(255,255,240,0.7);
+            backdrop-filter: blur(4px);
+            padding: 0.8rem 1.5rem;
+            border-radius: 3rem;
+            max-width: 700px;
+            width: auto;
+            
+            & p {
+                margin: 0;
+            }
+            
+            & a {
+                color: #1e4663;
+                text-decoration: none;
+                font-weight: 500;
+                
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+        
+        /* 접근성: focus visible */
+        button:focus-visible, .dot:focus-visible {
+            outline: 3px solid #ff9f2e;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<main class="presentation-container">
+    <!-- 시맨틱 구조: 각 슬라이드는 article 요소로 표현, flexbox로 중앙 정렬됨 -->
+    <div class="slide-card-wrapper">
+        <article class="slide" id="currentSlide" aria-live="polite" aria-label="현재 슬라이드">
+            <!-- 슬라이드 내용은 JavaScript에서 동적으로 생성하지만,
+                 제목, 설명, 항목 리스트는 시맨틱 태그(h2, p, ul, li)로 구성됨 -->
+        </article>
+    </div>
+
+    <!-- 슬라이드 인디케이터 (닷) -->
+    <div class="indicators" id="indicatorsContainer" aria-label="슬라이드 탐색 점"></div>
+
+    <!-- 네비게이션 컨트롤 (시맨틱 nav) -->
+    <nav class="nav-controls" aria-label="슬라이드 이동">
+        <button id="prevSlideBtn" aria-label="이전 슬라이드">◀ 이전</button>
+        <div class="slide-counter" id="slideCounter" aria-live="polite">1 / 3</div>
+        <button id="nextSlideBtn" aria-label="다음 슬라이드">다음 ▶</button>
+    </nav>
+</main>
+
+<footer class="info-footer" role="contentinfo">
+    <p>📚 <strong>시맨틱 태그 + CSS 중첩 + Flexbox</strong> | 각 슬라이드는 <code>&lt;article&gt;</code>, 제목(<code>&lt;h2&gt;</code>), 설명(<code>&lt;p&gt;</code>), 항목 리스트(<code>&lt;ul&gt; &lt;li&gt;</code>)로 구성 | CSS nesting (<code>&amp;</code> 문법) 사용 | Flexbox로 전체 중앙 정렬</p>
+</footer>
+
+<script>
+    // 슬라이드 데이터: 각 슬라이드는 제목, 설명, 항목별 설명(배열)
+    const slidesData = [
+        {
+            title: "🏷️ 시맨틱 태그 (Semantic Tag)",
+            description: "HTML5에서 도입된 의미론적 태그는 문서 구조를 명확히 하고, 접근성과 SEO를 향상시킵니다. 콘텐츠의 의미를 명확히 전달하여 개발자와 브라우저 모두가 이해하기 쉬운 마크업을 제공합니다.",
+            items: [
+                "<header> : 페이지나 섹션의 머리말 역할",
+                "<nav> : 내비게이션 메뉴 그룹을 감쌈",
+                "<main> : 문서의 핵심 콘텐츠 영역",
+                "<article> : 독립적인 게시물, 카드 등",
+                "<section> : 주제별 콘텐츠 그룹화"
+            ]
+        },
+        {
+            title: "🎨 CSS 중첩 (CSS Nesting)",
+            description: "CSS 중첩을 사용하면 부모 선택자를 반복하지 않고 직관적으로 스타일을 계층화할 수 있습니다. 코드 가독성이 높아지고 유지보수가 편리해집니다. 최신 브라우저에서 기본 지원됩니다.",
+            items: [
+                "& 기호로 부모 참조: .card { & .title { ... } }",
+                "미디어 쿼리 중첩: article { @media (width > 600px) { ... } }",
+                "가상 클래스/요소 중첩: button { &:hover { ... } }",
+                "명확한 스타일 그룹화로 협업 효율 증가",
+                "CSS-in-JS 없이 순수 CSS로 모듈화 가능"
+            ]
+        },
+        {
+            title: "📐 Flexbox 레이아웃",
+            description: "Flexbox는 1차원 레이아웃 모델로, 부모 컨테이너 내 아이템들을 효율적으로 정렬, 분배, 간격 조정할 수 있습니다. 반응형 디자인과 중앙 정렬을 쉽게 구현할 수 있습니다.",
+            items: [
+                "display: flex → 플렉스 컨테이너 생성",
+                "justify-content : 주축 정렬 (center, space-between 등)",
+                "align-items : 교차축 정렬 (center, stretch 등)",
+                "flex-direction: row / column 으로 방향 변경",
+                "gap 속성으로 간편한 간격 설정"
+            ]
+        }
+    ];
+
+    let currentIndex = 0;
+    const totalSlides = slidesData.length;
+    const slideElement = document.getElementById('currentSlide');
+    const prevBtn = document.getElementById('prevSlideBtn');
+    const nextBtn = document.getElementById('nextSlideBtn');
+    const slideCounter = document.getElementById('slideCounter');
+    const indicatorsContainer = document.getElementById('indicatorsContainer');
+
+    // 슬라이드 렌더링 함수 (시맨틱 태그 구조로 카드 내용을 그림)
+    function renderSlide(index) {
+        const data = slidesData[index];
+        if (!data) return;
+
+        // 시맨틱하고 구조화된 HTML 생성:
+        // header 영역에 h2 제목, 설명은 p 요소, 항목 리스트는 ul/li
+        const slideHTML = `
+            <header>
+                <h2>${data.title}</h2>
+            </header>
+            <div class="description">
+                <p>${data.description}</p>
+            </div>
+            <div class="feature-list">
+                <h3>📖 핵심 항목</h3>
+                <ul>
+                    ${data.items.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+        
+        slideElement.innerHTML = slideHTML;
+        
+        // 접근성: aria-label 업데이트 (현재 슬라이드 주제 알림)
+        slideElement.setAttribute('aria-label', `슬라이드 ${index+1}: ${data.title}`);
+        
+        // 카운터 업데이트
+        slideCounter.textContent = `${index+1} / ${totalSlides}`;
+        
+        // 인디케이터(닷) 업데이트
+        updateIndicators(index);
+        
+        // 버튼 disabled 상태 처리 (경계)
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides - 1);
+        
+        // disabled 스타일을 CSS로도 제어 (시각적 피드백)
+        prevBtn.style.opacity = (index === 0) ? '0.5' : '1';
+        nextBtn.style.opacity = (index === totalSlides - 1) ? '0.5' : '1';
+        prevBtn.style.cursor = (index === 0) ? 'not-allowed' : 'pointer';
+        nextBtn.style.cursor = (index === totalSlides - 1) ? 'not-allowed' : 'pointer';
+    }
+
+    // 인디케이터(닷) 생성 및 업데이트 (시맨틱하게 버튼 역할)
+    function updateIndicators(activeIndex) {
+        // 기존 인디케이터 모두 제거
+        indicatorsContainer.innerHTML = '';
+        
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.classList.add('dot');
+            if (i === activeIndex) {
+                dot.classList.add('active');
+            }
+            dot.setAttribute('aria-label', `${i+1}번 슬라이드로 이동`);
+            dot.setAttribute('data-slide-index', i);
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goToSlide(i);
+            });
+            indicatorsContainer.appendChild(dot);
+        }
+    }
+
+    // 특정 슬라이드로 이동하는 함수
+    function goToSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= totalSlides) index = totalSlides - 1;
+        if (index === currentIndex) return;
+        currentIndex = index;
+        renderSlide(currentIndex);
+        // 포커스 관리를 위해 슬라이드 내부 첫 번째 제목으로 포커스 이동 (접근성)
+        const slideHeader = slideElement.querySelector('h2');
+        if (slideHeader) slideHeader.focus();
+    }
+
+    // 다음 슬라이드
+    function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+            goToSlide(currentIndex + 1);
+        }
+    }
+
+    // 이전 슬라이드
+    function prevSlide() {
+        if (currentIndex > 0) {
+            goToSlide(currentIndex - 1);
+        }
+    }
+
+    // 키보드 이벤트 (좌우 화살표)
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevSlide();
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            nextSlide();
+        } else if (e.key === 'Home') {
+            e.preventDefault();
+            goToSlide(0);
+        } else if (e.key === 'End') {
+            e.preventDefault();
+            goToSlide(totalSlides - 1);
+        }
+    }
+
+    // 초기화 및 이벤트 등록
+    function init() {
+        renderSlide(0);
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+        window.addEventListener('keydown', handleKeyDown);
+        
+        // touch / 모바일 대비: 버튼에 기본 이벤트 방지 없이 자연스럽게 동작
+        // 추가적으로 flex 중앙 정렬을 시각적으로 확실히 보여줌 (이미 body flex로 중앙)
+    }
+    
+    init();
+</script>
+</body>
+</html>

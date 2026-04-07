@@ -15,6 +15,22 @@
     } else {		   
       document.write("커피 한 잔");	    	// 10 미만일 때
     }
+
+coupon = Math.floor(coupon / 10);
+document.write("<hr>쿠폰: " + coupon + "장<br>");
+let str = null;
+switch (coupon) {
+  case 0:
+    str = "커피 한 잔";
+    break;
+  case 1:
+    str = "다이어리";
+    break;
+  default:
+    str = "여행용 가방";
+}
+document.write(str);
+
   </script>
 </body>
 </html>

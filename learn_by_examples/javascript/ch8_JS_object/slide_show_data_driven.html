@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data-Driven Slide Template</title>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --subtext: #9ca3af;
+      --accent: #38bdf8;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    main {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 32px;
+      color: var(--subtext);
+      cursor: pointer;
+      user-select: none;
+      padding: 12px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: var(--text);
+        background: rgba(255,255,255,0.05);
+      }
+
+      &.left { left: 24px; }
+      &.right { right: 24px; }
+    }
+
+    section.slide {
+      width: 800px;
+      height: 450px;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+
+      & header {
+        & h1 {
+          margin: 0;
+          font-size: 28px;
+        }
+        & p {
+          margin: 4px 0 0;
+          color: var(--subtext);
+          font-size: 14px;
+        }
+      }
+
+      & article {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        & .item {
+          padding-left: 12px;
+          border-left: 2px solid var(--accent);
+
+          & h2 {
+            margin: 0;
+            font-size: 16px;
+          }
+
+          & p {
+            margin: 4px 0 0;
+            font-size: 14px;
+            color: var(--subtext);
+          }
+        }
+      }
+
+      & footer {
+        margin-top: auto;
+        font-size: 12px;
+        color: var(--subtext);
+        text-align: right;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="nav left" onclick="prevSlide()">‹</div>
+    <div class="nav right" onclick="nextSlide()">›</div>
+
+    <section class="slide" id="slide"></section>
+  </main>
+
+  <script>
+    const slides = [
+      {
+        title: "LLM Agent Architecture",
+        subtitle: "Layered Approach",
+        items: [
+          { title: "Perception", desc: "Input processing and parsing" },
+          { title: "Reasoning", desc: "LLM-based thinking and planning" },
+          { title: "Action", desc: "Tool execution and API calls" }
+        ]
+      },
+      {
+        title: "RAG Pipeline",
+        subtitle: "Retrieval Augmented Generation",
+        items: [
+          { title: "Indexing", desc: "Store documents as embeddings" },
+          { title: "Retrieval", desc: "Search relevant context" },
+          { title: "Generation", desc: "LLM generates grounded answer" }
+        ]
+      },
+      {
+        title: "Agent Loop",
+        subtitle: "Think → Act → Observe",
+        items: [
+          { title: "Think", desc: "Plan next step" },
+          { title: "Act", desc: "Call tool or API" },
+          { title: "Observe", desc: "Read result and iterate" }
+        ]
+      }
+    ];
+
+    let current = 0;
+
+    function renderSlide() {
+      const s = slides[current];
+      const slide = document.getElementById('slide');
+
+      slide.innerHTML = `
+        <header>
+          <h1>${s.title}</h1>
+          <p>${s.subtitle}</p>
+        </header>
+        <article>
+          ${s.items.map(item => `
+            <div class="item">
+              <h2>${item.title}</h2>
+              <p>${item.desc}</p>
+            </div>
+          `).join('')}
+        </article>
+        <footer>
+          Slide ${current + 1} / ${slides.length}
+        </footer>
+      `;
+    }
+
+    function nextSlide() {
+      current = (current + 1) % slides.length;
+      renderSlide();
+    }
+
+    function prevSlide() {
+      current = (current - 1 + slides.length) % slides.length;
+      renderSlide();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    renderSlide();
+  </script>
+</body>
+</html>

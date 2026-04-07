@@ -18,6 +18,19 @@
   <script>
     for (let k = 1; k < 5; k++)
       document.write(k + "<img src='../media/chicken.png'> ");
+    
+// 입력 (Input)
+let count = 5;
+
+// 처리 (Processing)
+let output = "";
+for (let k = 1; k < count; k++) {   // k < count → 1부터 4까지 반복 (원본 동작 유지)
+  output += k + "<img src='../media/chicken.png'> ";
+}
+
+// 출력 (Output)
+document.write(output);
+
   </script>
 </body>
 </html>
