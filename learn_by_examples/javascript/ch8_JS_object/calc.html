@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>초간단 계산기 | 덧셈 · 뺄셈</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e0e5ec 0%, #f0f4fa 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', monospace;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* 계산기 카드 */
+        .calculator {
+            max-width: 380px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(2px);
+            border-radius: 48px;
+            box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.1),
+                        -8px -8px 20px rgba(255, 255, 255, 0.7),
+                        inset 0 1px 1px rgba(255,255,255,0.6);
+            padding: 24px 20px 28px;
+            transition: all 0.2s ease;
+        }
+
+        /* 디스플레이 */
+        .display {
+            background: #1e2a2e;
+            color: #d4f1f9;
+            font-size: 3.2rem;
+            font-weight: 500;
+            font-family: 'Courier New', 'Fira Code', monospace;
+            text-align: right;
+            padding: 20px 24px;
+            border-radius: 32px;
+            margin-bottom: 28px;
+            letter-spacing: 2px;
+            word-break: break-word;
+            white-space: nowrap;
+            overflow-x: auto;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.2), 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            scrollbar-width: thin;
+        }
+
+        .display span {
+            display: inline-block;
+            min-width: 20px;
+        }
+
+        /* 버튼 그리드 */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* 공통 버튼 스타일 */
+        .btn {
+            background: #f2f5fa;
+            border: none;
+            font-size: 1.7rem;
+            font-weight: 600;
+            padding: 18px 0;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.12s linear;
+            box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.08),
+                        -3px -3px 8px rgba(255, 255, 255, 0.9);
+            color: #1f2a3e;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+            box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.1),
+                        inset -2px -2px 5px rgba(255, 255, 255, 0.6);
+            background: #e9edf3;
+        }
+
+        /* 숫자 버튼 */
+        .btn-number {
+            background: #ffffff;
+            color: #0b2b3b;
+            font-weight: 700;
+            font-size: 1.9rem;
+        }
+
+        /* 연산자 +, - */
+        .btn-operator {
+            background: #ffb74d;
+            color: #2c1a0c;
+            font-size: 2.2rem;
+            font-weight: 800;
+            box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.1), -3px -3px 8px #fff2e0;
+        }
+
+        .btn-operator:active {
+            background: #ffa02e;
+        }
+
+        /* equal 버튼 */
+        .btn-equal {
+            background: #2c7da0;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-equal:active {
+            background: #1f5e7a;
+        }
+
+        /* clear & backspace */
+        .btn-clear {
+            background: #e07c5c;
+            color: white;
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        .btn-clear:active {
+            background: #c95f3b;
+        }
+
+        .btn-back {
+            background: #7890a0;
+            color: white;
+            font-size: 1.6rem;
+        }
+
+        /* 0번 버튼 살짝 넓히고 싶으면 별도 처리 */
+        .btn-zero {
+            /* 그대로 */
+        }
+
+        /* 반응형 작은 화면 */
+        @media (max-width: 450px) {
+            .calculator {
+                padding: 18px 16px 22px;
+            }
+            .btn {
+                padding: 14px 0;
+                font-size: 1.5rem;
+            }
+            .display {
+                font-size: 2.4rem;
+                padding: 14px 18px;
+            }
+            .buttons {
+                gap: 10px;
+            }
+        }
+
+        /* 디스플레이 스크롤 예쁘게 */
+        .display::-webkit-scrollbar {
+            height: 4px;
+        }
+        .display::-webkit-scrollbar-track {
+            background: #2d3e44;
+            border-radius: 8px;
+        }
+        .display::-webkit-scrollbar-thumb {
+            background: #6f9eb0;
+            border-radius: 8px;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 20px;
+            color: #4b5c6e;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<div class="calculator">
+    <div class="display" id="calcDisplay">0</div>
+    <div class="buttons">
+        <!-- 1행 -->
+        <button class="btn btn-number" data-num="7">7</button>
+        <button class="btn btn-number" data-num="8">8</button>
+        <button class="btn btn-number" data-num="9">9</button>
+        <button class="btn btn-operator" data-op="+">+</button>
+
+        <!-- 2행 -->
+        <button class="btn btn-number" data-num="4">4</button>
+        <button class="btn btn-number" data-num="5">5</button>
+        <button class="btn btn-number" data-num="6">6</button>
+        <button class="btn btn-operator" data-op="-">−</button>
+
+        <!-- 3행 -->
+        <button class="btn btn-number" data-num="1">1</button>
+        <button class="btn btn-number" data-num="2">2</button>
+        <button class="btn btn-number" data-num="3">3</button>
+        <button class="btn btn-equal" id="btnEqual">=</button>
+
+        <!-- 4행 -->
+        <button class="btn btn-number btn-zero" data-num="0">0</button>
+        <button class="btn btn-number" data-num=".">.</button>
+        <button class="btn btn-clear" id="btnClear">C</button>
+        <button class="btn btn-back" id="btnBack">⌫</button>
+    </div>
+    <footer>➕ 덧셈 · 뺄셈 전용 계산기</footer>
+</div>
+
+<script>
+    // ----- 상태 변수 -----
+    let currentDisplay = "0";      // 화면에 보여질 문자열
+    let storedValue = null;        // 첫 번째 피연산자 (숫자)
+    let storedOperator = null;     // '+', '-'
+    let resetDisplayOnNextNumber = false;  // 연산자 누른 후, 또는 = 후 숫자 입력시 덮어쓰기
+
+    // DOM 요소
+    const displayEl = document.getElementById("calcDisplay");
+
+    // 화면 업데이트 (소수점 및 포맷 유지)
+    function updateDisplay() {
+        // 현재 currentDisplay 값으로 표시
+        displayEl.textContent = currentDisplay;
+    }
+
+    // 숫자/소수점 입력 처리
+    function inputDigit(digit) {
+        // 1. reset 플래그가 true면 (연산자 직후 또는 = 후) 새 숫자 시작
+        if (resetDisplayOnNextNumber) {
+            currentDisplay = digit;
+            resetDisplayOnNextNumber = false;
+            updateDisplay();
+            return;
+        }
+
+        // 2. 소수점 처리
+        if (digit === '.') {
+            // 이미 소수점이 포함되어 있다면 추가 금지
+            if (currentDisplay.includes('.')) return;
+            // 현재 화면이 비어있거나 0일때 . 을 누르면 "0." 으로
+            if (currentDisplay === "" || currentDisplay === "0") {
+                currentDisplay = "0.";
+                updateDisplay();
+                return;
+            }
+            currentDisplay += '.';
+            updateDisplay();
+            return;
+        }
+
+        // 3. 일반 숫자 입력
+        // 숫자 맨 앞에 0이 있고, 그 다음에 또 숫자면 0 대체 (ex: "0" + "5" -> "5")
+        if (currentDisplay === "0" && digit !== ".") {
+            currentDisplay = digit;
+        } else {
+            // 길이 제한 (과도하게 긴 숫자 방지, 표시 깨짐 방지)
+            if (currentDisplay.length < 16) {
+                currentDisplay += digit;
+            }
+        }
+        updateDisplay();
+    }
+
+    // 백스페이스 (⌫)
+    function handleBackspace() {
+        // reset 상태라면 (연산자 직후) -> 백스페이스는 현재 숫자를 지우기보다는 0으로 초기화 (자연스러움)
+        if (resetDisplayOnNextNumber) {
+            currentDisplay = "0";
+            resetDisplayOnNextNumber = false;
+            updateDisplay();
+            return;
+        }
+        // 일반 상태: 한 글자 삭제
+        if (currentDisplay.length === 1) {
+            currentDisplay = "0";
+        } else {
+            currentDisplay = currentDisplay.slice(0, -1);
+            // 만약 모두 지워졌으면 "0" 표시
+            if (currentDisplay === "" || currentDisplay === "-") {
+                currentDisplay = "0";
+            }
+        }
+        updateDisplay();
+    }
+
+    // 연산자 (+, -) 처리
+    function setOperator(op) {
+        // 현재 화면의 숫자를 실수로 변환
+        const currentValue = parseFloat(currentDisplay);
+
+        // 이미 연산자가 저장되어 있고, resetDisplayOnNextNumber == false 일때
+        // -> 두 번째 피연산자가 입력된 상태에서 연산자 변경 시에는 중간 계산 수행
+        if (storedOperator !== null && !resetDisplayOnNextNumber) {
+            // 이전 storedValue와 현재 값, 연산자로 계산
+            const result = calculate(storedValue, storedOperator, currentValue);
+            // 결과를 표시하고 storedValue 갱신
+            if (isNaN(result) || !isFinite(result)) {
+                currentDisplay = "오류";
+                updateDisplay();
+                resetAll();
+                return;
+            }
+            // 결과 포맷 (소수점 이하 과도하면 8자리까지)
+            const formattedResult = formatResult(result);
+            currentDisplay = formattedResult;
+            updateDisplay();
+            storedValue = parseFloat(currentDisplay);
+            storedOperator = op;
+            resetDisplayOnNextNumber = true;  // 다음 숫자 입력시 화면 초기화
+        } else {
+            // 첫 번째 연산자 입력, 혹은 = 후에 연산자 입력
+            if (storedOperator === null && !resetDisplayOnNextNumber) {
+                // 일반적인 첫 연산자: 현재 표시값을 첫 번째 피연산자로 저장
+                storedValue = parseFloat(currentDisplay);
+                storedOperator = op;
+                resetDisplayOnNextNumber = true;
+            } 
+            else if (resetDisplayOnNextNumber) {
+                // 직전에 연산자를 누른 상태에서 다른 연산자로 변경 (단순 교체)
+                storedOperator = op;
+                // resetDisplayOnNextNumber 유지 (다음 숫자 입력 대기)
+            }
+            else if (storedOperator !== null && resetDisplayOnNextNumber === false) {
+                // 이 경우는 거의 없지만, 방어로 처리
+                storedOperator = op;
+                resetDisplayOnNextNumber = true;
+            }
+        }
+    }
+
+    // 순수 계산 함수 (덧셈/뺄셈)
+    function calculate(a, operator, b) {
+        if (operator === '+') return a + b;
+        if (operator === '-') return a - b;
+        return b; // fallback
+    }
+
+    // 결과값 포맷 (너무 긴 소수점 제거)
+    function formatResult(value) {
+        if (isNaN(value) || !isFinite(value)) return "0";
+        // 소수점 8자리 이후는 반올림 처리 (부동소수점 오차 방지)
+        let rounded = Math.round(value * 100000000) / 100000000;
+        // 만약 정수라면 소수점 제거
+        if (Number.isInteger(rounded)) {
+            return rounded.toString();
+        }
+        // 불필요한 trailing .0 방지
+        return rounded.toString();
+    }
+
+    // = (equals) 처리
+    function computeResult() {
+        // 연산자가 없거나 reset 플래그가 true (이미 다음 숫자 입력 대기 중인데 =을 누르면 무효)
+        if (storedOperator === null) return;
+        // = 을 눌렀을 때 resetDisplayOnNextNumber 가 true 라면 아직 두 번째 숫자가 없음 (예: "5 + " 상태에서 =)
+        if (resetDisplayOnNextNumber) return;
+
+        const currentValue = parseFloat(currentDisplay);
+        if (isNaN(currentValue)) return;
+
+        const result = calculate(storedValue, storedOperator, currentValue);
+        if (isNaN(result) || !isFinite(result)) {
+            currentDisplay = "오류";
+            updateDisplay();
+            resetAll();
+            return;
+        }
+
+        const finalResult = formatResult(result);
+        currentDisplay = finalResult;
+        updateDisplay();
+
+        // = 후에는 storedValue를 결과값으로 업데이트 (체인 연산을 위해)
+        storedValue = parseFloat(currentDisplay);
+        storedOperator = null;
+        resetDisplayOnNextNumber = true;   // 다음 숫자 입력시 화면 리셋
+    }
+
+    // 전체 초기화 (C)
+    function resetAll() {
+        currentDisplay = "0";
+        storedValue = null;
+        storedOperator = null;
+        resetDisplayOnNextNumber = false;
+        updateDisplay();
+    }
+
+    // 추가: 초기화 및 에러 방지용
+    function clearEverything() {
+        resetAll();
+    }
+
+    // 숫자 버튼 이벤트 연결
+    document.querySelectorAll("[data-num]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const numVal = btn.getAttribute("data-num");
+            inputDigit(numVal);
+        });
+    });
+
+    // 연산자 버튼
+    document.querySelectorAll("[data-op]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const op = btn.getAttribute("data-op");
+            if (op === '+' || op === '-') {
+                setOperator(op);
+            }
+        });
+    });
+
+    // equals 버튼
+    document.getElementById("btnEqual").addEventListener("click", () => {
+        computeResult();
+    });
+
+    // clear 버튼 (C)
+    document.getElementById("btnClear").addEventListener("click", () => {
+        clearEverything();
+    });
+
+    // backspace 버튼
+    document.getElementById("btnBack").addEventListener("click", () => {
+        handleBackspace();
+    });
+
+    // 키보드 지원 (옵션: 편의성)
+    window.addEventListener("keydown", (e) => {
+        const key = e.key;
+        // 숫자 0-9 또는 소수점
+        if (/^[0-9]$/.test(key)) {
+            e.preventDefault();
+            inputDigit(key);
+        } else if (key === '.') {
+            e.preventDefault();
+            inputDigit('.');
+        } else if (key === '+' || key === '-') {
+            e.preventDefault();
+            setOperator(key);
+        } else if (key === 'Enter' || key === '=') {
+            e.preventDefault();
+            computeResult();
+        } else if (key === 'Backspace') {
+            e.preventDefault();
+            handleBackspace();
+        } else if (key === 'Escape' || key === 'c' || key === 'C') {
+            e.preventDefault();
+            clearEverything();
+        }
+    });
+</script>
+</body>
+</html>
