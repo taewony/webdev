@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas Game Loop</title>
+</head>
+<body>
+  <canvas id="myCanvas" width="600" height="400"
+    style="border: 2px solid #cef"></canvas>
+
+  <script>
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // 공(ball)
+    let x = 50;
+    let y = 50;
+    let dx = 3;
+    let dy = 3;
+    const size = 20;
+
+    // 바(paddle)
+    const paddleWidth = 100;
+    const paddleHeight = 10;
+    let paddleX = (canvas.width - paddleWidth) / 2;
+    const paddleY = canvas.height - 20;
+
+    // 게임 상태
+    let isGameOver = false;
+
+    // 마우스로 바 움직이기
+    canvas.addEventListener("mousemove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      paddleX = mouseX - paddleWidth / 2;
+    });
+
+    // 상태 업데이트
+    function update() {
+      if (isGameOver) return;
+
+      x += dx;
+      y += dy;
+
+      // 좌우 벽 반사
+      if (x + size > canvas.width || x < 0) {
+        dx = -dx;
+      }
+
+      // 위쪽 벽 반사
+      if (y < 0) {
+        dy = -dy;
+      }
+
+      // 바와 충돌
+      if (
+        y + size >= paddleY &&
+        x + size > paddleX &&
+        x < paddleX + paddleWidth
+      ) {
+        dy = -dy;
+        y = paddleY - size; // 겹침 방지
+      }
+
+      // 바를 놓치고 바닥에 닿으면 게임 종료
+      if (y + size > canvas.height) {
+        isGameOver = true;
+      }
+    }
+
+    // 화면 그리기
+    function render() {
+      // 화면 지우기
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 공
+      if (!isGameOver) {
+        ctx.fillStyle = "blue";
+        ctx.fillRect(x, y, size, size);
+      }
+
+      // 바
+      ctx.fillStyle = "black";
+      ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+
+      // 게임 오버 표시
+      if (isGameOver) {
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "red";
+        ctx.fillText("Game Over", 220, 200);
+      }
+    }
+
+    // 게임 루프
+    function game_loop() {
+      update();
+      render();
+      requestAnimationFrame(game_loop);
+    }
+
+    game_loop();
+  </script>
+</body>
+</html>
