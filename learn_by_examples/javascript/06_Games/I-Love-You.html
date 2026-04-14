@@ -1,170 +1,224 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Semantic Slide Template</title>
+<meta charset="UTF-8">
+<title>I Love You! 게임</title>
 
-  <style>
-    :root {
-      --bg: #0f172a;
-      --card: #111827;
-      --text: #e5e7eb;
-      --subtext: #9ca3af;
-      --accent: #38bdf8;
-    }
+<style>
+/* === [UI 기본 스타일] === */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: '맑은 고딕', sans-serif;
+    background-color: #f0f0f0;
+}
 
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
+/* 게임 영역 */
+#game-board {
+    position: relative;
+    width: 400px;
+    height: 500px;
+    background: #2c3e50;
+    overflow: hidden;
+}
 
-    main {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+/* 플레이어 (좌우 이동 바) */
+#player {
+    position: absolute;
+    bottom: 20px;
+    left: 175px;
+    width: 50px;
+    height: 20px;
+    background: #3498db;
+}
 
-    /* Navigation Arrows */
-    .nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 32px;
-      color: var(--subtext);
-      cursor: pointer;
-      user-select: none;
-      padding: 12px;
-      border-radius: 999px;
-      transition: all 0.2s ease;
+/* 떨어지는 문자 */
+.falling-char {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: white;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+}
 
-      &:hover {
-        color: var(--text);
-        background: rgba(255,255,255,0.05);
-      }
-
-      &.left {
-        left: 24px;
-      }
-
-      &.right {
-        right: 24px;
-      }
-    }
-
-    section.slide {
-      width: 800px;
-      height: 450px;
-      background: var(--card);
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 16px;
-
-      /* CSS Nesting */
-      & header {
-        & h1 {
-          margin: 0;
-          font-size: 28px;
-          font-weight: 600;
-        }
-
-        & p {
-          margin: 4px 0 0;
-          color: var(--subtext);
-          font-size: 14px;
-        }
-      }
-
-      & article {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-
-        & .item {
-          padding-left: 12px;
-          border-left: 2px solid var(--accent);
-
-          & h2 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 500;
-          }
-
-          & p {
-            margin: 4px 0 0;
-            font-size: 14px;
-            color: var(--subtext);
-          }
-        }
-      }
-
-      & footer {
-        margin-top: auto;
-        font-size: 12px;
-        color: var(--subtext);
-        text-align: right;
-      }
-    }
-  </style>
+/* 현재 진행 텍스트 */
+#current-text {
+    font-size: 24px;
+    color: red;
+}
+</style>
 </head>
 
 <body>
-  <main>
-    <div class="nav left" onclick="prevSlide()">‹</div>
-    <div class="nav right" onclick="nextSlide()">›</div>
 
-    <section class="slide">
-      <header>
-        <h1>LLM Agent Architecture</h1>
-        <p>Layered Approach to Designing Intelligent Systems</p>
-      </header>
+<h2>문장 완성 게임</h2>
+<div>Target: I Love You!</div>
+<div id="current-text"></div>
 
-      <article>
-        <div class="item">
-          <h2>1. Perception Layer</h2>
-          <p>Handles input processing such as text, API responses, and user queries.</p>
-        </div>
+<div id="game-board">
+    <div id="player"></div>
+</div>
 
-        <div class="item">
-          <h2>2. Reasoning Layer</h2>
-          <p>Uses LLM to plan, decide, and generate structured outputs.</p>
-        </div>
+<script>
+/* =========================================
+   [1] 핵심 상태 변수 (State Management)
+========================================= */
 
-        <div class="item">
-          <h2>3. Action Layer</h2>
-          <p>Executes tools, APIs, or system-level operations.</p>
-        </div>
-      </article>
+// 목표 문장 (수정됨)
+const targetSentence = "I Love You!";
 
-      <footer>
-        Slide 1 / 10
-      </footer>
-    </section>
-  </main>
+// 현재 맞춰야 할 문자 위치 (index 기반 FSM)
+let currentIndex = 0;
 
-  <script>
-    function nextSlide() {
-      console.log('Next slide');
+// 지금까지 맞춘 문자열
+let collectedSentence = "";
+
+// DOM 참조
+const board = document.getElementById('game-board');
+const player = document.getElementById('player');
+const currentText = document.getElementById('current-text');
+
+// 플레이어 위치
+let playerX = 175;
+const playerWidth = 50;
+
+// 떨어지는 문자 객체 배열
+let falling = [];
+
+// 게임 종료 여부
+let isGameOver = false;
+
+
+/* =========================================
+   [2] 입력 처리 (Keyboard Event)
+========================================= */
+document.addEventListener('keydown', (e) => {
+    if (isGameOver) return;
+
+    const speed = 25;
+
+    if (e.key === "ArrowLeft") {
+        playerX = Math.max(0, playerX - speed);
     }
 
-    function prevSlide() {
-      console.log('Previous slide');
+    if (e.key === "ArrowRight") {
+        playerX = Math.min(350, playerX + speed);
     }
 
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') nextSlide();
-      if (e.key === 'ArrowLeft') prevSlide();
-    });
-  </script>
+    player.style.left = playerX + "px";
+});
+
+
+/* =========================================
+   [3] 문자 생성 (Spawner)
+========================================= */
+function spawnChar() {
+    if (isGameOver) return;
+
+    const el = document.createElement('div');
+    el.className = 'falling-char';
+
+    // 현재 필요한 문자
+    const needed = targetSentence[currentIndex];
+
+    // 랜덤 문자 (목표 문장 내에서만 선택 → 난이도 조절)
+    const random = targetSentence[Math.floor(Math.random() * targetSentence.length)];
+
+    // 50% 확률로 필요한 문자 등장
+    const char = Math.random() > 0.5 ? needed : random;
+
+    el.innerText = char === ' ' ? '_' : char;
+    el.dataset.char = char;
+
+    const x = Math.random() * 370;
+    el.style.left = x + "px";
+    el.style.top = "0px";
+
+    board.appendChild(el);
+
+    falling.push({ el, x, y: 0 });
+}
+
+
+/* =========================================
+   [4] 게임 루프 (Physics + Collision)
+========================================= */
+function loop() {
+    if (isGameOver) return;
+
+    for (let i = falling.length - 1; i >= 0; i--) {
+        const obj = falling[i];
+
+        // 낙하 (gravity)
+        obj.y += 3;
+        obj.el.style.top = obj.y + "px";
+
+        // 플레이어와 충돌 검사
+        if (obj.y > 450) {
+            const left = obj.x;
+            const right = obj.x + 30;
+
+            if (right > playerX && left < playerX + playerWidth) {
+                handleCatch(obj.el.dataset.char);
+
+                obj.el.remove();
+                falling.splice(i, 1);
+                continue;
+            }
+        }
+
+        // 화면 밖 제거 (GC 역할)
+        if (obj.y > 500) {
+            obj.el.remove();
+            falling.splice(i, 1);
+        }
+    }
+
+    requestAnimationFrame(loop);
+}
+
+
+/* =========================================
+   [5] 게임 로직 (State Transition)
+========================================= */
+function handleCatch(char) {
+    const needed = targetSentence[currentIndex];
+
+    // 정답 문자 맞춤
+    if (char === needed) {
+
+        // 상태 업데이트
+        collectedSentence += char;
+
+        // 공백 처리 (HTML 렌더링 보정)
+        currentText.innerHTML = collectedSentence.replace(/ /g, '&nbsp;');
+
+        currentIndex++;
+
+        // 게임 클리어 조건
+        if (currentIndex === targetSentence.length) {
+            isGameOver = true;
+            alert("🎉 I Love You! 완성!");
+        }
+    }
+    // 오답 → 무시 (확장 가능 지점)
+}
+
+
+/* =========================================
+   [6] 실행 (Scheduler)
+========================================= */
+
+// 일정 주기로 문자 생성 (Spawner thread 역할)
+setInterval(spawnChar, 800);
+
+// 렌더링 + 물리 업데이트 루프 시작
+requestAnimationFrame(loop);
+
+</script>
+
 </body>
 </html>
