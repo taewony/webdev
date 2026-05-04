@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ AI Design System Storybook (Google DESIGN.md v2)</title>
+    <!-- Tailwind CSS + Google Fonts (slick look) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- js-yaml for YAML front matter parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <style>
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            background-color: #f8fafc;
+            color: #0f172a;
+            display: flex;
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            box-shadow: 1px 0 10px rgba(0,0,0,0.02);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .main-content {
+            flex: 1;
+            padding: 2.5rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+                padding: 1.5rem;
+                gap: 1rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+        .color-swatch {
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            cursor: default;
+        }
+        .color-swatch:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 16px -4px rgba(0,0,0,0.15);
+        }
+        .component-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            transition: box-shadow 0.2s;
+            margin: 1.5rem 0;
+        }
+        .component-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02);
+        }
+        .menu-item {
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #334155;
+            transition: all 0.15s;
+            margin-bottom: 0.25rem;
+        }
+        .menu-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .menu-item.active {
+            background: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        .badge {
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        /* 실제 컴포넌트 프리뷰 스타일 (Google DESIGN.md 기반) */
+        .preview-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .preview-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+        .preview-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+            max-width: 320px;
+        }
+        .preview-card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- 사이드바 -->
+<aside class="sidebar">
+    <div>
+        <h1 class="text-xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-600 inline-block"></span>
+            Design System
+        </h1>
+        <p class="text-xs text-slate-500 mt-1">by Google DESIGN.md v2</p>
+    </div>
+    <nav class="flex flex-col gap-1">
+        <div class="menu-item active" data-target="colors">🎨 Color Tokens</div>
+        <div class="menu-item" data-target="typography">🔤 Typography</div>
+        <div class="menu-item" data-target="spacing">📏 Spacing</div>
+        <div class="menu-item" data-target="components">🧩 Components</div>
+    </nav>
+    <div class="mt-auto pt-6 border-t border-slate-100 text-xs text-slate-400">
+        실시간 파일 로드 · design.md
+    </div>
+</aside>
+
+<!-- 메인 콘텐츠 -->
+<main id="storybook-preview" class="main-content">
+    <div id="loading-placeholder" class="flex flex-col items-center justify-center h-64 gap-4">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+        <p class="text-slate-500 text-sm">디자인 토큰을 불러오는 중…</p>
+    </div>
+</main>
+
+<script>
+    (function() {
+        // ---------- 1. Google DESIGN.md v2 명세를 따르는 내장 예시 ----------
+        const FALLBACK_DESIGN_MD = `---
+version: alpha
+name: Heritage Design System
+colors:
+  primary: "#1A1C1E"
+  secondary: "#6C7278"
+  tertiary: "#B8422E"
+  neutral: "#F7F5F2"
+  surface: "#FFFFFF"
+  on-primary: "#FFFFFF"
+  on-secondary: "#FFFFFF"
+  on-tertiary: "#FFFFFF"
+  text-main: "#1A1C1E"
+  text-muted: "#64748B"
+  success: "#10B981"
+  warning: "#F59E0B"
+  error: "#EF4444"
+typography:
+  h1:
+    fontFamily: "Public Sans"
+    fontSize: 48px
+    fontWeight: 600
+    lineHeight: 1.1
+    letterSpacing: -0.02em
+  body-md:
+    fontFamily: "Public Sans"
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.6
+  label-caps:
+    fontFamily: "Space Grotesk"
+    fontSize: 12px
+    fontWeight: 500
+    lineHeight: 1
+    letterSpacing: 0.1em
+rounded:
+  sm: 4px
+  md: 8px
+  lg: 16px
+  full: 9999px
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 16px
+  lg: 24px
+  xl: 32px
+  "2xl": 48px
+components:
+  button-primary:
+    backgroundColor: "{colors.tertiary}"
+    textColor: "{colors.on-tertiary}"
+    rounded: "{rounded.md}"
+    padding: 12px 24px
+  button-secondary:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.on-secondary}"
+    rounded: "{rounded.md}"
+    padding: 12px 24px
+  button-outline:
+    backgroundColor: "transparent"
+    textColor: "{colors.primary}"
+    rounded: "{rounded.md}"
+    padding: 12px 24px
+  card-elevated:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.lg}"
+    padding: 24px
+  card-flat:
+    backgroundColor: "{colors.neutral}"
+    rounded: "{rounded.lg}"
+    padding: 24px
+---
+## Overview
+Architectural Minimalism meets Journalistic Gravitas. The UI evokes a premium matte finish — a high-end broadsheet or contemporary gallery.
+
+## Colors
+The palette is rooted in high-contrast neutrals and a single accent color.
+- **Primary (#1A1C1E):** Deep ink for headlines and core text.
+- **Secondary (#6C7278):** Sophisticated slate for borders, captions, metadata.
+- **Tertiary (#B8422E):** "Boston Clay" — the sole driver for interaction.
+- **Neutral (#F7F5F2):** Warm limestone foundation, softer than pure white.
+
+## Typography
+- **Headlines:** Set in Public Sans Semi-Bold to establish an institutional and trustworthy voice.
+- **Body:** Public Sans Regular at 16px ensures contemporary professionalism and long-form readability.
+- **Labels:** Space Grotesk is used for all technical data, timestamps, and metadata.
+
+## Layout
+The layout follows a **Fluid Grid** model with a strict 8px spacing scale.
+
+## Elevation & Depth
+Depth is achieved through **Tonal Layers** rather than heavy shadows.
+
+## Shapes
+All interactive elements utilize a minimal **4px corner radius**.
+
+## Components
+- **Buttons:** Primary (Boston Clay), Secondary (Slate), Outline.
+- **Cards:** Elevated (white with shadow) and Flat (neutral background).
+
+## Do's and Don'ts
+- Do use the primary color only for the single most important action per screen.
+- Don't mix rounded and sharp corners in the same view.
+- Do maintain WCAG AA contrast ratios (4.5:1 for normal text).`;
+
+        // ---------- 2. Google DESIGN.md 파서 (YAML front matter + Markdown 본문) ----------
+        function parseDesignMD(content) {
+            // YAML front matter 추출
+            const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---\n?/);
+            let tokens = {};
+            let body = content;
+
+            if (frontMatterMatch) {
+                try {
+                    const yamlStr = frontMatterMatch[1];
+                    // js-yaml 로드 확인
+                    if (typeof jsyaml !== 'undefined') {
+                        tokens = jsyaml.load(yamlStr) || {};
+                    } else {
+                        console.warn('js-yaml이 로드되지 않아 기본 파서를 사용합니다.');
+                        tokens = parseSimpleYaml(yamlStr);
+                    }
+                } catch (e) {
+                    console.error('YAML 파싱 오류:', e);
+                    tokens = {};
+                }
+                body = content.substring(frontMatterMatch[0].length);
+            }
+
+            // Markdown 본문에서 섹션 정보 추출 (간단한 구조)
+            const sections = {};
+            const sectionRegex = /^## (.+)$/gm;
+            let match;
+            while ((match = sectionRegex.exec(body)) !== null) {
+                const title = match[1].trim();
+                sections[title.toLowerCase()] = title;
+            }
+
+            return {
+                tokens: tokens,
+                sections: sections,
+                body: body
+            };
+        }
+
+        // js-yaml이 없을 경우를 대비한 간단한 YAML 파서 (토큰 참조 미지원)
+        function parseSimpleYaml(yamlStr) {
+            const lines = yamlStr.split('\n');
+            const result = {};
+            let currentMap = result;
+            const stack = [];
+            let lastIndent = 0;
+
+            for (const line of lines) {
+                if (line.trim() === '' || line.trim().startsWith('#')) continue;
+                const indent = line.search(/\S/);
+                const trimmed = line.trim();
+                const colonIndex = trimmed.indexOf(':');
+                if (colonIndex === -1) continue;
+
+                const key = trimmed.substring(0, colonIndex).trim();
+                let value = trimmed.substring(colonIndex + 1).trim();
+
+                // 값이 없으면 (중첩 맵 시작)
+                if (value === '' || value === '|') {
+                    if (indent > lastIndent) {
+                        stack.push(currentMap);
+                    } else if (indent < lastIndent) {
+                        while (stack.length > 0 && indent <= lastIndent) {
+                            currentMap = stack.pop();
+                            lastIndent -= 2;
+                        }
+                    }
+                    currentMap[key] = {};
+                    currentMap = currentMap[key];
+                    lastIndent = indent;
+                    continue;
+                }
+
+                // 값이 있으면
+                if (indent > lastIndent) {
+                    stack.push(currentMap);
+                } else if (indent < lastIndent) {
+                    while (stack.length > 0 && indent <= lastIndent) {
+                        currentMap = stack.pop();
+                        lastIndent -= 2;
+                    }
+                }
+
+                // 따옴표 제거
+                value = value.replace(/^["']|["']$/g, '');
+                currentMap[key] = value;
+                lastIndent = indent;
+            }
+            return result;
+        }
+
+        // 토큰 참조 해결 (예: "{colors.primary}" → 실제 값)
+        function resolveTokenReferences(tokens, value) {
+            if (typeof value !== 'string') return value;
+            return value.replace(/\{([^}]+)\}/g, (match, path) => {
+                const keys = path.split('.');
+                let current = tokens;
+                for (const key of keys) {
+                    if (current && typeof current === 'object' && key in current) {
+                        current = current[key];
+                    } else {
+                        return match; // 참조 실패 시 원본 유지
+                    }
+                }
+                return typeof current === 'string' ? current : match;
+            });
+        }
+
+        // ---------- 3. UI 렌더링 ----------
+        function renderStorybook(designData) {
+            const preview = document.getElementById('storybook-preview');
+            const tokens = designData.tokens;
+
+            // CSS 변수 주입
+            const rootStyles = [];
+            if (tokens.colors) {
+                Object.entries(tokens.colors).forEach(([key, value]) => {
+                    if (typeof value === 'string') {
+                        rootStyles.push(`--${key}: ${value};`);
+                    }
+                });
+            }
+            if (tokens.rounded) {
+                Object.entries(tokens.rounded).forEach(([key, value]) => {
+                    rootStyles.push(`--rounded-${key}: ${value};`);
+                });
+            }
+            if (tokens.spacing) {
+                Object.entries(tokens.spacing).forEach(([key, value]) => {
+                    rootStyles.push(`--spacing-${key}: ${value};`);
+                });
+            }
+            const existingStyle = document.getElementById('dynamic-tokens');
+            if (existingStyle) existingStyle.remove();
+            const styleTag = document.createElement('style');
+            styleTag.id = 'dynamic-tokens';
+            styleTag.textContent = `:root { ${rootStyles.join(' ')} }`;
+            document.head.appendChild(styleTag);
+
+            // 색상 대비 계산 헬퍼
+            function getTextColorForBg(hex) {
+                if (!hex || hex.length < 7) return '#ffffff';
+                const color = hex.replace('#', '');
+                const r = parseInt(color.substring(0, 2), 16);
+                const g = parseInt(color.substring(2, 4), 16);
+                const b = parseInt(color.substring(4, 6), 16);
+                const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                return luminance > 0.55 ? '#0f172a' : '#ffffff';
+            }
+
+            let html = '';
+
+            // 1) Overview
+            if (designData.sections['overview'] || designData.sections['brand & style']) {
+                html += `<section id="overview-section" class="mb-10">
+                    <h2 class="text-2xl font-semibold mb-4 text-slate-800">📋 Overview</h2>
+                    <p class="text-slate-600">${tokens.name || 'Design System'} — ${tokens.description || 'No description provided.'}</p>
+                </section>`;
+            }
+
+            // 2) Color Tokens
+            if (tokens.colors && Object.keys(tokens.colors).length) {
+                html += `<section id="colors-section"><h2 class="text-2xl font-semibold mb-4 text-slate-800">🎨 Color Tokens</h2>`;
+                html += `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-12">`;
+                Object.entries(tokens.colors).forEach(([name, value]) => {
+                    if (typeof value !== 'string') return;
+                    const textColor = getTextColorForBg(value);
+                    html += `
+                        <div class="color-swatch p-4 flex flex-col justify-between h-28" style="background-color: ${value}; color: ${textColor};">
+                            <span class="font-semibold capitalize text-sm">${name.replace(/-/g, ' ')}</span>
+                            <span class="text-xs font-mono opacity-80">${value}</span>
+                        </div>
+                    `;
+                });
+                html += `</div></section>`;
+            }
+
+            // 3) Typography
+            if (tokens.typography && Object.keys(tokens.typography).length) {
+                html += `<section id="typography-section"><h2 class="text-2xl font-semibold mb-4 text-slate-800">🔤 Typography</h2>`;
+                html += `<div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm mb-12 grid gap-6">`;
+                Object.entries(tokens.typography).forEach(([level, props]) => {
+                    if (typeof props !== 'object') return;
+                    const fontFamily = props.fontFamily || 'Inter';
+                    const fontSize = props.fontSize || '16px';
+                    const fontWeight = props.fontWeight || 400;
+                    const lineHeight = props.lineHeight || '1.5';
+                    const letterSpacing = props.letterSpacing || '0';
+                    html += `
+                        <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-50">
+                            <span class="badge mt-1">${level}</span>
+                            <div>
+                                <p style="font-family: ${fontFamily}; font-size: ${fontSize}; font-weight: ${fontWeight}; line-height: ${lineHeight}; letter-spacing: ${letterSpacing};">
+                                    The quick brown fox jumps over the lazy dog
+                                </p>
+                                <p class="text-xs text-slate-400 mt-1">${fontFamily} · ${fontSize} · weight ${fontWeight}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div></section>`;
+            }
+
+            // 4) Spacing
+            if (tokens.spacing && Object.keys(tokens.spacing).length) {
+                html += `<section id="spacing-section"><h2 class="text-2xl font-semibold mb-4 text-slate-800">📏 Spacing Scale</h2>`;
+                html += `<div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm mb-12 flex flex-wrap gap-4 items-end">`;
+                Object.entries(tokens.spacing).forEach(([key, value]) => {
+                    const numericValue = parseFloat(value);
+                    const widthPx = isNaN(numericValue) ? 32 : Math.min(160, numericValue * 2);
+                    html += `
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="bg-blue-100 rounded" style="width: ${widthPx}px; height: 24px;"></div>
+                            <span class="text-xs font-medium text-slate-600">${key}</span>
+                            <span class="text-xs text-slate-400">${value}</span>
+                        </div>
+                    `;
+                });
+                html += `</div></section>`;
+            }
+
+            // 5) Components
+            if (tokens.components && Object.keys(tokens.components).length) {
+                html += `<section id="components-section"><h2 class="text-2xl font-semibold mb-4 text-slate-800">🧩 Components</h2>`;
+
+                Object.entries(tokens.components).forEach(([compName, compProps]) => {
+                    if (typeof compProps !== 'object') return;
+
+                    // 토큰 참조 해결
+                    const resolvedProps = {};
+                    Object.entries(compProps).forEach(([k, v]) => {
+                        resolvedProps[k] = resolveTokenReferences(tokens, v);
+                    });
+
+                    html += `<div class="mb-8" id="comp-${compName.toLowerCase()}">`;
+                    html += `<h3 class="text-lg font-semibold text-slate-700 flex items-center gap-2 mb-3">${compName} <span class="badge">component</span></h3>`;
+
+                    html += `<div class="component-card">`;
+
+                    // 버튼 타입 컴포넌트
+                    if (compName.toLowerCase().includes('button')) {
+                        const bg = resolvedProps.backgroundColor || 'transparent';
+                        const color = resolvedProps.textColor || '#000';
+                        const radius = resolvedProps.rounded || '8px';
+                        const pad = resolvedProps.padding || '12px 24px';
+                        const hasBorder = bg === 'transparent';
+                        html += `
+                            <button class="preview-btn" style="
+                                background-color: ${bg};
+                                color: ${color};
+                                border-radius: ${radius};
+                                padding: ${pad};
+                                ${hasBorder ? `border: 2px solid ${color};` : ''}
+                            ">
+                                ${compName.replace(/-/g, ' ')}
+                            </button>
+                        `;
+                        // 속성 정보 표시
+                        html += `<div class="text-xs text-slate-500 space-y-1 ml-4">
+                            <p>bg: ${bg}</p><p>color: ${color}</p><p>radius: ${radius}</p>
+                        </div>`;
+                    }
+                    // 카드 타입 컴포넌트
+                    else if (compName.toLowerCase().includes('card')) {
+                        const bg = resolvedProps.backgroundColor || '#fff';
+                        const radius = resolvedProps.rounded || '16px';
+                        const pad = resolvedProps.padding || '24px';
+                        html += `
+                            <div class="preview-card" style="
+                                background-color: ${bg};
+                                border-radius: ${radius};
+                                padding: ${pad};
+                            ">
+                                <h4 class="font-semibold text-slate-800">${compName.replace(/-/g, ' ')}</h4>
+                                <p class="text-sm text-slate-500 mt-2">This is a sample card content demonstrating the ${compName} component style.</p>
+                            </div>
+                        `;
+                        html += `<div class="text-xs text-slate-500 space-y-1 ml-4">
+                            <p>bg: ${bg}</p><p>radius: ${radius}</p><p>padding: ${pad}</p>
+                        </div>`;
+                    }
+                    // 기타 컴포넌트
+                    else {
+                        html += `<div style="padding: 16px; border: 1px dashed #cbd5e1; border-radius: 8px;">${compName} (custom)</div>`;
+                    }
+
+                    html += `</div></div>`;
+                });
+
+                html += `</section>`;
+            }
+
+            if (!html) {
+                html = `<div class="text-center py-20 text-slate-400">표시할 토큰/컴포넌트가 없습니다.</div>`;
+            }
+
+            preview.innerHTML = html;
+            document.getElementById('loading-placeholder')?.remove();
+        }
+
+        // ---------- 4. 사이드바 탐색 ----------
+        function setupNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const target = item.dataset.target;
+                    menuItems.forEach(m => m.classList.remove('active'));
+                    item.classList.add('active');
+                    const sectionMap = {
+                        colors: 'colors-section',
+                        typography: 'typography-section',
+                        spacing: 'spacing-section',
+                        components: 'components-section'
+                    };
+                    const sectionId = sectionMap[target];
+                    if (sectionId) {
+                        const el = document.getElementById(sectionId);
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        }
+
+        // ---------- 5. 실행 파이프라인 ----------
+        async function loadAndRender() {
+            let designContent = null;
+            try {
+                const response = await fetch('design.md');
+                if (!response.ok) throw new Error('파일 로드 실패');
+                designContent = await response.text();
+                console.log('✅ design.md 로드 성공');
+            } catch (err) {
+                console.warn('⚠️ design.md를 불러올 수 없어 내장 예시(Google DESIGN.md v2)를 사용합니다.', err);
+                designContent = FALLBACK_DESIGN_MD;
+            }
+
+            try {
+                const designData = parseDesignMD(designContent);
+                console.log('📦 파싱된 디자인 시스템:', designData);
+                renderStorybook(designData);
+                setupNavigation();
+            } catch (parseError) {
+                console.error('❌ 디자인 시스템 파싱 오류:', parseError);
+                document.getElementById('storybook-preview').innerHTML =
+                    `<div class="p-6 bg-red-50 text-red-700 rounded-xl">디자인 시스템을 해석하는 중 오류가 발생했습니다.</div>`;
+            }
+        }
+
+        loadAndRender();
+    })();
+</script>
+</body>
+</html>

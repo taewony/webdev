@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage — DESIGN.md Showcase</title>
+    <!-- 폰트: Public Sans + Space Grotesk (실제 프로덕션 조합) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js">
+    </script>
+    <style>
+        /* ========== CSS 리셋 및 베이스 ========== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            /* 아래 값들은 실제로는 JavaScript가 DESIGN.md의 YAML을 파싱해 주입합니다 */
+            /* 기본값(폴백) */
+            --color-primary: #1A1C1E;
+            --color-secondary: #6C7278;
+            --color-tertiary: #B8422E;
+            --color-neutral: #F7F5F2;
+            --color-surface: #FFFFFF;
+            --color-on-primary: #FFFFFF;
+            --color-on-secondary: #FFFFFF;
+            --color-on-tertiary: #FFFFFF;
+            --color-text-main: #1A1C1E;
+            --color-text-muted: #64748B;
+            --color-success: #10B981;
+            --color-warning: #F59E0B;
+            --color-error: #EF4444;
+
+            --rounded-sm: 4px;
+            --rounded-md: 8px;
+            --rounded-lg: 16px;
+            --rounded-full: 9999px;
+
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --spacing-3xl: 64px;
+            --spacing-4xl: 96px;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--color-neutral);
+            color: var(--color-text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ========== 공통 레이아웃 ========== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+        }
+
+        .section {
+            padding: var(--spacing-4xl) 0;
+        }
+
+        .section-label {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: var(--spacing-md);
+            display: block;
+        }
+
+        /* ========== 버튼 (DESIGN.md 컴포넌트) ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 1;
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--rounded-md);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background-color: var(--color-tertiary);
+            color: var(--color-on-tertiary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-on-secondary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-on-primary);
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--color-primary);
+            box-shadow: none;
+        }
+
+        .btn-ghost:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+
+        /* ========== 카드 (DESIGN.md 컴포넌트) ========== */
+        .card {
+            background-color: var(--color-surface);
+            border-radius: var(--rounded-lg);
+            padding: var(--spacing-2xl);
+            box-shadow: var(--shadow-md);
+            transition: all 0.25s ease;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .card-elevated {
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .card-elevated:hover {
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.08), 0 8px 12px -6px rgba(0, 0, 0, 0.04);
+            transform: translateY(-4px);
+        }
+
+        .card-flat {
+            background-color: var(--color-neutral);
+            box-shadow: none;
+            border-color: transparent;
+        }
+
+        .card-interactive {
+            cursor: pointer;
+        }
+
+        .card-interactive:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: var(--color-tertiary);
+        }
+
+        /* ========== 배지 ========== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-family: 'Space Grotesk', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--rounded-full);
+            background-color: var(--color-neutral);
+            color: var(--color-text-muted);
+            line-height: 1;
+        }
+
+        .badge-accent {
+            background-color: var(--color-tertiary);
+            color: var(--color-on-tertiary);
+        }
+
+        /* ========== 아바타 ========== */
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--rounded-full);
+            background-color: var(--color-secondary);
+            color: var(--color-on-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            overflow: hidden;
+        }
+
+        /* ========== 입력 필드 ========== */
+        .input {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--rounded-md);
+            border: 2px solid #e2e8f0;
+            background-color: var(--color-surface);
+            color: var(--color-text-main);
+            transition: all 0.2s;
+            outline: none;
+            width: 100%;
+        }
+
+        .input:focus {
+            border-color: var(--color-tertiary);
+            box-shadow: 0 0 0 3px rgba(184, 66, 46, 0.1);
+        }
+
+        .input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        /* ========== 타이포그래피 유틸리티 ========== */
+        .text-display {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(48px, 8vw, 80px);
+            font-weight: 600;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--color-primary);
+        }
+
+        .text-headline {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 6vw, 48px);
+            font-weight: 600;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            color: var(--color-primary);
+        }
+
+        .text-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--color-primary);
+        }
+
+        .text-body {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--color-text-main);
+        }
+
+        .text-body-muted {
+            color: var(--color-text-muted);
+        }
+
+        .text-label {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+        }
+
+        .text-caption {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        /* ========== 히어로 섹션 ========== */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(180deg,
+                    var(--color-neutral) 0%,
+                    rgba(247, 245, 242, 0.5) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(184, 66, 46, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* ========== 카드 그리드 ========== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: var(--spacing-xl);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--rounded-md);
+            background-color: var(--color-neutral);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-md);
+            font-size: 24px;
+        }
+
+        /* ========== CTA 섹션 ========== */
+        .cta-section {
+            background-color: var(--color-primary);
+            color: var(--color-on-primary);
+            border-radius: var(--rounded-lg);
+            padding: var(--spacing-3xl) var(--spacing-2xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .cta-section>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== 푸터 ========== */
+        .footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            padding: var(--spacing-2xl) 0;
+            text-align: center;
+        }
+
+        /* ========== 반응형 ========== */
+        @media (max-width: 768px) {
+            .section {
+                padding: var(--spacing-2xl) 0;
+            }
+
+            .hero {
+                min-height: 60vh;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ========== 데모용 버튼 그룹 ========== */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            align-items: center;
+            margin-top: var(--spacing-lg);
+        }
+
+        /* ========== 토큰 프리뷰 섹션 ========== */
+        .token-demo {
+            background: var(--color-surface);
+            border-radius: var(--rounded-lg);
+            padding: var(--spacing-2xl);
+            margin-top: var(--spacing-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .swatch-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .swatch {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--rounded-md);
+            display: flex;
+            align-items: flex-end;
+            padding: var(--spacing-sm);
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s;
+            cursor: default;
+        }
+
+        .swatch:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .spacing-bar {
+            height: 24px;
+            background-color: var(--color-tertiary);
+            border-radius: var(--rounded-sm);
+            opacity: 0.7;
+            margin-bottom: var(--spacing-xs);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <header class="hero">
+        <div class="container">
+            <span class="section-label">Design System Showcase</span>
+            <h1 class="text-display">
+                Heritage<br>Design Language
+            </h1>
+            <p class="text-body text-body-muted" style="max-width: 600px; margin-top: var(--spacing-lg);">
+                건축적 미니멀리즘과 저널리즘의 무게감이 만난 디자인 시스템.
+                고대비 중성색 팔레트와 단 하나의 강렬한 액센트 컬러로
+                모든 UI가 숨 쉬는 공간을 설계합니다.
+            </p>
+            <div class="btn-group">
+                <button class="btn btn-primary">
+                    시작하기
+                    <span style="font-size:18px;">→</span>
+                </button>
+                <button class="btn btn-outline">더 알아보기</button>
+                <button class="btn btn-ghost">문서 보기</button>
+            </div>
+            <!-- 미니 토큰 프리뷰 -->
+            <div class="token-demo" style="margin-top: var(--spacing-2xl);">
+                <span class="text-label">Color Palette</span>
+                <div class="swatch-row">
+                    <div class="swatch" style="background-color: var(--color-primary); color: var(--color-on-primary);">
+                        Primary
+                    </div>
+                    <div class="swatch" style="background-color: var(--color-secondary); color: var(--color-on-secondary);">
+                        Secondary
+                    </div>
+                    <div class="swatch" style="background-color: var(--color-tertiary); color: var(--color-on-tertiary);">
+                        Accent
+                    </div>
+                    <div class="swatch" style="background-color: var(--color-neutral); color: var(--color-text-main);">
+                        Neutral
+                    </div>
+                    <div class="swatch" style="background-color: var(--color-surface); color: var(--color-text-main); border: 1px solid #ddd;">
+                        Surface
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== FEATURES (CARD GRID) ==================== -->
+    <section class="section" style="background-color: var(--color-surface);">
+        <div class="container">
+            <span class="section-label">Components in Action</span>
+            <h2 class="text-headline" style="margin-bottom: var(--spacing-xs);">
+                카드 컴포넌트 변형
+            </h2>
+            <p class="text-body text-body-muted" style="max-width: 600px; margin-bottom: var(--spacing-2xl);">
+                Elevated, Flat, Interactive — 하나의 토큰으로 제어되는 세 가지 카드 스타일.
+            </p>
+
+            <div class="card-grid">
+                <!-- Elevated Card -->
+                <div class="card card-elevated">
+                    <div class="card-icon">📦</div>
+                    <h3 class="text-title" style="margin-bottom: var(--spacing-sm);">Elevated Card</h3>
+                    <p class="text-body text-body-muted" style="margin-bottom: var(--spacing-md);">
+                        입체감 있는 그림자로 콘텐츠의 중요도를 높입니다.
+                        호버 시 더 강한 그림자와 살짝 떠오르는 효과.
+                    </p>
+                    <span class="badge">elevated</span>
+                </div>
+
+                <!-- Flat Card -->
+                <div class="card card-flat">
+                    <div class="card-icon">📄</div>
+                    <h3 class="text-title" style="margin-bottom: var(--spacing-sm);">Flat Card</h3>
+                    <p class="text-body text-body-muted" style="margin-bottom: var(--spacing-md);">
+                        배경색만 다른 평평한 카드. 대시보드나 목록에 적합.
+                    </p>
+                    <span class="badge">flat</span>
+                </div>
+
+                <!-- Interactive Card -->
+                <div class="card card-interactive">
+                    <div class="card-icon">👆</div>
+                    <h3 class="text-title" style="margin-bottom: var(--spacing-sm);">Interactive Card</h3>
+                    <p class="text-body text-body-muted" style="margin-bottom: var(--spacing-md);">
+                        클릭 가능한 카드. 호버 시 보더 색상이 액센트 컬러로 변경됩니다.
+                    </p>
+                    <span class="badge badge-accent">interactive</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TYPOGRAPHY SHOWCASE ==================== -->
+    <section class="section">
+        <div class="container">
+            <span class="section-label">Typography Scale</span>
+            <h2 class="text-headline" style="margin-bottom: var(--spacing-lg);">
+                타이포그래피 계층 구조
+            </h2>
+
+            <!-- Display -->
+            <div style="margin-bottom: var(--spacing-xl); padding: var(--spacing-lg); background: var(--color-surface); border-radius: var(--rounded-lg);">
+                <span class="text-label">Display · Playfair Display 600</span>
+                <p class="text-display" style="font-size: clamp(32px, 6vw, 64px);">우아함의 무게</p>
+            </div>
+
+            <!-- Headline -->
+            <div style="margin-bottom: var(--spacing-xl); padding: var(--spacing-lg); background: var(--color-surface); border-radius: var(--rounded-lg);">
+                <span class="text-label">Headline · Playfair Display 600</span>
+                <h2 class="text-headline">디자인은 숨 쉬는 것이다</h2>
+            </div>
+
+            <!-- Body -->
+            <div style="margin-bottom: var(--spacing-xl); padding: var(--spacing-lg); background: var(--color-surface); border-radius: var(--rounded-lg);">
+                <span class="text-label">Body · Inter 400</span>
+                <p class="text-body">
+                    좋은 타이포그래피는 단순히 읽히는 것을 넘어, 호흡을 부여합니다.
+                    행간, 자간, 단락 간격은 모두 의도된 리듬을 가지며, 이 리듬이 곧 브랜드의 목소리가 됩니다.
+                </p>
+                <p class="text-body text-body-muted" style="margin-top: var(--spacing-md);">
+                    <em>Good typography gives breath to content. Every leading value, every tracking adjustment is a deliberate rhythm — and that rhythm becomes the voice of the brand.</em>
+                </p>
+            </div>
+
+            <!-- Labels & Caption -->
+            <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-lg);">
+                <div style="padding: var(--spacing-lg); background: var(--color-surface); border-radius: var(--rounded-lg); flex: 1; min-width: 200px;">
+                    <span class="text-label">Label · Space Grotesk 500</span>
+                    <p style="margin-top: var(--spacing-sm);">
+                        <span class="badge">Published</span>
+                        <span class="badge badge-accent" style="margin-left: var(--spacing-sm);">New</span>
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-lg); background: var(--color-surface); border-radius: var(--rounded-lg); flex: 1; min-width: 200px;">
+                    <span class="text-label">Caption · Inter 400</span>
+                    <p class="text-caption" style="margin-top: var(--spacing-sm);">
+                        Last updated 2024년 12월 · 8 min read
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FORM ELEMENTS ==================== -->
+    <section class="section" style="background-color: var(--color-surface);">
+        <div class="container">
+            <span class="section-label">Form Components</span>
+            <h2 class="text-headline" style="margin-bottom: var(--spacing-lg);">
+                입력 필드 &amp; 버튼 조합
+            </h2>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-lg); align-items: flex-end;">
+                <div style="flex: 1; min-width: 250px;">
+                    <label class="text-label" style="display: block; margin-bottom: var(--spacing-sm);">이메일</label>
+                    <input type="email" class="input" placeholder="you@example.com" value="">
+                </div>
+                <button class="btn btn-primary">구독하기</button>
+            </div>
+            <p class="text-caption" style="margin-top: var(--spacing-md);">
+                포커스 시 액센트 컬러 보더 + 부드러운 링 섀도우
+            </p>
+        </div>
+    </section>
+
+    <!-- ==================== CTA SECTION ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="cta-section">
+                <span class="section-label" style="color: rgba(255,255,255,0.7);">Call to Action</span>
+                <h2 class="text-headline" style="color: var(--color-on-primary); margin-bottom: var(--spacing-md);">
+                    디자인 시스템 구축 시작하기
+                </h2>
+                <p class="text-body" style="color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto var(--spacing-lg);">
+                    단 하나의 <code style="background:rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 4px;">DESIGN.md</code> 파일로
+                    팀 전체의 시각 언어를 통일하세요.
+                </p>
+                <div class="btn-group" style="justify-content: center;">
+                    <button class="btn btn-primary" style="background-color: white; color: var(--color-primary);">
+                        GitHub에서 보기
+                    </button>
+                    <button class="btn btn-outline" style="border-color: rgba(255,255,255,0.5); color: white;">
+                        문서 읽기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SPACING DEMO ==================== -->
+    <section class="section" style="background-color: var(--color-surface);">
+        <div class="container">
+            <span class="section-label">Spacing Scale</span>
+            <h2 class="text-headline" style="margin-bottom: var(--spacing-lg);">
+                8px 그리드 기반 스페이싱
+            </h2>
+            <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                <div>
+                    <span class="text-label">xs (4px)</span>
+                    <div class="spacing-bar" style="width: 4px;"></div>
+                </div>
+                <div>
+                    <span class="text-label">sm (8px)</span>
+                    <div class="spacing-bar" style="width: 8px;"></div>
+                </div>
+                <div>
+                    <span class="text-label">md (16px)</span>
+                    <div class="spacing-bar" style="width: 16px;"></div>
+                </div>
+                <div>
+                    <span class="text-label">lg (24px)</span>
+                    <div class="spacing-bar" style="width: 24px;"></div>
+                </div>
+                <div>
+                    <span class="text-label">xl (32px)</span>
+                    <div class="spacing-bar" style="width: 32px;"></div>
+                </div>
+                <div>
+                    <span class="text-label">2xl (48px)</span>
+                    <div class="spacing-bar" style="width: 48px;"></div>
+                </div>
+                <div>
+                    <span class="text-label">3xl (64px)</span>
+                    <div class="spacing-bar" style="width: 64px;"></div>
+                </div>
+                <div>
+                    <span class="text-label">4xl (96px)</span>
+                    <div class="spacing-bar" style="width: 96px;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <p class="text-caption">
+                Built with <strong>DESIGN.md</strong> — Google's open specification for design tokens.
+                <br>All styles on this page are driven by a single YAML frontmatter file.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==================== DESIGN.md 파서 (백그라운드) ==================== -->
+    <script>
+        (function() {
+            // 실제 이 페이지를 구동하는 DESIGN.md 내용 (Google V2 명세 준수)
+            const DESIGN_MD_CONTENT = `---
+version: "2.0"
+name: Heritage Design System
+description: Architectural minimalism meets journalistic gravitas — a premium matte finish for editorial and brand experiences.
+
+colors:
+  primary: "#1A1C1E"
+  secondary: "#6C7278"
+  tertiary: "#B8422E"
+  neutral: "#F7F5F2"
+  surface: "#FFFFFF"
+  on-primary: "#FFFFFF"
+  on-secondary: "#FFFFFF"
+  on-tertiary: "#FFFFFF"
+  text-main: "#1A1C1E"
+  text-muted: "#64748B"
+  success: "#10B981"
+  warning: "#F59E0B"
+  error: "#EF4444"
+
+typography:
+  display:
+    fontFamily: "Playfair Display"
+    fontSize: clamp(48px, 8vw, 80px)
+    fontWeight: 600
+    lineHeight: 1.05
+    letterSpacing: -0.02em
+  headline:
+    fontFamily: "Playfair Display"
+    fontSize: clamp(32px, 6vw, 48px)
+    fontWeight: 600
+    lineHeight: 1.15
+    letterSpacing: -0.01em
+  title:
+    fontFamily: "Inter"
+    fontSize: 24px
+    fontWeight: 600
+    lineHeight: 1.3
+  body:
+    fontFamily: "Inter"
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.7
+  label:
+    fontFamily: "Space Grotesk"
+    fontSize: 12px
+    fontWeight: 500
+    lineHeight: 1
+    letterSpacing: 0.08em
+  caption:
+    fontFamily: "Inter"
+    fontSize: 13px
+    fontWeight: 400
+    lineHeight: 1.5
+
+rounded:
+  sm: 4px
+  md: 8px
+  lg: 16px
+  full: 9999px
+
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 16px
+  lg: 24px
+  xl: 32px
+  2xl: 48px
+  3xl: 64px
+  4xl: 96px
+
+shadows:
+  sm: "0 1px 2px rgba(0,0,0,0.04)"
+  md: "0 4px 6px -1px rgba(0,0,0,0.06), 0 2px 4px -2px rgba(0,0,0,0.04)"
+  lg: "0 10px 15px -3px rgba(0,0,0,0.06), 0 4px 6px -4px rgba(0,0,0,0.04)"
+
+components:
+  button-primary:
+    backgroundColor: "{colors.tertiary}"
+    textColor: "{colors.on-tertiary}"
+    rounded: "{rounded.md}"
+    padding: 16px 32px
+    shadow: "{shadows.md}"
+  button-secondary:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.on-secondary}"
+    rounded: "{rounded.md}"
+    padding: 16px 32px
+    shadow: "{shadows.sm}"
+  button-outline:
+    backgroundColor: "transparent"
+    textColor: "{colors.primary}"
+    rounded: "{rounded.md}"
+    padding: 16px 32px
+    border: "2px solid {colors.primary}"
+  button-ghost:
+    backgroundColor: "transparent"
+    textColor: "{colors.primary}"
+    rounded: "{rounded.md}"
+    padding: 16px 32px
+  card-elevated:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.lg}"
+    padding: 48px
+    shadow: "{shadows.lg}"
+  card-flat:
+    backgroundColor: "{colors.neutral}"
+    rounded: "{rounded.lg}"
+    padding: 48px
+  card-interactive:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.lg}"
+    padding: 48px
+    shadow: "{shadows.md}"
+  input:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.md}"
+    padding: 16px 24px
+    border: "2px solid #e2e8f0"
+  badge:
+    backgroundColor: "{colors.neutral}"
+    textColor: "{colors.text-muted}"
+    rounded: "{rounded.full}"
+    padding: 4px 8px
+  badge-accent:
+    backgroundColor: "{colors.tertiary}"
+    textColor: "{colors.on-tertiary}"
+    rounded: "{rounded.full}"
+    padding: 4px 8px
+---
+
+## Overview
+Heritage Design System은 건축적 미니멀리즘과 저널리즘의 무게감이 만나는 지점에서 탄생했습니다. 마치 고급 무광 인쇄물과 같은 질감을 디지털 환경에 이식하는 것이 목표입니다.
+
+## Design Philosophy
+- **고대비 중성색**: Primary(#1A1C1E)는 깊은 잉크처럼 헤드라인과 핵심 텍스트를 지지합니다.
+- **단 하나의 액센트**: Tertiary(#B8422E, "Boston Clay")만이 유일한 상호작용 드라이버입니다.
+- **숨 쉬는 공간**: 모든 요소는 8px 그리드 위에서 호흡합니다.
+- **무채색 우선**: 컬러는 필요할 때만 등장하여 의미를 강화합니다.
+
+## Typography
+- **Display/Headline**: Playfair Display — 제도적 신뢰와 편집 디자인의 품격
+- **Body**: Inter — 현대적 전문성과 장문 가독성
+- **Label/Caption**: Space Grotesk — 기술적 데이터와 메타데이터 전용
+
+## Layout
+8px 기준의 Strict Spacing Scale을 Fluid Grid에 적용합니다. 여백은 콘텐츠의 숨결입니다.
+
+## Do's and Don'ts
+- ✅ Primary 컬러는 화면당 단 하나의 주요 액션에만 사용하세요.
+- ❌ 둥근 모서리와 직각 모서리를 같은 뷰에서 섞지 마세요.
+- ✅ WCAG AA 명암비(일반 텍스트 4.5:1)를 유지하세요.
+- ❌ 중성색 없이 흰색과 검정만으로 UI를 구성하지 마세요.
+`;
+
+            // YAML 프론트매터 파싱
+            function parseDesignMD(content) {
+                const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---\n?/);
+                let tokens = {};
+                if (frontMatterMatch && typeof jsyaml !== 'undefined') {
+                    try {
+                        tokens = jsyaml.load(frontMatterMatch[1]) || {};
+                    } catch (e) {
+                        console.error('YAML 파싱 오류:', e);
+                    }
+                }
+                return { tokens };
+            }
+
+            // {path} 참조 해결
+            function resolveTokenReferences(tokens, value) {
+                if (typeof value !== 'string') return value;
+                return value.replace(/\{([^}]+)\}/g, (match, path) => {
+                    const keys = path.split('.');
+                    let current = tokens;
+                    for (const key of keys) {
+                        if (current && typeof current === 'object' && key in current) {
+                            current = current[key];
+                        } else {
+                            return match;
+                        }
+                    }
+                    return typeof current === 'string' ? current : match;
+                });
+            }
+
+            // CSS 변수로 주입
+            const designData = parseDesignMD(DESIGN_MD_CONTENT);
+            const tokens = designData.tokens;
+
+            function flattenTokens(obj, prefix = '') {
+                const result = {};
+                for (const [key, value] of Object.entries(obj)) {
+                    const fullKey = prefix ? `${prefix}-${key}` : key;
+                    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                        Object.assign(result, flattenTokens(value, fullKey));
+                    } else if (typeof value === 'string') {
+                        result[fullKey] = value;
+                    }
+                }
+                return result;
+            }
+
+            const flatTokens = flattenTokens(tokens);
+            const rootStyles = [];
+            for (const [key, value] of Object.entries(flatTokens)) {
+                const resolved = resolveTokenReferences(tokens, value);
+                rootStyles.push(`--${key}: ${resolved};`);
+            }
+
+            // shadows는 특별 처리 (따옴표 제거)
+            if (tokens.shadows) {
+                for (const [key, value] of Object.entries(tokens.shadows)) {
+                    rootStyles.push(`--shadow-${key}: ${value};`);
+                }
+            }
+
+            const styleEl = document.createElement('style');
+            styleEl.textContent = `:root { ${rootStyles.join(' ')} }`;
+            document.head.appendChild(styleEl);
+
+            // 컴포넌트 해시 매핑 (별칭 지원)
+            if (tokens.components) {
+                const comp = tokens.components;
+                if (comp['button-primary']) {
+                    const bp = comp['button-primary'];
+                    rootStyles.push(`--btn-primary-bg: ${resolveTokenReferences(tokens, bp.backgroundColor)};`);
+                    rootStyles.push(`--btn-primary-color: ${resolveTokenReferences(tokens, bp.textColor)};`);
+                }
+                if (comp['card-elevated']) {
+                    const ce = comp['card-elevated'];
+                    rootStyles.push(`--card-elevated-shadow: ${resolveTokenReferences(tokens, ce.shadow || '')};`);
+                }
+            }
+
+            console.log('✅ DESIGN.md 파싱 완료 및 CSS 변수 주입됨', tokens);
+        })();
+    </script>
+</body>
+</html>
