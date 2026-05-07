@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Canvas 상자 받기 게임</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #2c3e50;
+        color: white;
+        font-family: sans-serif;
+        margin-top: 50px;
+      }
+      canvas {
+        background-color: #ecf0f1;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      p {
+        color: #bdc3c7;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>떨어지는 상자를 잡아라!</h2>
+    <p>좌우 방향키(←, →)를 이용해 파란 상자로 빨간 상자를 받으세요.</p>
+
+    <!-- 1. 캔버스 영역 정의 -->
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+
+    <script>
+      // ==========================================
+      // [1] 초기 설정 (Setup)
+      // ==========================================
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // ==========================================
+      // [2] 게임 상태 모델 (State Model)
+      // ==========================================
+      // 플레이어 (파란색 패들)
+      const player = {
+        x: 160,
+        y: 450,
+        width: 80,
+        height: 20,
+        speed: 5,
+        dx: 0, // x축 이동 방향 (-1, 0, 1)
+      };
+
+      // 목표물 (떨어지는 빨간색 상자)
+      const target = {
+        x: Math.random() * 370, // 0 ~ 370 사이 랜덤 시작
+        y: 0,
+        size: 30,
+        speed: 3,
+      };
+
+      // 게임 메타 데이터
+      let score = 0;
+      let isGameOver = false;
+
+      // ==========================================
+      // [3] 사용자 입력 처리 (Input Handling)
+      // ==========================================
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") player.dx = -1;
+        if (e.key === "ArrowRight") player.dx = 1;
+      });
+
+      document.addEventListener("keyup", (e) => {
+        if (e.key === "ArrowLeft" || e.key === "ArrowRight") player.dx = 0;
+      });
+
+      // ==========================================
+      // [4] 상태 업데이트 로직 (Update Logic)
+      // ==========================================
+      function update() {
+        if (isGameOver) return;
+
+        // 1. 플레이어 위치 업데이트 및 벽 충돌 방지
+        player.x += player.dx * player.speed;
+        if (player.x < 0) player.x = 0;
+        if (player.x + player.width > canvas.width)
+          player.x = canvas.width - player.width;
+
+        // 2. 목표물 낙하
+        target.y += target.speed;
+
+        // 3. 충돌 감지 (AABB - Axis-Aligned Bounding Box)
+        const isColliding =
+          player.x < target.x + target.size &&
+          player.x + player.width > target.x &&
+          player.y < target.y + target.size &&
+          player.y + player.height > target.y;
+
+        if (isColliding) {
+          // 잡았을 때: 점수 증가 및 목표물 초기화
+          score += 10;
+          target.speed += 0.5; // 난이도 증가
+          target.y = 0;
+          target.x = Math.random() * (canvas.width - target.size);
+        }
+
+        // 4. 바닥에 떨어졌을 때 (게임 오버)
+        if (target.y + target.size > canvas.height) {
+          isGameOver = true;
+        }
+      }
+
+      // ==========================================
+      // [5] 화면 렌더링 로직 (Draw Logic)
+      // ==========================================
+      function draw() {
+        // 1. 이전 프레임 지우기 (초기화)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 2. 플레이어 그리기
+        ctx.fillStyle = "#3498db"; // 파란색
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+
+        // 3. 목표물 그리기
+        ctx.fillStyle = "#e74c3c"; // 빨간색
+        ctx.fillRect(target.x, target.y, target.size, target.size);
+
+        // 4. 점수 표시
+        ctx.fillStyle = "#2c3e50";
+        ctx.font = "20px Arial";
+        ctx.fillText(`점수: ${score}`, 10, 30);
+
+        // 5. 게임 오버 텍스트
+        if (isGameOver) {
+          ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          ctx.fillStyle = "white";
+          ctx.font = "30px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("게임 오버!", canvas.width / 2, canvas.height / 2);
+          ctx.font = "20px Arial";
+          ctx.fillText(
+            `최종 점수: ${score}`,
+            canvas.width / 2,
+            canvas.height / 2 + 40,
+          );
+          ctx.fillText(
+            "새로고침(F5)하여 다시 시작",
+            canvas.width / 2,
+            canvas.height / 2 + 80,
+          );
+        }
+      }
+
+      // ==========================================
+      // [6] 메인 게임 루프 (Game Loop)
+      // ==========================================
+      function gameLoop() {
+        update(); // 상태 변경
+        draw(); // 변경된 상태를 화면에 그림
+
+        if (!isGameOver) {
+          requestAnimationFrame(gameLoop); // 다음 프레임 요청
+        }
+      }
+
+      // 게임 시작
+      gameLoop();
+    </script>
+  </body>
+</html>

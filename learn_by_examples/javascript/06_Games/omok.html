@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>오목 - 간단 버전</title>
+    <style>
+      * {
+        user-select: none;
+      }
+      body {
+        background: #f0e6d0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: "Segoe UI", sans-serif;
+      }
+      .game-container {
+        text-align: center;
+        background: #deb887;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      canvas {
+        background: #f7e9c3;
+        display: block;
+        margin: 0 auto;
+        box-shadow: 0 0 0 2px #5a3e1b;
+        cursor: pointer;
+      }
+      .info {
+        margin-top: 16px;
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #2c2c2a;
+      }
+      button {
+        margin-top: 12px;
+        padding: 8px 24px;
+        font-size: 1rem;
+        background: #5a3e1b;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #7a5a2e;
+      }
+      .turn {
+        background: #2c2c2a;
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 40px;
+        color: white;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <canvas id="gomokuCanvas" width="450" height="450"></canvas>
+      <div class="info">
+        <span id="turnDisplay" class="turn">● 흑돌 차례</span>
+      </div>
+      <button id="resetBtn">새 게임</button>
+    </div>
+
+    <script>
+      // ---------- 멘탈 모델: 15x15 보드, 흑(1) 백(2), 승리 조건 5연속 ----------
+      const BOARD_SIZE = 15;
+      const CELL_SIZE = 30; // 450px / 15
+      const RADIUS = 12;
+
+      let board = Array(BOARD_SIZE)
+        .fill()
+        .map(() => Array(BOARD_SIZE).fill(0)); // 0: 빈칸, 1: 흑돌, 2: 백돌
+      let currentTurn = 1; // 1: 흑, 2: 백
+      let gameOver = false;
+      let winner = null; // 'black', 'white'
+
+      const canvas = document.getElementById("gomokuCanvas");
+      const ctx = canvas.getContext("2d");
+      const turnDisplay = document.getElementById("turnDisplay");
+
+      // ----- 표현 모델: 보드 그리기 (격자 + 돌) -----
+      function drawBoard() {
+        // 배경 & 격자
+        ctx.fillStyle = "#f7e9c3";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.strokeStyle = "#5a3e1b";
+        ctx.lineWidth = 1.2;
+        for (let i = 0; i < BOARD_SIZE; i++) {
+          ctx.moveTo(i * CELL_SIZE, 0);
+          ctx.lineTo(i * CELL_SIZE, canvas.height);
+          ctx.stroke();
+          ctx.moveTo(0, i * CELL_SIZE);
+          ctx.lineTo(canvas.width, i * CELL_SIZE);
+          ctx.stroke();
+        }
+        // 별 그리기 (오목의 화점 - 선택)
+        const starPoints = [3, 7, 11]; // 0-index 기준 4,8,12 => 간단히 3,7,11
+        ctx.fillStyle = "#c97e3a";
+        for (let r of starPoints) {
+          for (let c of starPoints) {
+            if (
+              (r === 3 || r === 7 || r === 11) &&
+              (c === 3 || c === 7 || c === 11)
+            ) {
+              ctx.beginPath();
+              ctx.arc(c * CELL_SIZE, r * CELL_SIZE, 3, 0, 2 * Math.PI);
+              ctx.fill();
+            }
+          }
+        }
+
+        // 돌 그리기
+        for (let row = 0; row < BOARD_SIZE; row++) {
+          for (let col = 0; col < BOARD_SIZE; col++) {
+            const stone = board[row][col];
+            if (stone === 0) continue;
+            const x = col * CELL_SIZE;
+            const y = row * CELL_SIZE;
+            const gradient = ctx.createRadialGradient(
+              x + 8,
+              y + 8,
+              5,
+              x + 12,
+              y + 12,
+              RADIUS,
+            );
+            if (stone === 1) {
+              // 흑돌
+              gradient.addColorStop(0, "#2b2b2b");
+              gradient.addColorStop(1, "#111111");
+            } else {
+              // 백돌
+              gradient.addColorStop(0, "#f9f9fc");
+              gradient.addColorStop(1, "#d0d0d8");
+            }
+            ctx.beginPath();
+            ctx.arc(
+              x + CELL_SIZE / 2,
+              y + CELL_SIZE / 2,
+              RADIUS - 1,
+              0,
+              2 * Math.PI,
+            );
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = "#888";
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // ----- 실행 모델: 승리 검사 (가로, 세로, 대각선) -----
+      function checkWin(row, col, stone) {
+        // 4방향: → ↓ ↘ ↙
+        const directions = [
+          [1, 0],
+          [0, 1],
+          [1, 1],
+          [1, -1],
+        ];
+        for (let [dx, dy] of directions) {
+          let count = 1;
+          // 정방향
+          for (let step = 1; step <= 4; step++) {
+            const nr = row + dx * step,
+              nc = col + dy * step;
+            if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) break;
+            if (board[nr][nc] === stone) count++;
+            else break;
+          }
+          // 반대방향
+          for (let step = 1; step <= 4; step++) {
+            const nr = row - dx * step,
+              nc = col - dy * step;
+            if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) break;
+            if (board[nr][nc] === stone) count++;
+            else break;
+          }
+          if (count >= 5) return true;
+        }
+        return false;
+      }
+
+      // 게임 종료 처리
+      function endGame(winnerStone) {
+        gameOver = true;
+        winner = winnerStone === 1 ? "흑돌(●)" : "백돌(○)";
+        turnDisplay.innerText = `🏆 승리: ${winner} 🏆`;
+      }
+
+      // 한 수 두기 (메인 로직)
+      function placeStone(row, col) {
+        if (gameOver) {
+          alert("게임이 이미 종료되었습니다. 새 게임을 시작하세요.");
+          return false;
+        }
+        if (board[row][col] !== 0) {
+          alert("이미 돌이 있습니다.");
+          return false;
+        }
+
+        // 돌 놓기
+        board[row][col] = currentTurn;
+        drawBoard();
+
+        // 승리 검사
+        if (checkWin(row, col, currentTurn)) {
+          endGame(currentTurn);
+          drawBoard(); // 다시 그려서 UI 갱신
+          return true;
+        }
+
+        // 무승부 검사 (간단히 board full 체크)
+        let isFull = true;
+        for (let r = 0; r < BOARD_SIZE; r++) {
+          for (let c = 0; c < BOARD_SIZE; c++) {
+            if (board[r][c] === 0) {
+              isFull = false;
+              break;
+            }
+          }
+        }
+        if (isFull) {
+          gameOver = true;
+          turnDisplay.innerText = "무승부!";
+          return true;
+        }
+
+        // 턴 변경
+        currentTurn = currentTurn === 1 ? 2 : 1;
+        updateTurnDisplay();
+        return true;
+      }
+
+      function updateTurnDisplay() {
+        if (gameOver) return;
+        const turnName = currentTurn === 1 ? "● 흑돌 차례" : "○ 백돌 차례";
+        turnDisplay.innerText = turnName;
+      }
+
+      // canvas 클릭 좌표 → 인덱스
+      function handleCanvasClick(e) {
+        if (gameOver) return;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const mouseX = (e.clientX - rect.left) * scaleX;
+        const mouseY = (e.clientY - rect.top) * scaleY;
+        const col = Math.round(mouseX / CELL_SIZE);
+        const row = Math.round(mouseY / CELL_SIZE);
+        if (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
+          placeStone(row, col);
+        }
+      }
+
+      // 게임 리셋
+      function resetGame() {
+        board = Array(BOARD_SIZE)
+          .fill()
+          .map(() => Array(BOARD_SIZE).fill(0));
+        currentTurn = 1;
+        gameOver = false;
+        winner = null;
+        updateTurnDisplay();
+        drawBoard();
+      }
+
+      // 이벤트 연결 및 초기화
+      canvas.addEventListener("click", handleCanvasClick);
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        resetGame();
+      });
+      resetGame(); // 최초 실행
+    </script>
+  </body>
+</html>
